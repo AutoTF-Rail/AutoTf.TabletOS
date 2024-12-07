@@ -34,7 +34,6 @@ check_git_changes() {
     fi
 }
 
-echo "Redirecting script output to $TTY1..."
 
 cd /home/display/AutoTf.TabletOS/AutoTf.TabletOS
 
