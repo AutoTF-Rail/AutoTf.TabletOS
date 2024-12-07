@@ -1,5 +1,7 @@
 #!/bin/bash
 
+exec > /dev/tty1 2>&1
+
 check_internet() {
     echo "Checking internet connection..."
     if ping -c 1 8.8.8.8 &>/dev/null; then
