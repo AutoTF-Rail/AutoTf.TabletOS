@@ -45,7 +45,7 @@ EOF
 cat <<EOF | sudo tee /etc/systemd/system/osStartupScreenScript.service
 [Unit]
 Description=Run os startup script
-After=local-fs.target
+After=graphical.target
 
 [Service]
 Type=simple
