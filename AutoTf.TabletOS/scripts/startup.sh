@@ -38,17 +38,17 @@ check_git_changes() {
 
 
 cd /home/display/AutoTf.TabletOS/AutoTf.TabletOS
-fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSGettingUpdates.png 
 
 
 if check_internet; then
     if check_git_changes; then
+        fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSGettingUpdates.png 
         git pull
+        fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSStartingUp.png 
         dotnet build
     else
         echo "Skipping git pull as there are no changes."
     fi
-    
 fi
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSStartingUp.png 
 
