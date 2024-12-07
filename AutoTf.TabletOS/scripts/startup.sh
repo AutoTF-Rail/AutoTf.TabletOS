@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#exec > /dev/tty1 2>&1
-TTY1="/dev/tty1"
+exec > /dev/tty1 2>&1
 
 eval "$(ssh-agent -s)"
     
@@ -36,7 +35,6 @@ check_git_changes() {
 }
 
 echo "Redirecting script output to $TTY1..."
-exec > $TTY1 2>&1 
 
 cd /home/display/AutoTf.TabletOS/AutoTf.TabletOS
 
