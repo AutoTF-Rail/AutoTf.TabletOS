@@ -2,6 +2,10 @@
 
 exec > /dev/tty1 2>&1
 
+eval "$(ssh-agent -s)"
+    
+ssh-add /home/display/githubKey
+
 check_internet() {
     echo "Checking internet connection..."
     sleep 5
@@ -33,10 +37,6 @@ check_git_changes() {
 cd /home/display/AutoTf.TabletOS/AutoTf.TabletOS
 
 if check_internet; then
-    eval "$(ssh-agent -s)"
-    
-    ssh-add /home/display/githubKey
-    
     if check_git_changes; then
         git pull
     dotnet build
