@@ -45,13 +45,13 @@ EOF
 cat <<EOF | sudo tee /etc/systemd/system/osStartupScreenScript.service
 [Unit]
 Description=Run os startup script
-After=graphical.target
+After=multi-user.target getty@tty1.service
+Before=tty1.service
 
 [Service]
 Type=simple
 ExecStart=/bin/bash /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/scripts/showStartupScreen.sh
-User=root
-Group=root
+Restart=no
 
 [Install]
 WantedBy=multi-user.target
