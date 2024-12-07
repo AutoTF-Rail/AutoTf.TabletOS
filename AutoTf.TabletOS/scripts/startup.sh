@@ -8,7 +8,8 @@ eval "$(ssh-agent -s)"
 ssh-add /home/display/githubKey
 
 check_internet() {
-    echo "Checking internet connection..."
+  sleep 5
+    echo "Checking lan connection"
     if ethtool eth0 | grep -q "Link detected: yes"; then
         echo "Internet is connected."
         return 0 
