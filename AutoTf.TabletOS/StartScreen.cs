@@ -19,11 +19,11 @@ public class StartScreen : IDisposable
 
 		Mat background =
 			CvInvoke.Imread(
-				"/home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSEmptyBackground.png");
+				"/home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSLogin.png");
 		CvInvoke.CvtColor(background, background, ColorConversion.Bgr2Bgra);
 		_render.SetBackgroundImage(background);
-		_render.AddText(new Text("Welcome to TabletOS", .4f, FontFace.HersheyScriptSimplex, new Point(512, 300),
-			new MCvScalar(0), 1));
+		// _render.AddText(new Text("Welcome to TabletOS", .4f, FontFace.HersheyScriptSimplex, new Point(512, 300),
+		// 	new MCvScalar(0), 1));
 	}
 
 	public void Dispose()
