@@ -41,8 +41,8 @@ cd /home/display/AutoTf.TabletOS/AutoTf.TabletOS
 
 
 if check_internet; then
+    fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSGettingUpdates.png 
     if check_git_changes; then
-        fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSGettingUpdates.png 
         git pull
         fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSStartingUp.png 
         dotnet build
@@ -52,5 +52,4 @@ if check_internet; then
 fi
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSStartingUp.png 
 
-echo "Running the application on tty1..."
-dotnet run 2>&1 | tee /dev/tty1
+#dotnet run 2>&1 | tee /dev/tty1
