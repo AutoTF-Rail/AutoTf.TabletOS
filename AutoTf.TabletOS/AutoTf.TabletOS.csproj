@@ -15,7 +15,7 @@
         <PackageReference Include="System.Drawing.Common" Version="9.0.0-rc.2.24474.1" />
         <PackageReference Include="Emgu.CV" Version="4.9.0.5494" />
     </ItemGroup>
-    
+    4
     <ItemGroup>
       <None Update="scripts\install.sh">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -43,9 +43,4 @@
     <ItemGroup>
       <Folder Include="Images\" />
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="AutoTf.Logging" Version="1.0.0-20241121182113" />
-    </ItemGroup>
-
 </Project>
