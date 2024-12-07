@@ -50,4 +50,4 @@ if check_internet; then
 fi
 
 echo "Running the application on tty1..."
-dotnet run
+dotnet run 2>&1 | tee /dev/tty1
