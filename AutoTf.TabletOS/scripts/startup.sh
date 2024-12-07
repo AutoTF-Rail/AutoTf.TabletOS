@@ -9,9 +9,7 @@ ssh-add /home/display/githubKey
 
 check_internet() {
     echo "Checking internet connection..."
-    wget -q --spider http://google.com
-    
-    if [ $? -eq 0 ]; then
+    if ethtool eth0 | grep -q "Link detected: yes"; then
         echo "Internet is connected."
         return 0 
     else
