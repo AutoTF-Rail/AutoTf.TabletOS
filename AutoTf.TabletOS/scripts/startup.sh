@@ -8,8 +8,9 @@ ssh-add /home/display/githubKey
 
 check_internet() {
     echo "Checking internet connection..."
-    sleep 5
-    if ping -c 1 8.8.8.8 &>/dev/null; then
+    wget -q --spider http://google.com
+    
+    if [ $? -eq 0 ]; then
         echo "Internet is connected."
         return 0 
     else
