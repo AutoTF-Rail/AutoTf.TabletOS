@@ -29,14 +29,12 @@ check_git_changes() {
     fi
 }
 
-cd /home/display
+cd /home/display/AutoTf.TabletOS/AutoTf.TabletOS
 
 if check_internet; then
     eval "$(ssh-agent -s)"
     
     ssh-add /home/display/githubKey
-    
-    cd /home/display/AutoTf.TabletOS/AutoTf.TabletOS
     
     if check_git_changes; then
         git pull
