@@ -1,6 +1,7 @@
 #!/bin/bash
 
-exec > /dev/tty1 2>&1
+#exec > /dev/tty1 2>&1
+TTY1="/dev/tty1"
 
 eval "$(ssh-agent -s)"
     
@@ -35,6 +36,9 @@ check_git_changes() {
     fi
 }
 
+echo "Redirecting script output to $TTY1..."
+exec > $TTY1 2>&1 
+
 cd /home/display/AutoTf.TabletOS/AutoTf.TabletOS
 
 if check_internet; then
@@ -48,4 +52,4 @@ if check_internet; then
 fi
 
 echo "Running the application on tty1..."
-exec dotnet run
+dotnet run
