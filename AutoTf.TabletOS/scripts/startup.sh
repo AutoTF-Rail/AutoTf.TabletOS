@@ -4,11 +4,12 @@ exec > /dev/tty1 2>&1
 
 check_internet() {
     echo "Checking internet connection..."
+    sleep 5
     if ping -c 1 8.8.8.8 &>/dev/null; then
         echo "Internet is connected."
         return 0 
     else
-        echo "No internet connection. Exiting..."
+        echo "No internet connection. Not pulling updates..."
         return 1 
     fi
 }
@@ -45,4 +46,5 @@ if check_internet; then
     
 fi
 
-dotnet run
+echo "Running the application on tty1..."
+exec dotnet run
