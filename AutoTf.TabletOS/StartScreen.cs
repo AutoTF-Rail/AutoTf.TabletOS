@@ -10,7 +10,7 @@ namespace AutoTf.TabletOS;
 
 public class StartScreen : IDisposable
 {
-	private readonly RenderEngine _render;
+	private readonly IRenderEngine _render;
 	private readonly Logger _logger = new Logger();
 	private int it = 0;
 
@@ -23,7 +23,7 @@ public class StartScreen : IDisposable
 				"/home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/Images/TabletOSLogin.png");
 		CvInvoke.CvtColor(background, background, ColorConversion.Bgr2Bgra);
 		_render.SetBackgroundImage(background);
-		_render.AddButton(new Button("Shutdown", .6f, FontFace.HersheySimplex, new Point(15, 15), new Size(100, 30),
+		_render.AddButton(new Button("Shutdown", .6f, FontFace.HersheySimplex, new Point(15, 15), new Size(125, 30),
 			new MCvScalar(0), new MCvScalar(10, 10, 10), true, new MCvScalar(255,255,255), OnClick));
 		// _render.AddText(new Text("Welcome to TabletOS", .4f, FontFace.HersheyScriptSimplex, new Point(512, 300),
 		// 	new MCvScalar(0), 1));
@@ -31,6 +31,7 @@ public class StartScreen : IDisposable
 
 	private void OnClick()
 	{
+		_render.AddPopup(new Popup(_render, "Guh???", () => _logger.Log("Clicked yes"), () => _logger.Log("Clicked no")));
 		_render.AddText(new Text("BUTTON CLICK", 1f, FontFace.HersheySimplex, new Point(100, 100),
 			new MCvScalar(255, it * 50, 0), 2));
 		it++;
