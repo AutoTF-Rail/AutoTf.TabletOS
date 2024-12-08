@@ -12,6 +12,7 @@ public class StartScreen : IDisposable
 {
 	private readonly RenderEngine _render;
 	private readonly Logger _logger = new Logger();
+	private int it = 0;
 
 	public StartScreen()
 	{
@@ -30,9 +31,9 @@ public class StartScreen : IDisposable
 
 	private void OnClick()
 	{
-		_logger.Log("Click");
 		_render.AddText(new Text("BUTTON CLICK", 1f, FontFace.HersheySimplex, new Point(100, 100),
-			new MCvScalar(255, 0, 0), 2));
+			new MCvScalar(255, it * 50, 0), 2));
+		it++;
 	}
 
 	public void Dispose()
