@@ -25,6 +25,10 @@ public class StartScreen : IDisposable
 		_render.SetBackgroundImage(background);
 		_render.AddButton(new Button("Shutdown", .6f, FontFace.HersheySimplex, new Point(15, 15), new Size(125, 30),
 			new MCvScalar(0), new MCvScalar(10, 10, 10), true, new MCvScalar(255,255,255), OnClick));
+		_render.AddButton(new Button("Lighter", .6f, FontFace.HersheySimplex, new Point(15, 50), new Size(125, 30),
+			new MCvScalar(0), new MCvScalar(10, 10, 10), true, new MCvScalar(255,255,255), _render.HigherBrightness));
+		_render.AddButton(new Button("Darker", .6f, FontFace.HersheySimplex, new Point(15, 85), new Size(125, 30),
+			new MCvScalar(0), new MCvScalar(10, 10, 10), true, new MCvScalar(255,255,255), _render.LowerBrightness));
 		// _render.AddText(new Text("Welcome to TabletOS", .4f, FontFace.HersheyScriptSimplex, new Point(512, 300),
 		// 	new MCvScalar(0), 1));
 	}
