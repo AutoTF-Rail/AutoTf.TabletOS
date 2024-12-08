@@ -11,6 +11,5 @@ internal class Program
 	{
 		StartScreen screen = new StartScreen();
 		Thread.Sleep(-1);
-
 	}
 }
