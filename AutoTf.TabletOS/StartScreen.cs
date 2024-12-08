@@ -15,7 +15,7 @@ public class StartScreen : IDisposable
 
 	public StartScreen()
 	{
-		_render = new RenderEngine(_logger, true, 1024, 600, true);
+		_render = new RenderEngine(_logger, true, 1024, 600, true, true);
 
 		Mat background =
 			CvInvoke.Imread(
