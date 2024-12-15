@@ -14,16 +14,16 @@ public class LoginScreen : Screen
 {
 	public LoginScreen(Logger logger) : base(logger)
 	{
-		Mat background = CvInvoke.Imread("Assets/TabletOSStart.png");
+		Mat background = CvInvoke.Imread("Images/TabletOSStart.png");
 		CvInvoke.CvtColor(background, background, ColorConversion.Bgr2Bgra);
 		base.Background = background;
 		AddEntity(new Rectangle(new Point(0, 0), new Size(1024, 15), new MCvScalar(0, 0, 0, 51), true));
 		AddEntity(new Text(() => DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"), .4f, FontFace.HersheySimplex, new Point(2, 11), new MCvScalar(255, 255, 255), 1));
 		
-		Mat fullSignal = CvInvoke.Imread("Assets/FullSignalSign.png", ImreadModes.Unchanged);
+		Mat fullSignal = CvInvoke.Imread("Images/FullSignalSign.png", ImreadModes.Unchanged);
 		CvInvoke.CvtColor(fullSignal, fullSignal, ColorConversion.Bgr2Bgra);
 		
-		Mat noWifiSign = CvInvoke.Imread("Assets/NoWifiSign.png", ImreadModes.Unchanged);
+		Mat noWifiSign = CvInvoke.Imread("Images/NoWifiSign.png", ImreadModes.Unchanged);
 		CvInvoke.CvtColor(noWifiSign, noWifiSign, ColorConversion.Bgr2Bgra);
 		
 		AddEntity(new Image(fullSignal, new Size(15, 10), new Point(985, 4), new MCvScalar(255)));
