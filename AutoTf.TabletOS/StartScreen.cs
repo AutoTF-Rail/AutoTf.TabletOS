@@ -9,6 +9,7 @@ using Emgu.CV.Structure;
 
 namespace AutoTf.TabletOS;
 
+[ScreenIdentifier("StartScreen")]
 public class StartScreen : IDisposable
 {
 	private readonly IRenderBase _render;
