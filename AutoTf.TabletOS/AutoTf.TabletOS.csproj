@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoTf.Logging" Version="1.0.0-20241121182113" />
-        <PackageReference Include="AutoTf.Renderer" Version="1.0.0-20241208195119" />
-        <PackageReference Include="AutoTf.Renderer.Models" Version="1.0.0-20241208195119" />
+        <PackageReference Include="AutoTf.Logging" Version="1.0.0-20241215135956" />
+        <PackageReference Include="AutoTf.Renderer" Version="1.0.0-20241215153833" />
+        <PackageReference Include="AutoTf.Renderer.Models" Version="1.0.0-20241215153833" />
         <PackageReference Include="Emgu.CV.runtime.debian-arm64" Version="4.9.0.5494" />
         <PackageReference Include="System.Drawing.Common" Version="9.0.0-rc.2.24474.1" />
         <PackageReference Include="Emgu.CV" Version="4.9.0.5494" />
@@ -44,9 +44,12 @@
       <None Update="Images\TabletOSLogin.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="Assets\TabletOSLogin.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Images\" />
+      <Folder Include="Assets\" />
     </ItemGroup>
 </Project>
