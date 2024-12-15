@@ -1,6 +1,7 @@
 using System.Drawing;
 using AutoTf.Logging;
 using AutoTf.Renderer;
+using AutoTf.Renderer.Models;
 using AutoTf.Renderer.Models.Entities;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -10,6 +11,7 @@ using Rectangle = AutoTf.Renderer.Models.Entities.Rectangle;
 
 namespace AutoTf.TabletOS.Screens;
 
+[ScreenIdentifier("LoginScreen")]
 public class LoginScreen : Screen
 {
 	public LoginScreen(Logger logger) : base(logger)
