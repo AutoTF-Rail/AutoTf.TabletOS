@@ -34,7 +34,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/bin/bash /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/scripts/startup.sh
+ExecStart=/bin/bash /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh
 User=root
 Group=root
 
@@ -50,7 +50,7 @@ Before=tty1.service
 
 [Service]
 Type=simple
-ExecStart=/bin/bash /home/display/AutoTf.TabletOS/AutoTf.TabletOS/bin/Debug/net8.0/scripts/showStartupScreen.sh
+ExecStart=/bin/bash /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/showStartupScreen.sh
 Restart=no
 
 [Install]
@@ -61,9 +61,6 @@ sudo systemctl enable startupScript.service
 sudo systemctl start startupScript.service
 sudo systemctl enable osStartupScreenScript.service
 sudo systemctl start osStartupScreenScript.service
-
-sudo systemctl enable startupScript.service
-sudo systemctl start startupScript.service
 
 echo "Rebooting the system..."
 sudo reboot
