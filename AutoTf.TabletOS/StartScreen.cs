@@ -18,7 +18,7 @@ public class StartScreen : IDisposable
 	public StartScreen()
 	{
 		// _render = new RenderEngine(_logger, true, 1024, 600, true, true);
-		_render = new RenderBase(_logger, true,  new Size(1280, 720), new Size(1024, 600), false, true);
+		_render = new RenderBase(_logger, true, new Size(1024, 600), new Size(1024, 600), false, true);
 		_render.ActiveScreen = new LoginScreen(_logger);
 
 		// Mat background =
