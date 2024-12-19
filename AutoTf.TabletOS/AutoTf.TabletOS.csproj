@@ -79,9 +79,6 @@
       <None Update="Images\TabletOSTrainSelection.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Helvetica.ttf">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
       <None Update="Images\BrighterIcon.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
