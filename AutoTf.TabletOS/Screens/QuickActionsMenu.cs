@@ -29,11 +29,12 @@ public class QuickActionsMenu : Screen
 			new ColorSettings(new MCvScalar(0, 0, 0, 125), -1)));
 		AddEntity(new Rectangle(new Point(625, 21), new Size(389, 274), 10,
 			new ColorSettings(new MCvScalar(255, 255, 255, 255), 1)));
-		AddEntity(new Text(() => "Quick Actions", new FontSettings(new MCvScalar(255, 255, 255), 15),
-			new Point(775, 30)));
+		//AddEntity(new Text(() => "Quick Actions", new FontSettings(new MCvScalar(255, 255, 255), 15),
+		//	new Point(775, 30)));
 		
 		Mat darkerIcon = CvInvoke.Imread("Images/DarkerIcon.png", ImreadModes.Unchanged);
 		CvInvoke.CvtColor(darkerIcon, darkerIcon, ColorConversion.Bgr2Bgra);
+		
 		AddEntity(new ContentButton(() => new List<EntityBase>()
 		{
 			new Rectangle(new Point(0, 0), new Size(50, 50), 10,
@@ -41,8 +42,10 @@ public class QuickActionsMenu : Screen
 			new Rectangle(new Point(0, 0), new Size(50, 50), 10, new ColorSettings(new MCvScalar(0, 0, 0, 255), 1)),
 			new Image(darkerIcon, new Size(35, 35), new Point(8, 8)),
 		}, new Point(640, 70), new Size(50, 50)));
+		
 		Mat brighterIcon = CvInvoke.Imread("Images/BrighterIcon.png", ImreadModes.Unchanged);
 		CvInvoke.CvtColor(brighterIcon, brighterIcon, ColorConversion.Bgr2Bgra);
+		
 		AddEntity(new ContentButton(() => new List<EntityBase>()
 		{
 			new Rectangle(new Point(0, 0), new Size(50, 50), 10,
