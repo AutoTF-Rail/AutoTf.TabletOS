@@ -17,9 +17,11 @@ public class QuickActionsMenu : Screen
 	private readonly IRenderBase _render;
 	private IScreen _previousScreen;
 	private bool isShown = false;
+	private readonly Action CloseEvent;
 	
-	public QuickActionsMenu(IRenderBase render, Logger logger) : base(render, logger, true)
+	public QuickActionsMenu(Action closeEvent, IRenderBase render, Logger logger) : base(render, logger, true)
 	{
+		CloseEvent = closeEvent;
 		_render = render;
 		AddEntity(new Rectangle(new Point(0, 0), new Size(render.RenderSize.Width, render.RenderSize.Height), 0, new ColorSettings(new MCvScalar(20, 20, 20, 150), -1), Close));
 
@@ -52,9 +54,6 @@ public class QuickActionsMenu : Screen
 
 	public void Show()
 	{
-		if (isShown)
-			return;
-		isShown = true;
 		Console.WriteLine("Rendering");
 		Mat bck = _render.RenderRaw(true, false);
 		CvInvoke.CvtColor(bck, bck, ColorConversion.Bgr2Bgra);
@@ -66,8 +65,8 @@ public class QuickActionsMenu : Screen
 
 	public void Close()
 	{
+		CloseEvent.Invoke();
 		_render.SwapBackScreen();
-		isShown = false;
 	}
 	
 	public override void Mute()

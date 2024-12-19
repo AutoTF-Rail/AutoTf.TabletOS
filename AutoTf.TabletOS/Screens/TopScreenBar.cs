@@ -16,6 +16,7 @@ public class TopScreenBar : Screen
 {
 	private readonly IRenderBase _render;
 	private readonly Logger _logger;
+	private bool isShown = false;
 	
 	public TopScreenBar(IRenderBase render, Logger logger) : base(render, logger, true)
 	{
@@ -44,8 +45,16 @@ public class TopScreenBar : Screen
 
 	private void ShowQuickActionsMenu()
 	{
-		QuickActionsMenu quickShowMenu = new QuickActionsMenu(_render, _logger);
+		if (isShown)
+			return;
+		isShown = true;
+		QuickActionsMenu quickShowMenu = new QuickActionsMenu(CloseQuickActionsMenu, _render, _logger);
 		quickShowMenu.Show();
+	}
+
+	private void CloseQuickActionsMenu()
+	{
+		isShown = false;
 	}
 	
 	public override void Mute()
