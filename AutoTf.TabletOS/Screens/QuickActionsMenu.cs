@@ -57,6 +57,7 @@ public class QuickActionsMenu : Screen
 		isShown = true;
 		Console.WriteLine("Rendering");
 		Mat bck = _render.RenderRaw(true, false);
+		CvInvoke.CvtColor(Background, Background, ColorConversion.Bgr2Bgra);
 		Console.WriteLine("Setting");
 		Background = bck;
 		Console.WriteLine("Saving");
