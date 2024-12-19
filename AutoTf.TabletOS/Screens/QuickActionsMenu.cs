@@ -16,6 +16,7 @@ public class QuickActionsMenu : Screen
 {
 	private readonly IRenderBase _render;
 	private IScreen _previousScreen;
+	private bool isShown = false;
 	
 	public QuickActionsMenu(IRenderBase render, Logger logger) : base(logger)
 	{
@@ -51,6 +52,9 @@ public class QuickActionsMenu : Screen
 
 	public void Show()
 	{
+		if (isShown)
+			return;
+		isShown = true;
 		Console.WriteLine("Rendering");
 		Mat bck = _render.RenderRaw(true, false);
 		Console.WriteLine("Converting");
@@ -66,6 +70,7 @@ public class QuickActionsMenu : Screen
 	public void Close()
 	{
 		_render.ActiveScreen = _previousScreen;
+		isShown = false;
 	}
 	
 	public override void Mute()
