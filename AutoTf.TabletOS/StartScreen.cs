@@ -3,9 +3,6 @@ using AutoTf.Logging;
 using AutoTf.Renderer;
 using AutoTf.Renderer.Models;
 using AutoTf.TabletOS.Screens;
-using Emgu.CV;
-using Emgu.CV.CvEnum;
-using Emgu.CV.Structure;
 
 namespace AutoTf.TabletOS;
 
@@ -19,6 +16,9 @@ public class StartScreen : IDisposable
 	{
 		// _render = new RenderEngine(_logger, true, 1024, 600, true, true);
 		_render = new RenderBase(_logger, true, new Size(1024, 600), new Size(1024, 600), false, true);
+		
+		_render.ActiveToolbar = new TopScreenBar(_render, _logger);
+
 		_render.ActiveScreen = new LoginScreen(_logger);
 
 		// Mat background =
