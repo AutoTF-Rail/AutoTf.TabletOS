@@ -19,22 +19,11 @@ public class LoginScreen : Screen
 		Mat background = CvInvoke.Imread("Images/TabletOSStart.png");
 		CvInvoke.CvtColor(background, background, ColorConversion.Bgr2Bgra);
 		base.Background = background;
-		AddEntity(new Rectangle(new Point(0, 0), new Size(1024, 15), 0, new ColorSettings(new MCvScalar(0, 0, 0, 51), -1)));
-		AddEntity(new Text(() => DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"), new FontSettings(new MCvScalar(255, 255, 255), 15), new Point(2, -1)));
-		
-		Mat fullSignal = CvInvoke.Imread("Images/FullSignalSign.png", ImreadModes.Unchanged);
-		CvInvoke.CvtColor(fullSignal, fullSignal, ColorConversion.Bgr2Bgra);
-		
-		Mat noWifiSign = CvInvoke.Imread("Images/NoWifiSign.png", ImreadModes.Unchanged);
-		CvInvoke.CvtColor(noWifiSign, noWifiSign, ColorConversion.Bgr2Bgra);
-		
-		AddEntity(new Image(fullSignal, new Size(15, 10), new Point(985, 4)));
-		AddEntity(new Image(noWifiSign, new Size(17, 17), new Point(1005, 0)));
 		
 		List<EntityBase> exampleButton = new List<EntityBase>();
 		
 		Mat drawnTrain = CvInvoke.Imread("Images/DrawnTrain.png", ImreadModes.Unchanged);
-		CvInvoke.CvtColor(noWifiSign, noWifiSign, ColorConversion.Bgr2Bgra);
+		CvInvoke.CvtColor(drawnTrain, drawnTrain, ColorConversion.Bgr2Bgra);
 		
 		exampleButton.Add(new Rectangle(new Point(0, 0), new Size(438, 50), 0, new ColorSettings(new MCvScalar(0, 0, 0, 100), -1)));
 		
