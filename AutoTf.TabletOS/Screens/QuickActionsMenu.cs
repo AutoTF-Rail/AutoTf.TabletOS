@@ -51,7 +51,9 @@ public class QuickActionsMenu : Screen
 
 	public void Show()
 	{
-		Background = _render.RenderRaw(true, false);
+		Mat bck = _render.RenderRaw(true, false);
+		CvInvoke.CvtColor(bck, bck, ColorConversion.Bgr2Bgra);
+		Background = bck;
 		_previousScreen = _render.ActiveScreen!;
 		_render.ActiveScreen = this;
 	}
