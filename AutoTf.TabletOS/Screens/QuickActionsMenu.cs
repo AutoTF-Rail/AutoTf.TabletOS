@@ -60,14 +60,12 @@ public class QuickActionsMenu : Screen
 		Console.WriteLine("Setting");
 		Background = bck;
 		Console.WriteLine("Saving");
-		_previousScreen = _render.ActiveScreen!;
-		Console.WriteLine("Setting 2");
-		_render.ActiveScreen = this;
+		_render.SwapScreen(this);
 	}
 
 	public void Close()
 	{
-		_render.ActiveScreen = _previousScreen;
+		_render.SwapBackScreen();
 		isShown = false;
 	}
 	
