@@ -18,7 +18,7 @@ public class StartScreen : IDisposable
 		try
 		{
 			_logger.Log("Guh");
-			_render = new RenderBase(_logger, true, new Size(1024, 600), new Size(1024, 600), false, true);
+			_render = new RenderBase(_logger, true, new Size(1280, 720), new Size(1024, 600), true, true);
 		
 			_render.ActiveToolbar = new TopScreenBar(_render, _logger);
 
