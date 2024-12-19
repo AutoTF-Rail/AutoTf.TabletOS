@@ -19,20 +19,27 @@ public class TopScreenBar : Screen
 	
 	public TopScreenBar(IRenderBase render, Logger logger) : base(logger)
 	{
-		_render = render;
-		_logger = logger;
+		try
+		{
+			_render = render;
+			_logger = logger;
 		
-		AddEntity(new Rectangle(new Point(0, 0), new Size(1024, 15), 0, new ColorSettings(new MCvScalar(0, 0, 0, 51), -1), ShowQuickActionsMenu));
-		AddEntity(new Text(() => DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"), new FontSettings(new MCvScalar(255, 255, 255), 15), new Point(2, -1)));
+			AddEntity(new Rectangle(new Point(0, 0), new Size(1024, 15), 0, new ColorSettings(new MCvScalar(0, 0, 0, 51), -1), ShowQuickActionsMenu));
+			AddEntity(new Text(() => DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"), new FontSettings(new MCvScalar(255, 255, 255), 15), new Point(2, -1)));
 		
-		Mat fullSignal = CvInvoke.Imread("Images/FullSignalSign.png", ImreadModes.Unchanged);
-		CvInvoke.CvtColor(fullSignal, fullSignal, ColorConversion.Bgr2Bgra);
+			Mat fullSignal = CvInvoke.Imread("Images/FullSignalSign.png", ImreadModes.Unchanged);
+			CvInvoke.CvtColor(fullSignal, fullSignal, ColorConversion.Bgr2Bgra);
 		
-		Mat noWifiSign = CvInvoke.Imread("Images/NoWifiSign.png", ImreadModes.Unchanged);
-		CvInvoke.CvtColor(noWifiSign, noWifiSign, ColorConversion.Bgr2Bgra);
+			Mat noWifiSign = CvInvoke.Imread("Images/NoWifiSign.png", ImreadModes.Unchanged);
+			CvInvoke.CvtColor(noWifiSign, noWifiSign, ColorConversion.Bgr2Bgra);
 		
-		AddEntity(new Image(fullSignal, new Size(15, 10), new Point(985, 4)));
-		AddEntity(new Image(noWifiSign, new Size(17, 17), new Point(1005, 0)));
+			AddEntity(new Image(fullSignal, new Size(15, 10), new Point(985, 4)));
+			AddEntity(new Image(noWifiSign, new Size(17, 17), new Point(1005, 0)));
+		}
+		catch (Exception e)
+		{
+			logger.Log(e.Message);
+		}
 	}
 
 	private void ShowQuickActionsMenu()

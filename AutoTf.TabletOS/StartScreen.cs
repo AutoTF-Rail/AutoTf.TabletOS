@@ -15,11 +15,19 @@ public class StartScreen : IDisposable
 	public StartScreen()
 	{
 		// _render = new RenderEngine(_logger, true, 1024, 600, true, true);
-		_render = new RenderBase(_logger, true, new Size(1024, 600), new Size(1024, 600), false, true);
+		try
+		{
+			_render = new RenderBase(_logger, true, new Size(1024, 600), new Size(1024, 600), false, true);
 		
-		_render.ActiveToolbar = new TopScreenBar(_render, _logger);
+			_render.ActiveToolbar = new TopScreenBar(_render, _logger);
 
-		_render.ActiveScreen = new LoginScreen(_logger);
+			_render.ActiveScreen = new LoginScreen(_logger);
+		}
+		catch (Exception e)
+		{
+			_logger.Log(e.Message);
+			throw;
+		}
 
 		// Mat background =
 		// CvInvoke.Imread(
