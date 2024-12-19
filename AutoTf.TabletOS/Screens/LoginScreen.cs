@@ -18,6 +18,7 @@ public class LoginScreen : Screen
 	{
 		try
 		{
+			logger.Log("Startup");
 			Mat background = CvInvoke.Imread("Images/TabletOSStart.png");
 			CvInvoke.CvtColor(background, background, ColorConversion.Bgr2Bgra);
 			base.Background = background;
