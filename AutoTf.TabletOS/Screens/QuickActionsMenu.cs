@@ -51,10 +51,15 @@ public class QuickActionsMenu : Screen
 
 	public void Show()
 	{
+		Console.WriteLine("Rendering");
 		Mat bck = _render.RenderRaw(true, false);
+		Console.WriteLine("Converting");
 		CvInvoke.CvtColor(bck, bck, ColorConversion.Bgr2Bgra);
+		Console.WriteLine("Setting");
 		Background = bck;
+		Console.WriteLine("Saving");
 		_previousScreen = _render.ActiveScreen!;
+		Console.WriteLine("Setting 2");
 		_render.ActiveScreen = this;
 	}
 
