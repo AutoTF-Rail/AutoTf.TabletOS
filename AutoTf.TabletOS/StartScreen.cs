@@ -21,7 +21,7 @@ public class StartScreen : IDisposable
 		
 			_render.ActiveToolbar = new TopScreenBar(_render, _logger);
 
-			_render.ActiveScreen = new LoginScreen(_logger);
+			_render.ActiveScreen = new LoginScreen(_render, _logger);
 		}
 		catch (Exception e)
 		{
