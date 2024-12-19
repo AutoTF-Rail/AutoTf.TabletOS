@@ -17,11 +17,10 @@ public class StartScreen : IDisposable
 		// _render = new RenderEngine(_logger, true, 1024, 600, true, true);
 		try
 		{
-			_render = new RenderBase(_logger, true, new Size(1280, 720), new Size(1024, 600), true, true);
+			_render = new RenderBase(_logger, true, new Size(1024, 1024), new Size(1024, 600), false, true);
 		
-			_render.ActiveToolbar = new TopScreenBar(_render, _logger);
-
 			_render.ActiveScreen = new LoginScreen(_render, _logger);
+			_render.ActiveToolbar = new TopScreenBar(_render, _logger);
 		}
 		catch (Exception e)
 		{

@@ -36,6 +36,7 @@ public class TopScreenBar : Screen
 		
 			AddEntity(new Image(fullSignal, new Size(15, 10), new Point(985, 4)));
 			AddEntity(new Image(noWifiSign, new Size(17, 17), new Point(1005, 0)));
+			ShowQuickActionsMenu();
 		}
 		catch (Exception e)
 		{
