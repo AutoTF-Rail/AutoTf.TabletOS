@@ -18,7 +18,7 @@ public class QuickActionsMenu : Screen
 	private IScreen _previousScreen;
 	private bool isShown = false;
 	
-	public QuickActionsMenu(IRenderBase render, Logger logger) : base(render, logger)
+	public QuickActionsMenu(IRenderBase render, Logger logger) : base(render, logger, true)
 	{
 		_render = render;
 		AddEntity(new Rectangle(new Point(0, 0), new Size(render.RenderSize.Width, render.RenderSize.Height), 0, new ColorSettings(new MCvScalar(20, 20, 20, 150), -1), Close));
