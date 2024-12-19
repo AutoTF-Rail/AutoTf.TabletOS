@@ -57,13 +57,21 @@ public class QuickActionsMenu : Screen
 
 	public void Show()
 	{
-		Console.WriteLine("Rendering");
-		Mat bck = _render.RenderRaw(true, false);
-		CvInvoke.CvtColor(bck, bck, ColorConversion.Bgr2Bgra);
-		Console.WriteLine("Setting");
-		Background = bck;
-		Console.WriteLine("Saving");
-		_render.SwapScreen(this);
+		try
+		{
+			Console.WriteLine("Rendering");
+			Mat bck = _render.RenderRaw(true, false);
+			CvInvoke.CvtColor(bck, bck, ColorConversion.Bgr2Bgra);
+			Console.WriteLine("Setting");
+			Background = bck;
+			Console.WriteLine("Saving");
+			_render.SwapScreen(this);
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
+			throw;
+		}
 	}
 
 	public void Close()
