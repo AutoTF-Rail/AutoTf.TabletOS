@@ -19,7 +19,7 @@ public class QuickActionsMenu : Screen
 	private bool isShown = false;
 	private readonly Action CloseEvent;
 	
-	public QuickActionsMenu(Action closeEvent, IRenderBase render, Logger logger) : base(render, logger, true)
+	public QuickActionsMenu(Action closeEvent, IRenderBase render, Logger logger) : base(logger)
 	{
 		CloseEvent = closeEvent;
 		_render = render;

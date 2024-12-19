@@ -14,7 +14,7 @@ namespace AutoTf.TabletOS.Screens;
 [ScreenIdentifier("LoginScreen")]
 public class LoginScreen : Screen
 {
-	public LoginScreen(IRenderBase render, Logger logger) : base(render, logger)
+	public LoginScreen(IRenderBase render, Logger logger) : base(logger)
 	{
 		try
 		{

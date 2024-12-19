@@ -18,7 +18,7 @@ public class TopScreenBar : Screen
 	private readonly Logger _logger;
 	private bool isShown = false;
 	
-	public TopScreenBar(IRenderBase render, Logger logger) : base(render, logger, true)
+	public TopScreenBar(IRenderBase render, Logger logger) : base(logger)
 	{
 		try
 		{
