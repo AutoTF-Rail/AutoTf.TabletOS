@@ -64,6 +64,7 @@ public class QuickActionsMenu : Screen
 			CvInvoke.CvtColor(bck, bck, ColorConversion.Bgr2Bgra);
 			Console.WriteLine("Setting");
 			Background = bck;
+			Console.WriteLine(Background.NumberOfChannels);
 			Console.WriteLine("Saving");
 			_render.SwapScreen(this);
 		}
