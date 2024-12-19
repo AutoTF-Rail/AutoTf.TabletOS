@@ -10,13 +10,14 @@ namespace AutoTf.TabletOS;
 public class StartScreen : IDisposable
 {
 	private readonly IRenderBase _render;
-	private readonly Logger _logger = new Logger();
+	private readonly Logger _logger = new Logger(true);
 
 	public StartScreen()
 	{
 		// _render = new RenderEngine(_logger, true, 1024, 600, true, true);
 		try
 		{
+			_logger.Log("Guh");
 			_render = new RenderBase(_logger, true, new Size(1024, 600), new Size(1024, 600), false, true);
 		
 			_render.ActiveToolbar = new TopScreenBar(_render, _logger);
