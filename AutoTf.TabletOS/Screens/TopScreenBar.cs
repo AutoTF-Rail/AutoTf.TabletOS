@@ -26,7 +26,7 @@ public class TopScreenBar : Screen
 			_logger = logger;
 		
 			AddEntity(new Rectangle(new Point(0, 0), new Size(1024, 15), 0, new ColorSettings(new MCvScalar(0, 0, 0, 51), -1), ShowQuickActionsMenu));
-			AddEntity(new Text(() => DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"), new FontSettings(new MCvScalar(255, 255, 255), 15), new Point(2, -1)));
+			AddEntity(new Text(() => DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"), new FontSettings(new MCvScalar(255, 255, 255), 15), new Point(2, -1), true));
 		
 			Mat fullSignal = CvInvoke.Imread("Images/FullSignalSign.png", ImreadModes.Unchanged);
 			CvInvoke.CvtColor(fullSignal, fullSignal, ColorConversion.Bgr2Bgra);
