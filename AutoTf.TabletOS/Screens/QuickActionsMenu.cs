@@ -25,9 +25,9 @@ public class QuickActionsMenu : Screen
 		_render = render;
 		AddEntity(new Rectangle(new Point(0, 0), new Size(render.RenderSize.Width, render.RenderSize.Height), 0, new ColorSettings(new MCvScalar(20, 20, 20, 150), -1), Close));
 
-		AddEntity(new Rectangle(new Point(625, 21), new Size(389, 274), 10,
+		AddEntity(new Rectangle(new Point(625, 21), new Size(389, 274), 0,
 			new ColorSettings(new MCvScalar(0, 0, 0, 125), -1)));
-		AddEntity(new Rectangle(new Point(625, 21), new Size(389, 274), 10,
+		AddEntity(new Rectangle(new Point(625, 21), new Size(389, 274), 0,
 			new ColorSettings(new MCvScalar(255, 255, 255, 255), 1)));
 		//AddEntity(new Text(() => "Quick Actions", new FontSettings(new MCvScalar(255, 255, 255), 15),
 		//	new Point(775, 30)));
@@ -37,9 +37,9 @@ public class QuickActionsMenu : Screen
 		
 		AddEntity(new ContentButton(() => new List<EntityBase>()
 		{
-			new Rectangle(new Point(0, 0), new Size(50, 50), 10,
+			new Rectangle(new Point(0, 0), new Size(50, 50), 0,
 				new ColorSettings(new MCvScalar(200, 200, 200, 255), -1)),
-			new Rectangle(new Point(0, 0), new Size(50, 50), 10, new ColorSettings(new MCvScalar(0, 0, 0, 255), 1)),
+			new Rectangle(new Point(0, 0), new Size(50, 50), 0, new ColorSettings(new MCvScalar(0, 0, 0, 255), 1)),
 			new Image(darkerIcon, new Size(35, 35), new Point(8, 8)),
 		}, new Point(640, 70), new Size(50, 50)));
 		
@@ -48,9 +48,9 @@ public class QuickActionsMenu : Screen
 		
 		AddEntity(new ContentButton(() => new List<EntityBase>()
 		{
-			new Rectangle(new Point(0, 0), new Size(50, 50), 10,
+			new Rectangle(new Point(0, 0), new Size(50, 50), 0,
 				new ColorSettings(new MCvScalar(200, 200, 200, 255), -1)),
-			new Rectangle(new Point(0, 0), new Size(50, 50), 10, new ColorSettings(new MCvScalar(0, 0, 0, 255), 1)),
+			new Rectangle(new Point(0, 0), new Size(50, 50), 0, new ColorSettings(new MCvScalar(0, 0, 0, 255), 1)),
 			new Image(brighterIcon, new Size(35, 35), new Point(8, 8)),
 		}, new Point(700, 70), new Size(50, 50)));
 	}
