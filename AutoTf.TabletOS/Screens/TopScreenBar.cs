@@ -43,12 +43,15 @@ public class TopScreenBar : Screen
 		}
 	}
 
+	private QuickActionsMenu quickShowMenu;
+
 	private void ShowQuickActionsMenu()
 	{
 		if (isShown)
 			return;
+		Console.WriteLine("Show");
 		isShown = true;
-		QuickActionsMenu quickShowMenu = new QuickActionsMenu(CloseQuickActionsMenu, _render, _logger);
+		quickShowMenu = new QuickActionsMenu(CloseQuickActionsMenu, _render, _logger);
 		quickShowMenu.Show();
 	}
 
