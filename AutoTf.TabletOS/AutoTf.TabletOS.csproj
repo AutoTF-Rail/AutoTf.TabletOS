@@ -9,10 +9,10 @@
 
     <ItemGroup>
         <PackageReference Include="AutoTf.Logging" Version="1.0.0-20241216145134" />
-        <PackageReference Include="AutoTf.Renderer" Version="1.0.0-20241221124209" />
-        <PackageReference Include="AutoTf.Renderer.Extensions" Version="1.0.0-20241221124209" />
-        <PackageReference Include="AutoTf.Renderer.Models" Version="1.0.0-20241221124209" />
-        <PackageReference Include="AutoTf.Renderer.Screens" Version="1.0.0-20241221124209" />
+        <PackageReference Include="AutoTf.Renderer" Version="1.0.0-20241221125551" />
+        <PackageReference Include="AutoTf.Renderer.Extensions" Version="1.0.0-20241221125551" />
+        <PackageReference Include="AutoTf.Renderer.Models" Version="1.0.0-20241221125551" />
+        <PackageReference Include="AutoTf.Renderer.Screens" Version="1.0.0-20241221125551" />
         <PackageReference Include="Emgu.CV.runtime.debian-arm64" Version="4.9.0.5494" />
         <PackageReference Include="System.Drawing.Common" Version="9.0.0-rc.2.24474.1" />
         <PackageReference Include="Emgu.CV" Version="4.9.0.5494" />
