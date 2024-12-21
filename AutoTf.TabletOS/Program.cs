@@ -9,8 +9,8 @@ internal class Program
 	{
 		try
 		{
-			AppDomain.CurrentDomain.ProcessExit += (sender, e) => DisposeExit(); 
-			AppDomain.CurrentDomain.UnhandledException += (sender, e) => DisposeExit(); 
+			AppDomain.CurrentDomain.ProcessExit += (sender, e) => DisposeExit(null); 
+			AppDomain.CurrentDomain.UnhandledException += (sender, e) => DisposeExit(e); 
 			
 			_screen = new StartScreen();
 			Thread.Sleep(-1);
@@ -22,9 +22,18 @@ internal class Program
 		}
 	}
 
-	private static void DisposeExit()
+	private static void DisposeExit(UnhandledExceptionEventArgs? e)
 	{
-		new Logger().Log("Unhandled Exception");
+		if (e != null)
+		{
+			Exception ex = (Exception)e.ExceptionObject;
+			Logger logger = new Logger();
+			logger.Log("Unhandled Root Exception");
+			logger.Log(ex.Message);
+			logger.Log(ex.StackTrace!);
+			logger.Log(ex.InnerException?.Message!);
+		}
+
 		_screen.Dispose();
 	}
 }
