@@ -1,4 +1,5 @@
-﻿using AutoTf.Renderer;
+﻿using AutoTf.Logging;
+using AutoTf.Renderer;
 using AutoTf.TabletOS;
 
 internal class Program
@@ -8,8 +9,8 @@ internal class Program
 	{
 		try
 		{
-			AppDomain.CurrentDomain.ProcessExit += (sender, e) => _screen.Dispose(); 
-			AppDomain.CurrentDomain.UnhandledException += (sender, e) => _screen.Dispose(); 
+			AppDomain.CurrentDomain.ProcessExit += (sender, e) => DisposeExit(); 
+			AppDomain.CurrentDomain.UnhandledException += (sender, e) => DisposeExit(); 
 			
 			_screen = new StartScreen();
 			Thread.Sleep(-1);
@@ -19,5 +20,11 @@ internal class Program
 			Console.WriteLine("Root Error:");
 			Console.WriteLine(e);
 		}
+	}
+
+	private static void DisposeExit()
+	{
+		new Logger().Log("Unhandled Exception");
+		_screen.Dispose();
 	}
 }
