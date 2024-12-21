@@ -23,6 +23,7 @@ public class QuickActionsMenu : Screen
 	{
 		CloseEvent = closeEvent;
 		_render = render;
+		
 		AddEntity(new Rectangle(new Point(0, 0), new Size(render.RenderSize.Width, render.RenderSize.Height), 0, new ColorSettings(new MCvScalar(20, 20, 20, 150), -1), Close));
 
 		AddEntity(new Rectangle(new Point(625, 21), new Size(389, 274), 0,
@@ -74,8 +75,8 @@ public class QuickActionsMenu : Screen
 
 	public void Close()
 	{
-		CloseEvent.Invoke();
 		_render.SwapBackScreen();
+		CloseEvent.Invoke();
 	}
 	
 	public override void Mute()
