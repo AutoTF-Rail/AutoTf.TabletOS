@@ -37,6 +37,14 @@ Type=simple
 ExecStart=/bin/bash /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh
 User=root
 Group=root
+StandardInput=tty
+StandardOutput=journal
+StandardError=journal
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
