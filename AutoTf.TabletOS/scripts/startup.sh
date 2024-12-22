@@ -1,7 +1,5 @@
 #!/bin/bash
 
-exec > /dev/tty1 2>&1
-
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSLoadingOS.png 
 
 eval "$(ssh-agent -s)"
