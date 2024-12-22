@@ -1,6 +1,9 @@
 using System;
+using System.Diagnostics;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
@@ -38,5 +41,22 @@ public partial class TopBar : UserControl
 	private void ToggleQuickMenu(object? sender, PointerReleasedEventArgs e)
 	{
 		QuickMenuGrid.IsVisible = !QuickMenuGrid.IsVisible;
+	}
+
+	private void Shutdown_Click(object? sender, RoutedEventArgs e)
+	{
+		Process process = new Process
+		{
+			StartInfo = new ProcessStartInfo
+			{
+				FileName = "shutdown",
+				Arguments = "now",
+				CreateNoWindow = true,
+				UseShellExecute = false
+			}
+		};
+
+		process.Start();
+		Environment.Exit(0);
 	}
 }

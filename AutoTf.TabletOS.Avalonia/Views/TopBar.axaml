@@ -9,9 +9,9 @@
              Width="1024"
              x:Class="AutoTf.TabletOS.Avalonia.Views.TopBar">
     <Grid>
-        <Grid x:Name="TopBarGrid" PointerReleased="ToggleQuickMenu" Height="15" VerticalAlignment="Top">
-            <Grid MinHeight="15" Background="Gray" Opacity=".5" />
-            <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
+        <Grid x:Name="TopBarGrid" PointerReleased="ToggleQuickMenu" Height="25" Background="Transparent" VerticalAlignment="Top">
+            <Grid Height="15" VerticalAlignment="Top" Background="Gray" Opacity=".5" />
+            <DockPanel Height="15" VerticalAlignment="Top" LastChildFill="False" HorizontalAlignment="Stretch">
                 <TextBlock DockPanel.Dock="Left" Name="Bluber" FontFamily="Roboto"></TextBlock>
                 <Image DockPanel.Dock="Right" Source="../Assets/NoWifiSign.png" />
                 <Image DockPanel.Dock="Right" Source="../Assets/FullSignalSign.png" Height="10" Margin="2" />
@@ -28,9 +28,10 @@
                             <Grid>
                                 <Border Background="LightBlue" CornerRadius="10" />
                                 <DockPanel Margin="5">
-                                    <Border Background="Aqua" CornerRadius="35" Width="38" Height="38" BorderBrush="Black" BorderThickness=".3">
+                                    <Grid Width="38" Height="38">
+                                        <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
                                         <Image Source="../Assets/NoWifiSign.png" Height="25" />
-                                    </Border>
+                                    </Grid>
                                     <TextBlock FontSize="10" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
                                         <Run Text="WiFi" />
                                         <LineBreak />
@@ -43,14 +44,52 @@
                             <Grid>
                                 <Border Background="LightBlue" CornerRadius="10" />
                                 <DockPanel Margin="5">
-                                    <Border Background="Aqua" CornerRadius="35" Width="38" Height="38" BorderBrush="Black" BorderThickness=".3">
+                                    <Grid Width="38" Height="38">
+                                        <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
                                         <Image Source="../Assets/FullSignalSign.png" Height="15" />
-                                    </Border>
+                                    </Grid>
                                     <TextBlock FontSize="10" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
                                         <Run Text="Mesh" />
                                         <LineBreak />
                                         <Run Text="Strength" />
                                     </TextBlock>
+                                </DockPanel>
+                            </Grid>
+                        </Button>
+                    </DockPanel>
+                    
+                    <DockPanel LastChildFill="False">
+                        <Button Padding="0" Width="66" Margin="0,0,1,0" Height="50" Background="Transparent">
+                            <Grid>
+                                <Border Background="LightGray" CornerRadius="10" />
+                                <DockPanel Margin="5">
+                                    <Grid Width="38" Height="38">
+                                        <Border Background="Gray" CornerRadius="35" BorderBrush="Black" Opacity=".2" />
+                                        <Image Source="../Assets/DarkerIcon.png" Height="25" />
+                                    </Grid>
+                                </DockPanel>
+                            </Grid>
+                        </Button>
+                        <Button Padding="0" Width="66" Margin="2,0,0,0" Height="50" Background="Transparent">
+                            <Grid>
+                                <Border Background="LightGray" CornerRadius="10" />
+                                <DockPanel Margin="5">
+                                    <Grid Width="38" Height="38">
+                                        <Border Background="Gray" CornerRadius="35" BorderBrush="Black" Opacity=".2" />
+                                        <Image Source="../Assets/BrighterIcon.png" Height="25" />
+                                    </Grid>
+                                </DockPanel>
+                            </Grid>
+                        </Button>
+                        <Button Padding="0" Width="135" Height="50" Background="Transparent" Click="Shutdown_Click">
+                            <Grid>
+                                <Border Background="LightBlue" CornerRadius="10" />
+                                <DockPanel Margin="5">
+                                    <Grid Width="38" Height="38">
+                                        <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
+                                        <Image Source="../Assets/FullSignalSign.png" Height="15" />
+                                    </Grid>
+                                    <TextBlock FontSize="10" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">Shutdown</TextBlock>
                                 </DockPanel>
                             </Grid>
                         </Button>
