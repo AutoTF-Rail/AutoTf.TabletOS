@@ -45,11 +45,11 @@ if check_internet; then
     if check_git_changes; then
         git pull
         fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSApplyingUpdates.png 
-        dotnet build -m:4
+        dotnet build -m
     else
         echo "Skipping git pull as there are no changes."
     fi
 fi
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSStartingUp.png
 
-dotnet run --drm 2>&1 | tee /dev/tty1
+dotnet run --drm
