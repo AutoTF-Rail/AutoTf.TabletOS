@@ -4,9 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:avaloniaRaspbianLiteDrm="clr-namespace:AutoTf.TabletOS.Avalonia.Views"
         mc:Ignorable="d"
-        d:DesignWidth="800"
-        d:DesignHeight="450"
+        d:DesignWidth="1024"
+        d:DesignHeight="600"
+        Height="600"
+        Width="1024"
         x:Class="AutoTf.TabletOS.Avalonia.Views.MainWindow"
-        Title="AvaloniaRaspbianLiteDrm">
+        Title="Tablet OS">
     <avaloniaRaspbianLiteDrm:MainView />
 </Window>

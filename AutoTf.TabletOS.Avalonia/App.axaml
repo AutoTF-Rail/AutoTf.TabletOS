@@ -2,8 +2,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="AutoTf.TabletOS.Avalonia.App"
              xmlns:local="using:AutoTf.TabletOS.Avalonia"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Dark">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+     <!-- <Application.Styles> -->
+     <!--     <Style Selector="TextBlock"> -->
+     <!--         <Setter Property="FontFamily" Value="local:AutoTf.TabletOS.Avalonia.Assets.Roboto-Regular.ttf#Roboto" /> -->
+     <!--     </Style> -->
+     <!-- </Application.Styles> -->
+     <!-- <Application.Resources> -->
+     <!--     <FontFamily x:Key="Roboto">avares://Assets/Fonts/Roboto-Regular.ttf#Roboto</FontFamily> -->
+     <!-- </Application.Resources> -->
 
     <Application.DataTemplates>
         <local:ViewLocator/>

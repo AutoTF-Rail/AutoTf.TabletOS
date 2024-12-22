@@ -10,8 +10,28 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets\**"/>
+        <None Remove="Assets\BrighterIcon.png" />
+        <AvaloniaResource Include="Assets\BrighterIcon.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AvaloniaResource>
+        <None Remove="Assets\DarkerIcon.png" />
+        <AvaloniaResource Include="Assets\DarkerIcon.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AvaloniaResource>
+        <None Remove="Assets\FullSignalSign.png" />
+        <AvaloniaResource Include="Assets\FullSignalSign.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AvaloniaResource>
+        <None Remove="Assets\NoWifiSign.png" />
+        <AvaloniaResource Include="Assets\NoWifiSign.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </AvaloniaResource>
+<!--        <None Remove="Assets\Roboto-Regular.ttf" />-->
+<!--        <AvaloniaResource Include="Assets\Roboto-Regular.ttf">-->
+<!--          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>-->
+<!--        </AvaloniaResource>-->
+        <AvaloniaResource Include="Assets\Fonts\*" />
     </ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.2.3" />
         <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
@@ -27,12 +47,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Models\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="Assets\TabletOSStart.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models\" />
     </ItemGroup>
 </Project>

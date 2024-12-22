@@ -6,6 +6,8 @@
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
+             Height="600"
+             Width="1024"
              x:Class="AutoTf.TabletOS.Avalonia.Views.MainSingleView">
     <avaloniaRaspbianLiteDrm:MainView />
 </UserControl>

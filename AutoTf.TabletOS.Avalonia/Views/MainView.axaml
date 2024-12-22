@@ -2,17 +2,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:AutoTf.TabletOS.Avalonia.Views"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
+             Height="600"
+             Width="1024"
              x:Class="AutoTf.TabletOS.Avalonia.Views.MainView">
-    <StackPanel HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Margin="30"
-                Spacing="30">
-        <TextBlock FontSize="25">
-            Welcome to Avalonia! The best XAML framework ever ♥
-        </TextBlock>
-        <Slider />
-    </StackPanel>
+    <Grid>
+        <Image Source="../Assets/TabletOSStart.png"></Image>
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="30"
+                    Spacing="30">
+            <TextBlock FontSize="25" FontFamily="asdasd">
+                Welcome to Avalonia! The best XAML framework ever ♥
+            </TextBlock>
+            <Slider />
+        </StackPanel>
+        <views:TopBar VerticalAlignment="Top" />
+    </Grid>
 </UserControl>
