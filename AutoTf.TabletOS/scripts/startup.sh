@@ -37,7 +37,7 @@ check_git_changes() {
 }
 
 
-cd /home/display/AutoTf.TabletOS/AutoTf.TabletOS
+cd /home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia
 
 
 if check_internet; then
@@ -52,4 +52,4 @@ if check_internet; then
 fi
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSStartingUp.png
 
-dotnet run 2>&1 | tee /dev/tty1
+dotnet run --drm 2>&1 | tee /dev/tty1
