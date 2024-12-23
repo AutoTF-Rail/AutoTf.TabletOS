@@ -96,6 +96,40 @@
                     </DockPanel>
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom" Margin="30">
+                    <DockPanel LastChildFill="False" Margin="0,0,0,10">
+                        <Button Padding="0" Width="135" Height="50" Background="Transparent">
+                            <Grid>
+                                <Border Background="LightBlue" CornerRadius="10" />
+                                <DockPanel Margin="5">
+                                    <Grid Width="38" Height="38">
+                                        <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
+                                        <Image Source="../Assets/NoWifiSign.png" Height="25" />
+                                    </Grid>
+                                    <TextBlock FontSize="11" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
+                                        <Run Text="CPU Usage" />
+                                        <LineBreak />
+                                        <Run Name="CpuUsage" Text="-1" />
+                                    </TextBlock>
+                                </DockPanel>
+                            </Grid>
+                        </Button>
+                        <Button Padding="0" Width="135" Height="50" Background="Transparent">
+                            <Grid>
+                                <Border Background="LightBlue" CornerRadius="10" />
+                                <DockPanel Margin="5">
+                                    <Grid Width="38" Height="38">
+                                        <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
+                                        <Image Source="../Assets/FullSignalSign.png" Height="15" />
+                                    </Grid>
+                                    <TextBlock FontSize="11" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
+                                        <Run Text="RAM Usage" />
+                                        <LineBreak />
+                                        <Run Name="RamUsage" Text="-1" />
+                                    </TextBlock>
+                                </DockPanel>
+                            </Grid>
+                        </Button>
+                    </DockPanel>
                     <TextBlock>TabletOS by AutoTF (https://autotf.de)</TextBlock>
                     <TextBlock>Served under the Apache 2.0 License</TextBlock>
                     <TextBlock Name="VersionBox">Version</TextBlock>

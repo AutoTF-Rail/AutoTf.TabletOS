@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -41,9 +42,14 @@ public partial class TopBar : UserControl
 		UpdateClock(null, null);
 	}
 	
-	private void UpdateClock(object? sender, EventArgs e)
+	private async void UpdateClock(object? sender, EventArgs e)
 	{
 		Bluber.Text = DateTime.Now.ToString("dd.MM.yy HH:mm:ss");
+		if (QuickMenuGrid.IsVisible)
+		{
+			CpuUsage.Text = (await Program.GetCpuUsageAsync()).ToString(CultureInfo.InvariantCulture);
+			RamUsage.Text = Program.GetUsedMemory() + "/" + Program.GetTotalMemory();
+		}
 	}
 
 	private void ToggleQuickMenu(object? sender, PointerReleasedEventArgs e)
