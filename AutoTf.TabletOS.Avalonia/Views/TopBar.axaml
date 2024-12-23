@@ -124,7 +124,7 @@
                                     <TextBlock FontSize="11" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
                                         <Run Text="RAM Usage" />
                                         <LineBreak />
-                                        <Run Name="RamUsage" Text="-1" />
+                                        <Run Name="RamUsage" FontSize="9" Text="-1" />
                                     </TextBlock>
                                 </DockPanel>
                             </Grid>
