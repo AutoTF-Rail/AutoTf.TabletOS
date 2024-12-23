@@ -15,6 +15,13 @@ public partial class Popup : UserControl
 
 		Question.Text = content;
 		CancelButton.IsVisible = showCancel;
+
+		StaticEvents.BrightnessChanged += BrightnessChanged;
+	}
+
+	private void BrightnessChanged()
+	{
+		this.Opacity = StaticEvents.CurrentBrightness;
 	}
 	
 	public Task<DialogResult> Show(Grid parent)

@@ -59,7 +59,7 @@
                     </DockPanel>
                     
                     <DockPanel LastChildFill="False">
-                        <Button Padding="0" Width="66" Margin="0,0,1,0" Height="50" Background="Transparent">
+                        <Button Padding="0" Width="66" Margin="0,0,1,0" Height="50" Background="Transparent" Click="DarkerButton_Click">
                             <Grid>
                                 <Border Background="LightGray" CornerRadius="10" />
                                 <DockPanel Margin="5">
@@ -70,7 +70,7 @@
                                 </DockPanel>
                             </Grid>
                         </Button>
-                        <Button Padding="0" Width="66" Margin="2,0,0,0" Height="50" Background="Transparent">
+                        <Button Padding="0" Width="66" Margin="2,0,0,0" Height="50" Background="Transparent" Click="BrighterButton_Click">
                             <Grid>
                                 <Border Background="LightGray" CornerRadius="10" />
                                 <DockPanel Margin="5">

@@ -11,15 +11,6 @@
              x:Class="AutoTf.TabletOS.Avalonia.Views.MainView">
     <Grid>
         <Image Source="../Assets/TabletOSStart.png"></Image>
-        <StackPanel HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Margin="30"
-                    Spacing="30">
-            <TextBlock FontSize="25" FontFamily="asdasd">
-                Welcome to Avalonia! The best XAML framework ever ♥
-            </TextBlock>
-            <Slider />
-        </StackPanel>
         <views:TopBar VerticalAlignment="Top" />
     </Grid>
 </UserControl>

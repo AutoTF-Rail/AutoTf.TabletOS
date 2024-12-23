@@ -16,6 +16,13 @@ public partial class TopBar : UserControl
 	{
 		InitializeComponent();
 		Initialize();
+		
+		StaticEvents.BrightnessChanged += BrightnessChanged;
+	}
+
+	private void BrightnessChanged()
+	{
+		// this.Opacity = StaticEvents.CurrentBrightness;
 	}
 
 	private void Initialize()
@@ -62,5 +69,21 @@ public partial class TopBar : UserControl
 		
 		process.Start();
 		Environment.Exit(0);
+	}
+
+	private void DarkerButton_Click(object? sender, RoutedEventArgs e)
+	{
+		if (StaticEvents.CurrentBrightness <= .6)
+			return;
+		StaticEvents.CurrentBrightness -= .1f;
+		StaticEvents.BrightnessChanged?.Invoke();
+	}
+
+	private void BrighterButton_Click(object? sender, RoutedEventArgs e)
+	{
+		if (StaticEvents.CurrentBrightness >= 1.0f)
+			return;
+		StaticEvents.CurrentBrightness += .1f;
+		StaticEvents.BrightnessChanged?.Invoke();
 	}
 }
