@@ -47,8 +47,8 @@ public partial class TopBar : UserControl
 		Bluber.Text = DateTime.Now.ToString("dd.MM.yy HH:mm:ss");
 		if (QuickMenuGrid.IsVisible)
 		{
-			CpuUsage.Text = (await Program.GetCpuUsageAsync()).ToString(CultureInfo.InvariantCulture);
-			RamUsage.Text = Program.GetUsedMemory() + "/" + Program.GetTotalMemory();
+			CpuUsage.Text = float.Round((await Program.GetCpuUsageAsync()), MidpointRounding.ToEven).ToString(CultureInfo.InvariantCulture) + "%";
+			RamUsage.Text = float.Round(Program.GetUsedMemory()) + "MB/" + float.Round(Program.GetTotalMemory()) + "MB";
 		}
 	}
 
