@@ -43,8 +43,12 @@ public partial class TopBar : UserControl
 		QuickMenuGrid.IsVisible = !QuickMenuGrid.IsVisible;
 	}
 
-	private void Shutdown_Click(object? sender, RoutedEventArgs e)
+	private async void Shutdown_Click(object? sender, RoutedEventArgs e)
 	{
+		Popup popup = new Popup("Are you sure you want to shutdown?");
+		if (await popup.Show(RootGrid) != DialogResult.Yes)
+			return;
+		
 		Process process = new Process
 		{
 			StartInfo = new ProcessStartInfo
@@ -55,7 +59,7 @@ public partial class TopBar : UserControl
 				UseShellExecute = false
 			}
 		};
-
+		
 		process.Start();
 		Environment.Exit(0);
 	}
