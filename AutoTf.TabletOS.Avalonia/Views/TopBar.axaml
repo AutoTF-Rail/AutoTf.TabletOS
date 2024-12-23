@@ -95,6 +95,11 @@
                         </Button>
                     </DockPanel>
                 </StackPanel>
+                <StackPanel VerticalAlignment="Bottom" Margin="30">
+                    <TextBlock>TabletOS by AutoTF (https://autotf.de)</TextBlock>
+                    <TextBlock>Served under the Apache 2.0 License</TextBlock>
+                    <TextBlock Name="VersionBox">Version</TextBlock>
+                </StackPanel>
             </Grid>
         </Grid>
     </Grid>

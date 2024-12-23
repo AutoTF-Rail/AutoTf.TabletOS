@@ -28,7 +28,8 @@ public partial class TopBar : UserControl
 	private void Initialize()
 	{
 		// QuickMenuGrid.IsVisible = false;
-		
+
+		VersionBox.Text = "Version: " + Program.GetGitVersion();
 		
 		_timer = new DispatcherTimer
 		{
