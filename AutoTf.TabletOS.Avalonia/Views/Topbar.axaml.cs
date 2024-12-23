@@ -73,7 +73,7 @@ public partial class TopBar : UserControl
 
 	private void DarkerButton_Click(object? sender, RoutedEventArgs e)
 	{
-		if (StaticEvents.CurrentBrightness <= .6)
+		if (StaticEvents.CurrentBrightness <= .4)
 			return;
 		StaticEvents.CurrentBrightness -= .1f;
 		StaticEvents.BrightnessChanged?.Invoke();
