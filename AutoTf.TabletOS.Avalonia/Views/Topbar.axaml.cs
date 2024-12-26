@@ -102,5 +102,6 @@ public partial class TopBar : UserControl
 		{
 			viewModel.ActiveView = new InfoScreen(viewModel.ActiveView);
 		}
+		else ErrorBox.Text = "No Context";
 	}
 }
