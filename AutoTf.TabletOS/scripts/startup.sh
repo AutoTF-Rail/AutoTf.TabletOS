@@ -50,4 +50,4 @@ if check_internet; then
 fi
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSStartingUp.png
 
-dotnet run -c RELEASE --drm
+dotnet run -c RELEASE --drm > /dev/tty1 2>&1
