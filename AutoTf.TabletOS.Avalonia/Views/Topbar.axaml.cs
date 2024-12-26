@@ -28,7 +28,7 @@ public partial class TopBar : UserControl
 		// this.Opacity = StaticEvents.CurrentBrightness;
 	}
 
-	private void Initialize()
+	public void Initialize()
 	{
 		// QuickMenuGrid.IsVisible = false;
 
@@ -94,5 +94,11 @@ public partial class TopBar : UserControl
 			return;
 		Statics.CurrentBrightness += .1f;
 		Statics.BrightnessChanged?.Invoke();
+	}
+
+	private void InfoButton_OnClick(object? sender, RoutedEventArgs e)
+	{
+		InfoScreen screen = new InfoScreen();
+		screen.ShowDialog(Statics.Window);
 	}
 }

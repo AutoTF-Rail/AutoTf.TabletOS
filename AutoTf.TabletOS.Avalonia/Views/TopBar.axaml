@@ -97,7 +97,7 @@
                 </StackPanel>
                 <StackPanel VerticalAlignment="Bottom" Margin="30">
                     <DockPanel LastChildFill="False" Margin="0,0,0,10">
-                        <Button Padding="0" Width="135" Height="50" Background="Transparent">
+                        <Button Padding="0" Width="135" Height="50" Background="Transparent" IsEnabled="False">
                             <Grid>
                                 <Border Background="LightBlue" CornerRadius="10" />
                                 <DockPanel Margin="5">
@@ -113,7 +113,7 @@
                                 </DockPanel>
                             </Grid>
                         </Button>
-                        <Button Padding="0" Width="135" Height="50" Background="Transparent">
+                        <Button Padding="0" Width="135" Height="50" Background="Transparent" IsEnabled="False">
                             <Grid>
                                 <Border Background="LightBlue" CornerRadius="10" />
                                 <DockPanel Margin="5">
@@ -133,7 +133,7 @@
                     <!-- <TextBlock Name="LastSynced">Last Synced: Unknown</TextBlock> -->
                     <DockPanel>
                         <Border Background="LightBlue" CornerRadius="10" />
-                        <Button Padding="0" Width="200" Margin="2,0,0,0" Height="30" Background="Transparent" Click="BrighterButton_Click">
+                        <Button Padding="0" Width="200" Margin="2,0,0,0" Height="30" Background="Transparent" Click="InfoButton_OnClick">
                             <Grid>
                                 <Border Background="DarkGray" CornerRadius="10" />
                                 <DockPanel Margin="5">

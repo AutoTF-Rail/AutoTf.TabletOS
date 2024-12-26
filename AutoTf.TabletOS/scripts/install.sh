@@ -70,5 +70,15 @@ sudo systemctl start startupScript.service
 sudo systemctl enable osStartupScreenScript.service
 sudo systemctl start osStartupScreenScript.service
 
+
+# Add disable_splash=1 to /boot/firmware/config.txt if it doesn't exist
+config_file="/boot/firmware/config.txt"
+if ! grep -q "^disable_splash=1" $config_file; then
+    echo "Adding disable_splash=1 to $config_file"
+    echo "disable_splash=1" | sudo tee -a $config_file > /dev/null
+else
+    echo "disable_splash=1 is already present in $config_file"
+fi
+
 echo "Rebooting the system..."
 sudo reboot
