@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTf.TabletOS", "AutoTf.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTf.TabletOS.Avalonia", "AutoTf.TabletOS.Avalonia\AutoTf.TabletOS.Avalonia.csproj", "{B8617FFA-4C15-496B-9454-C344CC0DA954}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTf.TabletOS.Models", "AutoTf.TabletOS.Models\AutoTf.TabletOS.Models.csproj", "{1EDAC2C8-6BFB-4F98-8B8F-2CD8B618967F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{B8617FFA-4C15-496B-9454-C344CC0DA954}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8617FFA-4C15-496B-9454-C344CC0DA954}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8617FFA-4C15-496B-9454-C344CC0DA954}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EDAC2C8-6BFB-4F98-8B8F-2CD8B618967F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EDAC2C8-6BFB-4F98-8B8F-2CD8B618967F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EDAC2C8-6BFB-4F98-8B8F-2CD8B618967F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EDAC2C8-6BFB-4F98-8B8F-2CD8B618967F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

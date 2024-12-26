@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using AutoTf.TabletOS.Models;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
@@ -16,12 +17,12 @@ public partial class Popup : UserControl
 		Question.Text = content;
 		CancelButton.IsVisible = showCancel;
 
-		StaticEvents.BrightnessChanged += BrightnessChanged;
+		Statics.BrightnessChanged += BrightnessChanged;
 	}
 
 	private void BrightnessChanged()
 	{
-		this.Opacity = StaticEvents.CurrentBrightness;
+		this.Opacity = Statics.CurrentBrightness;
 	}
 	
 	public Task<DialogResult> Show(Grid parent)

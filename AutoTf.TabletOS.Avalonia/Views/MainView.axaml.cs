@@ -8,11 +8,11 @@ public partial class MainView : UserControl
 	{
 		InitializeComponent();
 	
-		StaticEvents.BrightnessChanged += BrightnessChanged;
+		Statics.BrightnessChanged += BrightnessChanged;
 	}
 
 	private void BrightnessChanged()
 	{
-		this.Opacity = StaticEvents.CurrentBrightness;
+		this.Opacity = Statics.CurrentBrightness;
 	}
 }

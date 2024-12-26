@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using AutoTf.TabletOS.Models;
+using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -18,7 +20,7 @@ public partial class TopBar : UserControl
 		InitializeComponent();
 		Initialize();
 		
-		StaticEvents.BrightnessChanged += BrightnessChanged;
+		Statics.BrightnessChanged += BrightnessChanged;
 	}
 
 	private void BrightnessChanged()
@@ -30,7 +32,8 @@ public partial class TopBar : UserControl
 	{
 		// QuickMenuGrid.IsVisible = false;
 
-		VersionBox.Text = "Version: " + Program.GetGitVersion();
+		// VersionBox.Text = "Version: " + Program.GetGitVersion();
+		// LastSynced.Text = "Last Synced: " + Statics.DataManager.GetLastSynced();
 		
 		_timer = new DispatcherTimer
 		{
@@ -41,14 +44,13 @@ public partial class TopBar : UserControl
 
 		UpdateClock(null, null);
 	}
-	
 	private async void UpdateClock(object? sender, EventArgs e)
 	{
 		Bluber.Text = DateTime.Now.ToString("dd.MM.yy HH:mm:ss");
 		if (QuickMenuGrid.IsVisible)
 		{
-			CpuUsage.Text = float.Round((await Program.GetCpuUsageAsync()), MidpointRounding.ToEven).ToString(CultureInfo.InvariantCulture) + "%";
-			RamUsage.Text = float.Round(Program.GetUsedMemory()) + "MB/" + float.Round(Program.GetTotalMemory()) + "MB";
+			CpuUsage.Text = float.Round((await Statics.ProcessReader.GetCpuUsageAsync()), MidpointRounding.ToEven).ToString(CultureInfo.InvariantCulture) + "%";
+			RamUsage.Text = float.Round(Statics.ProcessReader.GetUsedMemory()) + "MB/" + float.Round(Statics.ProcessReader.GetTotalMemory()) + "MB";
 		}
 	}
 
@@ -80,17 +82,17 @@ public partial class TopBar : UserControl
 
 	private void DarkerButton_Click(object? sender, RoutedEventArgs e)
 	{
-		if (StaticEvents.CurrentBrightness <= .4)
+		if (Statics.CurrentBrightness <= .4)
 			return;
-		StaticEvents.CurrentBrightness -= .1f;
-		StaticEvents.BrightnessChanged?.Invoke();
+		Statics.CurrentBrightness -= .1f;
+		Statics.BrightnessChanged?.Invoke();
 	}
 
 	private void BrighterButton_Click(object? sender, RoutedEventArgs e)
 	{
-		if (StaticEvents.CurrentBrightness >= 1.0f)
+		if (Statics.CurrentBrightness >= 1.0f)
 			return;
-		StaticEvents.CurrentBrightness += .1f;
-		StaticEvents.BrightnessChanged?.Invoke();
+		Statics.CurrentBrightness += .1f;
+		Statics.BrightnessChanged?.Invoke();
 	}
 }

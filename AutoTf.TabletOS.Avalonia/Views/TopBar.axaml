@@ -103,7 +103,7 @@
                                 <DockPanel Margin="5">
                                     <Grid Width="38" Height="38">
                                         <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
-                                        <Image Source="../Assets/NoWifiSign.png" Height="25" />
+                                        <Image Source="../Assets/CpuIcon.png" Height="30" />
                                     </Grid>
                                     <TextBlock FontSize="11" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
                                         <Run Text="CPU Usage" />
@@ -119,7 +119,7 @@
                                 <DockPanel Margin="5">
                                     <Grid Width="38" Height="38">
                                         <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
-                                        <Image Source="../Assets/FullSignalSign.png" Height="15" />
+                                        <Image Source="../Assets/RamIcon.png" Height="30" />
                                     </Grid>
                                     <TextBlock FontSize="11" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
                                         <Run Text="RAM Usage" />
@@ -130,9 +130,22 @@
                             </Grid>
                         </Button>
                     </DockPanel>
-                    <TextBlock>TabletOS by AutoTF (https://autotf.de)</TextBlock>
-                    <TextBlock>Served under the Apache 2.0 License</TextBlock>
-                    <TextBlock Name="VersionBox">Version</TextBlock>
+                    <!-- <TextBlock Name="LastSynced">Last Synced: Unknown</TextBlock> -->
+                    <DockPanel>
+                        <Border Background="LightBlue" CornerRadius="10" />
+                        <Button Padding="0" Width="200" Margin="2,0,0,0" Height="30" Background="Transparent" Click="BrighterButton_Click">
+                            <Grid>
+                                <Border Background="DarkGray" CornerRadius="10" />
+                                <DockPanel Margin="5">
+                                    <Image Source="../Assets/QuestionMarkIcon.png" Height="20" />
+                                    <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center">TabletOS by AutoTF</TextBlock>
+                                </DockPanel>
+                            </Grid>
+                        </Button>
+                    </DockPanel>
+                    <!-- <TextBlock>TabletOS by AutoTF (https://autotf.de)</TextBlock> -->
+                    <!-- <TextBlock>Served under the Apache 2.0 License</TextBlock> -->
+                    <!-- <TextBlock Name="VersionBox">Version</TextBlock> -->
                 </StackPanel>
             </Grid>
         </Grid>

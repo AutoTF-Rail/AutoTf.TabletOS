@@ -55,4 +55,8 @@
     <ItemGroup>
       <Folder Include="Models\" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AutoTf.TabletOS.Models\AutoTf.TabletOS.Models.csproj" />
+    </ItemGroup>
 </Project>
