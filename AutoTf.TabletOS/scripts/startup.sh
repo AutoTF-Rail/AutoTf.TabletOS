@@ -1,8 +1,8 @@
 #!/bin/bash
-
-exec > /dev/tty1 2>&1
-chvt 1
-env > /tmp/startup_script_env.log
+#
+#exec > /dev/tty1 2>&1
+#chvt 1
+#env > /tmp/startup_script_env.log
 
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSLoadingOS.png 
 
@@ -54,4 +54,4 @@ if check_internet; then
 fi
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSStartingUp.png
 
-dotnet run -c RELEASE --drm > /tmp/startup_script_env_dotnet.log
+dotnet run -c RELEASE --drm
