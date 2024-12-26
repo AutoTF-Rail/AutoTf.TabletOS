@@ -1,6 +1,7 @@
 #!/bin/bash
 
 exec > /dev/tty1 2>&1
+env > /tmp/startup_script_env.log
 
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSLoadingOS.png 
 
