@@ -54,4 +54,4 @@ if check_internet; then
 fi
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSStartingUp.png
 
-dotnet run -c RELEASE --drm > /tmp/startup_script_env_dotnet.log 2>&1
+dotnet run -c RELEASE --drm > /tmp/startup_script_env_dotnet.log
