@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia;
@@ -32,7 +33,6 @@ public partial class TopBar : UserControl
 	{
 		// QuickMenuGrid.IsVisible = false;
 
-		// VersionBox.Text = "Version: " + Program.GetGitVersion();
 		// LastSynced.Text = "Last Synced: " + Statics.DataManager.GetLastSynced();
 		
 		_timer = new DispatcherTimer
@@ -98,7 +98,9 @@ public partial class TopBar : UserControl
 
 	private void InfoButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		InfoScreen screen = new InfoScreen();
-		screen.ShowDialog(Statics.Window);
+		if (DataContext is MainWindowViewModel viewModel)
+		{
+			viewModel.ActiveView = new InfoScreen(viewModel.ActiveView);
+		}
 	}
 }

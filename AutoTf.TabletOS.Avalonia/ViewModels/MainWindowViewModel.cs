@@ -1,6 +1,20 @@
-﻿namespace AutoTf.TabletOS.Avalonia.ViewModels;
+﻿using AutoTf.TabletOS.Avalonia.Views;
+using ReactiveUI;
 
-public partial class MainWindowViewModel : ViewModelBase
+namespace AutoTf.TabletOS.Avalonia.ViewModels;
+
+public partial class MainWindowViewModel : ReactiveObject
 {
-	public string Greeting { get; } = "Welcome to Avalonia!";
+	private object _activeView;
+
+	public object ActiveView
+	{
+		get => _activeView;
+		set => this.RaiseAndSetIfChanged(ref _activeView, value);
+	}
+
+	public MainWindowViewModel()
+	{
+		ActiveView = new MainView();
+	}
 }
