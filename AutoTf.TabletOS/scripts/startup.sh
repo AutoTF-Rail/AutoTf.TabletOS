@@ -1,5 +1,7 @@
 #!/bin/bash
 
+exec > /dev/tty1 2>&1
+
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSLoadingOS.png 
 
 eval "$(ssh-agent -s)"
@@ -50,4 +52,4 @@ if check_internet; then
 fi
 fbi -T 1 -d /dev/fb0 -a -noverbose /home/display/AutoTf.TabletOS/AutoTf.TabletOS/Images/TabletOSStartingUp.png
 
-dotnet run -c RELEASE --drm > /dev/tty1 2>&1
+dotnet run -c RELEASE --drm
