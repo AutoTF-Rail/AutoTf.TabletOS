@@ -8,6 +8,8 @@
              d:DesignHeight="450"
              Height="600"
              Width="1024"
-             x:Class="AutoTf.TabletOS.Avalonia.Views.MainSingleView">
-    <avaloniaRaspbianLiteDrm:MainView />
+             x:Class="AutoTf.TabletOS.Avalonia.Views.MainSingleView"
+             xmlns:viewModels="clr-namespace:AutoTf.TabletOS.Avalonia.ViewModels"
+             x:DataType="viewModels:MainWindowViewModel">
+    <ContentControl Content="{Binding ActiveView}" />
 </UserControl>

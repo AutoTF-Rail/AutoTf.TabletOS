@@ -145,7 +145,7 @@
                     </DockPanel>
                     <!-- <TextBlock>TabletOS by AutoTF (https://autotf.de)</TextBlock> -->
                     <!-- <TextBlock>Served under the Apache 2.0 License</TextBlock> -->
-                    <TextBlock Name="ErrorBox">Error</TextBlock>
+                    <!-- <TextBlock Name="ErrorBox">Error</TextBlock> -->
                 </StackPanel>
             </Grid>
         </Grid>
