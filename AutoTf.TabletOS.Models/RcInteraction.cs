@@ -150,6 +150,70 @@ public class RcInteraction : IRcInteractions
         return string.IsNullOrWhiteSpace(result) ? "No readable data on card." : result;
 	}
 	
+	public bool WriteToCard(byte[] data, byte blockNumber)
+	{
+		if (data.Length != 16)
+		{
+			throw new ArgumentException("Data must be exactly 16 bytes to write to a Mifare block.");
+		}
+
+		bool res;
+		Data106kbpsTypeA card;
+
+		do
+		{
+			res = _rfid.ListenToCardIso14443TypeA(out card, TimeSpan.FromSeconds(2));
+			Thread.Sleep(res ? 0 : 200);
+		}
+		while (!res);
+
+		Console.WriteLine($"Card detected: UID={BitConverter.ToString(card.NfcId)}");
+
+		var mifare = new MifareCard(_rfid, 0)
+		{
+			SerialNumber = card.NfcId,
+			Capacity = MifareCardCapacity.Mifare1K,
+			KeyA = MifareCard.DefaultKeyA.ToArray(),
+			KeyB = MifareCard.DefaultKeyB.ToArray()
+		};
+
+		mifare.BlockNumber = blockNumber;
+
+		mifare.Command = MifareCardCommand.AuthenticationA;
+		int ret = mifare.RunMifareCardCommand();
+
+		if (ret < 0)
+		{
+			mifare.ReselectCard();
+			Console.WriteLine($"Authentication failed for block {blockNumber}. Retrying with Key B.");
+
+			mifare.Command = MifareCardCommand.AuthenticationB;
+			ret = mifare.RunMifareCardCommand();
+
+			if (ret < 0)
+			{
+				Console.WriteLine($"Error authenticating block {blockNumber}. Write failed.");
+				return false;
+			}
+		}
+
+		mifare.Command = MifareCardCommand.Write16Bytes;
+		mifare.Data = data;
+		ret = mifare.RunMifareCardCommand();
+
+		if (ret >= 0)
+		{
+			Console.WriteLine($"Successfully wrote data to block {blockNumber}: {BitConverter.ToString(data)}");
+			return true;
+		}
+		else
+		{
+			mifare.ReselectCard();
+			Console.WriteLine($"Error writing data to block {blockNumber}");
+			return false;
+		}
+	}
+	
 	public void StopMonitoring()
 	{
 		_cancellationTokenSource?.Cancel();

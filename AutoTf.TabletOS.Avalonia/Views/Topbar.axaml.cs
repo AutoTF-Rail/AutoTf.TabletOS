@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
@@ -42,6 +43,7 @@ public partial class TopBar : UserControl
 		};
 		_timer.Tick += UpdateClock; 
 		_timer.Start();
+		Statics.RcInteraction.WriteToCard(Encoding.UTF8.GetBytes("MeowMeowMeow"), (byte)5);
 
 		UpdateClock(null, null);
 	}

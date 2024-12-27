@@ -18,6 +18,11 @@ public class FakeRcInteractions : IRcInteractions
 		return "Fake";
 	}
 
+	public bool WriteToCard(byte[] data, byte blockNumber)
+	{
+		return true;
+	}
+
 	public event EventHandler<string>? CardInserted;
 	public event EventHandler<string>? CardRemoved;
 	public event EventHandler<string>? CardRead;
