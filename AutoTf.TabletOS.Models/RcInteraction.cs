@@ -21,8 +21,7 @@ public class RcInteraction : IRcInteractions
 	{
 		SpiConnectionSettings spiSettings = new SpiConnectionSettings(spiBusId, chipSelectLine)
 		{
-			ClockFrequency = 500_000,
-			Mode = SpiMode.Mode0
+			ClockFrequency = 5_000_000
 		};
 		
 		SpiDevice spiDevice = SpiDevice.Create(spiSettings);
@@ -75,43 +74,72 @@ public class RcInteraction : IRcInteractions
 	
 	public string ReadCardContent(byte[]? key = null)
 	{
-		key ??= new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }; 
-		if (!_rfid.ListenToCardIso14443TypeA(out Data106kbpsTypeA card, TimeSpan.FromSeconds(1)))
-		{
-			return "No card detected.";
-		}
+		bool res;
+        Data106kbpsTypeA card;
 
-		Console.WriteLine($"Card detected: UID={BitConverter.ToString(card.NfcId)}");
+        // Wait for a card to be detected
+        do
+        {
+            res = _rfid.ListenToCardIso14443TypeA(out card, TimeSpan.FromSeconds(2));
+            Thread.Sleep(res ? 0 : 200);
+        }
+        while (!res);
 
-		byte[] buffer = new byte[16];
-		var result = string.Empty;
+        Console.WriteLine($"Card detected: UID={BitConverter.ToString(card.NfcId)}");
 
-		try
-		{
-			for (int block = 0; block < 64; block++) // Mifare Classic has 64 blocks
-			{
-				if (_rfid.MifareAuthenticate(key, MifareCardCommand.AuthenticationA, (byte)block, card.NfcId) != Status.Ok)
-				{
-					Console.WriteLine($"Authentication failed for block {block}");
-					continue;
-				}
+        // Initialize the MifareCard
+        MifareCard mifare = new MifareCard(_rfid, 0)
+        {
+            SerialNumber = card.NfcId,
+            Capacity = MifareCardCapacity.Mifare1K,
+            KeyA = MifareCard.DefaultKeyA.ToArray(),
+            KeyB = MifareCard.DefaultKeyB.ToArray()
+        };
 
-				if (_rfid.SendAndReceiveData(MfrcCommand.Transceive, new byte[] { (byte)MifareCardCommand.Read16Bytes, (byte)block }, buffer) == Status.Ok)
-				{
-					result += $"Block {block}: {BitConverter.ToString(buffer)}\n";
-				}
-				else
-				{
-					Console.WriteLine($"Failed to read block {block}");
-				}
-			}
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine($"Error reading card: {ex.Message}");
-		}
+        string result = string.Empty;
 
-		return string.IsNullOrWhiteSpace(result) ? "No readable data on card." : result;
+        // Loop through blocks
+        for (int block = 0; block < 64; block++)
+        {
+            mifare.BlockNumber = (byte)block;
+
+            // Authenticate the block
+            mifare.Command = MifareCardCommand.AuthenticationA; // Try Key A
+            int ret = mifare.RunMifareCardCommand();
+
+            if (ret < 0)
+            {
+                mifare.ReselectCard();
+                Console.WriteLine($"Authentication failed for block {block}. Retrying with Key B.");
+
+                // Try Key B if Key A fails
+                mifare.Command = MifareCardCommand.AuthenticationB;
+                ret = mifare.RunMifareCardCommand();
+
+                if (ret < 0)
+                {
+                    mifare.ReselectCard();
+                    Console.WriteLine($"Error authenticating block {block}");
+                    continue;
+                }
+            }
+
+            // Read the block
+            mifare.Command = MifareCardCommand.Read16Bytes;
+            ret = mifare.RunMifareCardCommand();
+
+            if (ret >= 0 && mifare.Data is object)
+            {
+                result += $"Block {block}: {BitConverter.ToString(mifare.Data)}\n";
+            }
+            else
+            {
+                mifare.ReselectCard();
+                Console.WriteLine($"Error reading block {block}");
+            }
+        }
+
+        return string.IsNullOrWhiteSpace(result) ? "No readable data on card." : result;
 	}
 	
 	public void StopMonitoring()
