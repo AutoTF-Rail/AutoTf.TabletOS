@@ -101,42 +101,71 @@ public class RcInteraction : IRcInteractions
         // Loop through blocks
         for (int block = 0; block < 64; block++)
         {
-            mifare.BlockNumber = (byte)block;
+	        mifare.BlockNumber = (byte)block;
 
-            // Authenticate the block
-            mifare.Command = MifareCardCommand.AuthenticationA; // Try Key A
-            int ret = mifare.RunMifareCardCommand();
+	        bool authenticated = false;
 
-            if (ret < 0)
-            {
-                mifare.ReselectCard();
-                Console.WriteLine($"Authentication failed for block {block}. Retrying with Key B.");
+	        mifare.Command = MifareCardCommand.AuthenticationA;
+	        int ret = mifare.RunMifareCardCommand();
 
-                // Try Key B if Key A fails
-                mifare.Command = MifareCardCommand.AuthenticationB;
-                ret = mifare.RunMifareCardCommand();
+	        if (ret >= 0)
+	        {
+		        authenticated = true;
+		        Console.WriteLine($"Authenticated block {block} with Key A.");
+	        }
+	        else
+	        {
+		        mifare.Command = MifareCardCommand.AuthenticationB;
+		        ret = mifare.RunMifareCardCommand();
 
-                if (ret < 0)
-                {
-                    mifare.ReselectCard();
-                    Console.WriteLine($"Error authenticating block {block}");
-                    continue;
-                }
-            }
+		        if (ret >= 0)
+		        {
+			        authenticated = true;
+			        Console.WriteLine($"Authenticated block {block} with Key B.");
+		        }
+	        }
 
-            // Read the block
-            mifare.Command = MifareCardCommand.Read16Bytes;
-            ret = mifare.RunMifareCardCommand();
+	        if (!authenticated)
+	        {
+		        Console.WriteLine($"Authentication failed for block {block}.");
+		        continue;
+	        }
 
-            if (ret >= 0 && mifare.Data is object)
-            {
-                result += $"Block {block}: {BitConverter.ToString(mifare.Data)}\n";
-            }
-            else
-            {
-                mifare.ReselectCard();
-                Console.WriteLine($"Error reading block {block}");
-            }
+	        mifare.Command = MifareCardCommand.Read16Bytes;
+	        ret = mifare.RunMifareCardCommand();
+
+	        if (ret >= 0 && mifare.Data is object)
+	        {
+		        Console.WriteLine($"Block {block} data: {BitConverter.ToString(mifare.Data)}");
+		        if (block == 0)
+		        {
+			        if (mifare.Data.Length != 16)
+			        {
+				        Console.WriteLine("Invalid block data length.");
+			        }
+			        else
+			        {
+				        Console.WriteLine("Interpreting Block 0 (Manufacturer Block):");
+
+				        byte[] uid = mifare.Data.Take(4).ToArray(); 
+				        byte bcc = mifare.Data[4];           
+				        byte[] manufacturerData = mifare.Data.Skip(5).Take(5).ToArray();
+				        byte[] reserved = mifare.Data.Skip(10).Take(6).ToArray();
+
+				        Console.WriteLine($"UID: {BitConverter.ToString(uid)}");
+				        Console.WriteLine($"BCC: {bcc:X2}");
+				        Console.WriteLine($"Manufacturer Data: {BitConverter.ToString(manufacturerData)}");
+				        Console.WriteLine($"Reserved Data: {BitConverter.ToString(reserved)}");
+			        }
+		        }
+		        result += $"Block {block}: {BitConverter.ToString(mifare.Data)}\n";
+	        }
+	        else
+	        {
+		        Console.WriteLine($"Failed to read block {block}");
+	        }
+
+	        mifare.ReselectCard();
         }
 
         return string.IsNullOrWhiteSpace(result) ? "No readable data on card." : result;
