@@ -16,7 +16,7 @@
                  <ColumnDefinition />
              </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Margin="20">
-                <Button Click="Button_OnClick" Foreground="Black">Back</Button>
+                <Button Click="Button_OnClick" Foreground="Black" BorderBrush="Black">Back</Button>
                 <Image Source="../Assets/AutoTfTabletOsCombine.png" Width="300" HorizontalAlignment="Left" Margin="70, 10, 10, 10" />
             </StackPanel>
             <StackPanel Grid.Column="1" Margin="50">

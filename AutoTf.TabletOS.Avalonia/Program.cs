@@ -48,10 +48,13 @@ sealed class Program
 #if RELEASE
 		Statics.DataManager = new DataManager();
 		Statics.ProcessReader = new ProcessReader();
+		Statics.RcInteraction = new RcInteraction(0, 0, 25);
 #else
 		Statics.DataManager = new FakeDataManager();
 		Statics.ProcessReader = new FakeProcessReader();
+		Statics.RcInteraction = new FakeRcInteractions();
 #endif
+		Statics.RcInteraction.StartMonitoring();
 	}
 
 	private static void SilenceConsole()

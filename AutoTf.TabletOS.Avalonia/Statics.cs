@@ -1,4 +1,5 @@
 using System;
+using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Controls;
 
@@ -11,4 +12,5 @@ public static class Statics
 	public static IDataManager DataManager;
 	public static IProcessReader ProcessReader;
 	public static Window Window;
+	public static IRcInteractions RcInteraction;
 }

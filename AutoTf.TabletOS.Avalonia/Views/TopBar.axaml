@@ -95,7 +95,8 @@
                         </Button>
                     </DockPanel>
                 </StackPanel>
-                <StackPanel VerticalAlignment="Bottom" Margin="30">
+                <StackPanel VerticalAlignment="Bottom" Margin="27">
+                    <TextBlock Name="RfidStatus">RFID Present: False</TextBlock>
                     <DockPanel LastChildFill="False" Margin="0,0,0,10">
                         <Button Padding="0" Width="135" Height="50" Background="Transparent" IsEnabled="False">
                             <Grid>

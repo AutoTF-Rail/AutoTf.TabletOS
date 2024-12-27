@@ -34,13 +34,15 @@ public partial class TopBar : UserControl
 		// QuickMenuGrid.IsVisible = false;
 
 		// LastSynced.Text = "Last Synced: " + Statics.DataManager.GetLastSynced();
+
+		RfidStatus.Text = Statics.RcInteraction.ReadCardContent();
 		
 		_timer = new DispatcherTimer
 		{
 			Interval = TimeSpan.FromSeconds(1) 
 		};
 		_timer.Tick += UpdateClock; 
-		_timer.Start(); 
+		_timer.Start();
 
 		UpdateClock(null, null);
 	}
