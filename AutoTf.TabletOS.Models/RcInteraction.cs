@@ -74,80 +74,84 @@ public class RcInteraction : IRcInteractions
 	
 	public string ReadCardContent(byte[]? key = null)
 	{
-		bool res;
-        Data106kbpsTypeA card;
+	    bool res;
+	    Data106kbpsTypeA card;
 
-        // Wait for a card to be detected
-        do
-        {
-            res = _rfid.ListenToCardIso14443TypeA(out card, TimeSpan.FromSeconds(2));
-            Thread.Sleep(res ? 0 : 200);
-        }
-        while (!res);
+	    // Wait for a card to be detected
+	    do
+	    {
+	        res = _rfid.ListenToCardIso14443TypeA(out card, TimeSpan.FromSeconds(2));
+	        Thread.Sleep(res ? 0 : 200);
+	    }
+	    while (!res);
 
-        Console.WriteLine($"Card detected: UID={BitConverter.ToString(card.NfcId)}");
+	    Console.WriteLine($"Card detected: UID={BitConverter.ToString(card.NfcId)}");
 
-        // Initialize the MifareCard
-        MifareCard mifare = new MifareCard(_rfid, 0)
-        {
-            SerialNumber = card.NfcId,
-            Capacity = MifareCardCapacity.Mifare1K,
-            KeyA = MifareCard.DefaultKeyA.ToArray(),
-            KeyB = MifareCard.DefaultKeyB.ToArray()
-        };
+	    // Initialize the MifareCard
+	    var mifare = new MifareCard(_rfid, 0)
+	    {
+	        SerialNumber = card.NfcId,
+	        Capacity = MifareCardCapacity.Mifare1K,
+	        KeyA = MifareCard.DefaultKeyA.ToArray(),
+	        KeyB = MifareCard.DefaultKeyB.ToArray()
+	    };
 
-        string result = string.Empty;
+	    string result = string.Empty;
 
-        // Loop through blocks
-        for (int block = 0; block < 64; block++)
-        {
+	    // Loop through blocks
+	    for (int block = 0; block < 64; block++)
+	    {
 	        mifare.BlockNumber = (byte)block;
 
 	        bool authenticated = false;
 
+	        // Authenticate with Key A
 	        mifare.Command = MifareCardCommand.AuthenticationA;
 	        int ret = mifare.RunMifareCardCommand();
 
 	        if (ret >= 0)
 	        {
-		        authenticated = true;
-		        Console.WriteLine($"Authenticated block {block} with Key A.");
+	            authenticated = true;
+	            Console.WriteLine($"Authenticated block {block} with Key A.");
 	        }
 	        else
 	        {
-		        mifare.Command = MifareCardCommand.AuthenticationB;
-		        ret = mifare.RunMifareCardCommand();
+	            // Try Key B if Key A fails
+	            mifare.Command = MifareCardCommand.AuthenticationB;
+	            ret = mifare.RunMifareCardCommand();
 
-		        if (ret >= 0)
-		        {
-			        authenticated = true;
-			        Console.WriteLine($"Authenticated block {block} with Key B.");
-		        }
+	            if (ret >= 0)
+	            {
+	                authenticated = true;
+	                Console.WriteLine($"Authenticated block {block} with Key B.");
+	            }
 	        }
 
 	        if (!authenticated)
 	        {
-		        Console.WriteLine($"Authentication failed for block {block}.");
-		        continue;
+	            Console.WriteLine($"Authentication failed for block {block}.");
+	            continue;
 	        }
 
+	        // Read the block
 	        mifare.Command = MifareCardCommand.Read16Bytes;
 	        ret = mifare.RunMifareCardCommand();
 
 	        if (ret >= 0 && mifare.Data is object)
 	        {
-		        Console.WriteLine($"Block {block} data: {BitConverter.ToString(mifare.Data)}");
-		        result += $"Block {block}: {BitConverter.ToString(mifare.Data)}\n";
+	            Console.WriteLine($"Block {block} data: {BitConverter.ToString(mifare.Data)}");
+	            result += $"Block {block}: {BitConverter.ToString(mifare.Data)}\n";
 	        }
 	        else
 	        {
-		        Console.WriteLine($"Failed to read block {block}");
+	            Console.WriteLine($"Failed to read block {block}");
 	        }
 
+	        // Reselect card after each block to handle card stopping communication
 	        mifare.ReselectCard();
-        }
+	    }
 
-        return string.IsNullOrWhiteSpace(result) ? "No readable data on card." : result;
+	    return string.IsNullOrWhiteSpace(result) ? "No readable data on card." : result;
 	}
 	
 	public bool WriteToCard(byte[] data, byte blockNumber)
