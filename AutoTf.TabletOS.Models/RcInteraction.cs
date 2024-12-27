@@ -137,6 +137,27 @@ public class RcInteraction : IRcInteractions
 	        if (ret >= 0 && mifare.Data is object)
 	        {
 		        Console.WriteLine($"Block {block} data: {BitConverter.ToString(mifare.Data)}");
+		        if (block == 0)
+		        {
+			        if (mifare.Data.Length != 16)
+			        {
+				        Console.WriteLine("Invalid block data length.");
+			        }
+			        else
+			        {
+				        Console.WriteLine("Interpreting Block 0 (Manufacturer Block):");
+
+				        byte[] uid = mifare.Data.Take(4).ToArray(); 
+				        byte bcc = mifare.Data[4];           
+				        byte[] manufacturerData = mifare.Data.Skip(5).Take(5).ToArray();
+				        byte[] reserved = mifare.Data.Skip(10).Take(6).ToArray();
+
+				        Console.WriteLine($"UID: {BitConverter.ToString(uid)}");
+				        Console.WriteLine($"BCC: {bcc:X2}");
+				        Console.WriteLine($"Manufacturer Data: {BitConverter.ToString(manufacturerData)}");
+				        Console.WriteLine($"Reserved Data: {BitConverter.ToString(reserved)}");
+			        }
+		        }
 		        result += $"Block {block}: {BitConverter.ToString(mifare.Data)}\n";
 	        }
 	        else
