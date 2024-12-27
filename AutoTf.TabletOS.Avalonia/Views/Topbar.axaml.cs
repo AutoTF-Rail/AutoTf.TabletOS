@@ -35,7 +35,6 @@ public partial class TopBar : UserControl
 
 		// LastSynced.Text = "Last Synced: " + Statics.DataManager.GetLastSynced();
 
-		RfidStatus.Text = Statics.RcInteraction.ReadCardContent();
 		
 		_timer = new DispatcherTimer
 		{
@@ -53,6 +52,7 @@ public partial class TopBar : UserControl
 		{
 			CpuUsage.Text = float.Round((await Statics.ProcessReader.GetCpuUsageAsync()), MidpointRounding.ToEven).ToString(CultureInfo.InvariantCulture) + "%";
 			RamUsage.Text = float.Round(Statics.ProcessReader.GetUsedMemory()) + "MB/" + float.Round(Statics.ProcessReader.GetTotalMemory()) + "MB";
+			RfidStatus.Text = Statics.RcInteraction.ReadCardContent();
 		}
 	}
 

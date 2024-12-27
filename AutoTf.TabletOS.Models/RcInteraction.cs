@@ -76,7 +76,7 @@ public class RcInteraction : IRcInteractions
 	public string ReadCardContent(byte[]? key = null)
 	{
 		key ??= new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }; 
-		if (!_rfid.ListenToCardIso14443TypeA(out var card, TimeSpan.FromSeconds(1)))
+		if (!_rfid.ListenToCardIso14443TypeA(out Data106kbpsTypeA card, TimeSpan.FromSeconds(1)))
 		{
 			return "No card detected.";
 		}
