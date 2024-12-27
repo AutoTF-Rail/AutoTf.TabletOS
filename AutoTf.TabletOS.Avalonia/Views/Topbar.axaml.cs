@@ -43,7 +43,9 @@ public partial class TopBar : UserControl
 		};
 		_timer.Tick += UpdateClock; 
 		_timer.Start();
-		Statics.RcInteraction.WriteToCard(Encoding.UTF8.GetBytes("MeowMeowMeow"), (byte)5);
+		byte[] blockData = new byte[16];
+		Array.Copy(Encoding.UTF8.GetBytes("MeowMeowMeow"), blockData, Math.Min(Encoding.UTF8.GetBytes("MeowMeowMeow").Length, blockData.Length));
+		Statics.RcInteraction.WriteToCard(blockData, 5);
 
 		UpdateClock(null, null);
 	}
