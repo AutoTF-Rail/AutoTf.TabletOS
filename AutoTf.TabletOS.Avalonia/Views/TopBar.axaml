@@ -144,6 +144,7 @@
                             </Grid>
                         </Button>
                     </DockPanel>
+                    <Button Margin="5">Authenticate A New Key</Button>
                     <!-- <TextBlock>TabletOS by AutoTF (https://autotf.de)</TextBlock> -->
                     <!-- <TextBlock>Served under the Apache 2.0 License</TextBlock> -->
                     <!-- <TextBlock Name="ErrorBox">Error</TextBlock> -->
