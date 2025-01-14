@@ -12,5 +12,4 @@ public static class Statics
 	public static IDataManager DataManager;
 	public static IProcessReader ProcessReader;
 	public static Window Window;
-	public static IRcInteractions RcInteraction;
 }

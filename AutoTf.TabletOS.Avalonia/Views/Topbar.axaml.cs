@@ -43,9 +43,6 @@ public partial class TopBar : UserControl
 		};
 		_timer.Tick += UpdateClock; 
 		_timer.Start();
-		byte[] blockData = new byte[16];
-		Array.Copy(Encoding.UTF8.GetBytes("MeowMeowMeow"), blockData, Math.Min(Encoding.UTF8.GetBytes("MeowMeowMeow").Length, blockData.Length));
-		Statics.RcInteraction.WriteToCard(blockData, 5);
 
 		UpdateClock(null, null);
 	}
@@ -56,7 +53,6 @@ public partial class TopBar : UserControl
 		{
 			CpuUsage.Text = float.Round((await Statics.ProcessReader.GetCpuUsageAsync()), MidpointRounding.ToEven).ToString(CultureInfo.InvariantCulture) + "%";
 			RamUsage.Text = float.Round(Statics.ProcessReader.GetUsedMemory()) + "MB/" + float.Round(Statics.ProcessReader.GetTotalMemory()) + "MB";
-			RfidStatus.Text = Statics.RcInteraction.ReadCardContent();
 		}
 	}
 
