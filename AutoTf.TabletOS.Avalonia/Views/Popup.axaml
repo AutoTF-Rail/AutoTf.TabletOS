@@ -2,8 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             Width="1024" Height="600"
+             mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="800"
+             Width="1280" Height="800"
              x:Class="AutoTf.TabletOS.Avalonia.Views.Popup">
     <Grid>
         <Grid Background="Gray" Opacity=".2" PointerReleased="CancelButton_OnClick" />

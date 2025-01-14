@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignWidth="1024"
-             d:DesignHeight="600"
-             Height="600"
-             Width="1024"
+             d:DesignWidth="1280"
+             d:DesignHeight="800"
+             Height="800"
+             Width="1280"
              x:Class="AutoTf.TabletOS.Avalonia.Views.TopBar">
     <Grid Name="RootGrid">
         <Grid x:Name="TopBarGrid" PointerReleased="ToggleQuickMenu" Height="25" Background="Transparent" VerticalAlignment="Top">
