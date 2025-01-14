@@ -10,7 +10,7 @@
              Width="1280"
              x:Class="AutoTf.TabletOS.Avalonia.Views.MainView">
     <Grid>
-        <Image Source="../Assets/TabletOSStart.png"></Image>
+        <Image Source="../Assets/TabletOSStart.png" Stretch="Fill"></Image>
         <views:TopBar VerticalAlignment="Top" />
     </Grid>
 </UserControl>
