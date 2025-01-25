@@ -9,7 +9,6 @@
              Width="1280"
              x:Class="AutoTf.TabletOS.Avalonia.Views.InfoScreen">
     <Grid>
-        <Image Source="../Assets/TabletOSBackground.png" HorizontalAlignment="Stretch"/>
         <Grid>
              <Grid.ColumnDefinitions>
                  <ColumnDefinition Width="*" />

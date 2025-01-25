@@ -12,5 +12,8 @@
         Title="Tablet OS"
         xmlns:viewModels="clr-namespace:AutoTf.TabletOS.Avalonia.ViewModels"
         x:DataType="viewModels:MainWindowViewModel">
-    <ContentControl Content="{Binding ActiveView}" />
+    <Grid>
+        <Image Source="../Assets/TabletOSStart.png" Stretch="Fill"></Image>
+        <ContentControl Content="{Binding ActiveView}" />
+    </Grid>
 </Window>

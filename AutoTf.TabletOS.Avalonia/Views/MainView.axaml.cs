@@ -44,8 +44,9 @@ public partial class MainView : UserControl
 						
 						if (DataContext is MainWindowViewModel viewModel)
 						{
-							viewModel.ActiveView = new InfoScreen(viewModel.ActiveView);
+							viewModel.ActiveView = new TrainSelectionScreen();
 						}
+						LoadingArea.IsVisible = false;
 					});
 				}
 			}
