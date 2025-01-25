@@ -1,6 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using AutoTf.TabletOS.Avalonia.ViewModels;
 using Avalonia.Controls;
+using Avalonia.Threading;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -13,7 +16,7 @@ public partial class MainView : UserControl
 		Statics.BrightnessChanged += BrightnessChanged;
 		LoadingArea.IsVisible = false;
 
-		ListenForYubikey();
+		Task.Run(ListenForYubikey);
 	}
 
 	private void ListenForYubikey()
@@ -34,9 +37,16 @@ public partial class MainView : UserControl
 			{
 				if (e.Data.Contains("Yubico") || e.Data.Contains("YubiKey"))
 				{
-					LoadingName.Text = "Loading key...";
-					LoadingArea.IsVisible = true;
-					Console.WriteLine("YubiKey plugged in: " + e.Data);
+					Dispatcher.UIThread.Invoke(() =>
+					{	
+						LoadingName.Text = "";
+						LoadingArea.IsVisible = true;
+						
+						if (DataContext is MainWindowViewModel viewModel)
+						{
+							viewModel.ActiveView = new InfoScreen(viewModel.ActiveView);
+						}
+					});
 				}
 			}
 		};
