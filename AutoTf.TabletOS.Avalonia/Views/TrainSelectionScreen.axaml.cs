@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -10,14 +12,18 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using DynamicData;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class TrainSelectionScreen : UserControl
 {
+	private ObservableCollection<TrainAd> _nearbyTrains = new ObservableCollection<TrainAd>();
+	
 	public TrainSelectionScreen()
 	{
 		InitializeComponent();
+		NearbyTrains.ItemsSource = _nearbyTrains;
 		
 		Task.Run(Initialize);
 	}
@@ -35,19 +41,7 @@ public partial class TrainSelectionScreen : UserControl
 
 	private void LoadNearbyTrains()
 	{
-		string[]? bridges = RunBridgeScan();
-		
-		Dispatcher.UIThread.Invoke(() =>
-		{
-			NearbyLoadingArea.IsVisible = false;
-			if (bridges != null)
-			{
-				NearbyTrains.ItemsSource = bridges.Select(x => new TrainAd()
-				{
-					TrainName = x.Replace("CentralBridge-", "") 
-				}).ToList();
-			}
-		});
+		RunBridgeScan();
 	}
 
 	private void LoadInternetTrains()
@@ -67,14 +61,15 @@ public partial class TrainSelectionScreen : UserControl
 	{
 		OtherTrains.SelectedItem = null;
 	}
-	
-	public string[]? RunBridgeScan()
+
+	private async void RunBridgeScan()
 	{
 		ProcessStartInfo processStartInfo = new ProcessStartInfo()
 		{
-			FileName = "hcitool",
-			Arguments = "lescan",
+			FileName = "btmgmt",
+			Arguments = "find",
 			RedirectStandardOutput = true,
+			RedirectStandardError = true,
 			UseShellExecute = false,
 			CreateNoWindow = true
 		};
@@ -86,20 +81,35 @@ public partial class TrainSelectionScreen : UserControl
 
 		process.Start();
 		Thread.Sleep(1500);
-		process.Kill();
 
-		string output = process.StandardOutput.ReadToEnd();
+		StreamReader outputReader = process.StandardOutput;
 
-		process.WaitForExit();
+		string? line;
+		while ((line = await outputReader.ReadLineAsync()) != null)
+		{
+			if(line.Contains("name"))
+				AddBridge(line.Replace("name ", ""));
+		}
 
-		return FilterForBridge(output);
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			if (NearbyLoadingArea.IsVisible)
+				NearbyTrains.IsVisible = false;
+		});
 	}
-	
-	private string[]? FilterForBridge(string output)
-	{
-		Regex regex = new Regex(@"([0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2})\s*(CentralBridge-[^\s]+)");
 
-		MatchCollection matches = regex.Matches(output);
-		return matches.Select(x => x.Groups[2].Value).ToArray();
+	private void AddBridge(string name)
+	{
+		Console.WriteLine("Adding: " + name);
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			_nearbyTrains.Add(new TrainAd()
+			{
+				TrainName = name
+			});
+			
+			if (NearbyLoadingArea.IsVisible)
+				NearbyTrains.IsVisible = false;
+		});
 	}
 }
