@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Models;
 using Avalonia;
@@ -95,6 +96,11 @@ public partial class TrainSelectionScreen : UserControl
 					TrainNum = "456-456"
 				}
 			};
+		});
+		Thread.Sleep(2500);
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			NearbyLoadingArea.IsVisible = false;
 		});
 	}
 

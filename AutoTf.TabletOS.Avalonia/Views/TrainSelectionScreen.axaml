@@ -60,7 +60,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Border Grid.Row="1">
+                        <Border Grid.Row="1" Name="NearbyLoadingArea">
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <Border CornerRadius="0, 0, 0, 20" Background="Black" Opacity=".5" />
                                 <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center">Searching Nearby...</TextBlock>
@@ -115,7 +115,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Border Grid.Row="1">
+                        <Border Grid.Row="1" Name="OtherLoadingArea">
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <Border CornerRadius="0, 0, 0, 20" Background="Black" Opacity=".5" />
                                 <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center">Checking for Internet...</TextBlock>
