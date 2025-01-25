@@ -32,7 +32,7 @@ public partial class TopBar : UserControl
 
 	public void Initialize()
 	{
-		// QuickMenuGrid.IsVisible = false;
+		QuickMenuGrid.IsVisible = false;
 
 		// LastSynced.Text = "Last Synced: " + Statics.DataManager.GetLastSynced();
 

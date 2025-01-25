@@ -12,5 +12,13 @@
     <Grid>
         <Image Source="../Assets/TabletOSStart.png" Stretch="Fill"></Image>
         <views:TopBar VerticalAlignment="Top" />
+        <Grid Name="LoadingArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid Background="Black" Opacity=".72" />
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Loading...</TextBlock>
+                <TextBlock Name="LoadingName" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Processing File</TextBlock>
+                <TextBlock Name="LoadingPercent" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">0%</TextBlock>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
