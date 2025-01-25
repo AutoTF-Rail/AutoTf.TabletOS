@@ -12,7 +12,7 @@
              xmlns:viewModels="clr-namespace:AutoTf.TabletOS.Avalonia.ViewModels"
              x:DataType="viewModels:MainWindowViewModel">
     <Grid>
-        <Image Source="../Assets/TabletOSStart.png" Stretch="Fill"></Image>
+        <Image Source="../Assets/AuthBackground.png" Stretch="Fill"></Image>
         <ContentControl Content="{Binding ActiveView}" />
     </Grid>
 </UserControl>
