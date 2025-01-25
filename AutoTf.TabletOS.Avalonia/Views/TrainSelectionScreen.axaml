@@ -26,7 +26,7 @@
                             <TextBlock FontSize="25" Margin="10, 6">Trains near you</TextBlock>
                             <Line HorizontalAlignment="Stretch" StartPoint="0,0" EndPoint="580,0" Stroke="Black" Opacity=".7" StrokeThickness="3" />
                         </StackPanel>
-                        <ListBox Grid.Row="1" Margin="5, 5, 5, 0" Name="NearbyTrains" Background="Transparent" VerticalAlignment="Stretch" Padding="0">
+                        <ListBox SelectionMode="Single" SelectionChanged="NearbyTrains_OnSelectionChanged" Grid.Row="1" Margin="5, 5, 5, 0" Name="NearbyTrains" Background="Transparent" VerticalAlignment="Stretch" Padding="0">
                             <ListBox.Styles>
                                 <Style Selector="ListBoxItem">
                                     <Setter Property="Padding" Value="2"/>
@@ -81,7 +81,7 @@
                             <TextBlock FontSize="25" Margin="10, 6">Other trains</TextBlock>
                             <Line HorizontalAlignment="Stretch" StartPoint="0,0" EndPoint="580,0" Stroke="Black" Opacity=".7" StrokeThickness="3" />
                         </StackPanel>
-                        <ListBox Grid.Row="1" Margin="5, 5, 5, 0" Name="OtherTrains" Background="Transparent" VerticalAlignment="Stretch" Padding="0">
+                        <ListBox SelectionChanged="OtherTrains_OnSelectionChanged" SelectionMode="Single" Grid.Row="1" Margin="5, 5, 5, 0" Name="OtherTrains" Background="Transparent" VerticalAlignment="Stretch" Padding="0">
                             <ListBox.Styles>
                                 <Style Selector="ListBoxItem">
                                     <Setter Property="Padding" Value="2"/>
