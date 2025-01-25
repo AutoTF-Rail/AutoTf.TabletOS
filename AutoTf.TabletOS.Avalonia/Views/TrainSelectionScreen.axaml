@@ -3,11 +3,85 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="clr-namespace:AutoTf.TabletOS.Avalonia.Views"
+             xmlns:models="clr-namespace:AutoTf.TabletOS.Models;assembly=AutoTf.TabletOS.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AutoTf.TabletOS.Avalonia.Views.TrainSelectionScreen">
     <Grid>
-        <TextBlock FontSize="20" Margin="30">Train Selection</TextBlock>
+        <!-- <TextBlock FontSize="25" Margin="30">Train Selection</TextBlock> -->
         <views:TopBar VerticalAlignment="Top" />
+        
+        <Grid Margin="40, 70, 40, 40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <Border Grid.Column="0" Margin="10" BorderBrush="Black" BorderThickness="1" CornerRadius="20, 0, 0, 20">
+                <Grid>
+                    <Border Background="Black" Opacity=".1" CornerRadius="20, 0, 0, 20" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel VerticalAlignment="Stretch" Grid.Row="0">
+                            <TextBlock FontSize="25" Margin="10, 6">Trains near you</TextBlock>
+                            <Line HorizontalAlignment="Stretch" StartPoint="0,0" EndPoint="580,0" Stroke="Black" Opacity=".7" StrokeThickness="3" />
+                        </StackPanel>
+                        <ListBox Grid.Row="1" Margin="5, 5, 5, 0" Name="NearbyTrains" Background="Transparent" VerticalAlignment="Stretch" Padding="0">
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Padding" Value="2"/>
+                                    <Setter Property="Margin" Value="2"/>
+                                </Style>
+                            </ListBox.Styles>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="models:TrainAd">
+                                    <Button Background="Transparent" Margin="0" CornerRadius="50" Padding="0" HorizontalAlignment="Stretch" Height="55">
+                                        <Grid Margin="0">
+                                            <Border Margin="0" CornerRadius="50" BorderBrush="Black" BorderThickness="2" />
+                                            <Border Margin="0" CornerRadius="50" Opacity=".15">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0%, 0%" EndPoint="100%, 0%">
+                                                        <GradientStop Color="GreenYellow" Offset="0" />
+                                                        <GradientStop Color="Blue" Offset="1" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                            <DockPanel VerticalAlignment="Stretch">
+                                                <Image DockPanel.Dock="Left" Source="../Assets/RoundTrainIcon.png" VerticalAlignment="Center" Height="52" />
+                                                <Image DockPanel.Dock="Right" Source="../Assets/Arrow_Right.png" Margin="10" Height="35" VerticalAlignment="Center" />
+                                                <TextBlock FontSize="25" Margin="10" VerticalAlignment="Center">
+                                                    <Run Text="{Binding TrainName}" />
+                                                    <Run>-</Run>
+                                                    <Run Text="{Binding TrainNum}" />
+                                                </TextBlock>
+                                            </DockPanel>
+                                        </Grid>
+                                    </Button>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Border Grid.Row="1">
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Border CornerRadius="0, 0, 0, 20" Background="Black" Opacity=".5" />
+                                <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center">Searching Nearby...</TextBlock>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+            <Border Grid.Column="1" Margin="10" BorderBrush="Black" BorderThickness="1" CornerRadius="0, 20, 20, 0">
+                <Grid>
+                    <Border Background="Black" Opacity=".1" CornerRadius="0, 20, 20, 0" />
+                    <StackPanel>
+                        <TextBlock FontSize="25" Margin="10, 6">Other trains</TextBlock>
+                        <Line HorizontalAlignment="Stretch" StartPoint="0,0" EndPoint="580,0" Stroke="Black" Opacity=".7" StrokeThickness="3" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+        
         <Grid Name="LoadingArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid Background="Black" Opacity=".72" />
             <StackPanel VerticalAlignment="Center">

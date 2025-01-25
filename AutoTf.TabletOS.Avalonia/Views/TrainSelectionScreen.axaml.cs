@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Models;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -11,14 +13,89 @@ public partial class TrainSelectionScreen : UserControl
 	public TrainSelectionScreen()
 	{
 		InitializeComponent();
+		
 		Task.Run(Initialize);
 	}
 
 	private void Initialize()
 	{
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			LoadingArea.IsVisible = false;
+		});
+		
 		LoadInternetTrains();
+		LoadNearbyTrains();
+	}
 
-		LoadingArea.IsVisible = false;
+	private void LoadNearbyTrains()
+	{
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			NearbyTrains.ItemsSource = new List<TrainAd>()
+			{
+				new TrainAd()
+				{
+					TrainName = "Meow",
+					TrainNum = "123-123"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				},
+				new TrainAd()
+				{
+					TrainName = "Wuff",
+					TrainNum = "456-456"
+				}
+			};
+		});
 	}
 
 	private void LoadInternetTrains()

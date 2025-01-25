@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using ReactiveUI;
 
-namespace AutoTf.TabletOS.Avalonia.ViewModels;
+namespace AutoTf.TabletOS.Preview;
 
 public partial class MainWindowViewModel : ReactiveObject
 {
@@ -16,6 +16,6 @@ public partial class MainWindowViewModel : ReactiveObject
 
 	public MainWindowViewModel()
 	{
-		ActiveView = new MainView();
+		ActiveView = new TrainSelectionScreen();
 	}
 }
