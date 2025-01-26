@@ -144,31 +144,43 @@ public partial class TrainSelectionScreen : UserControl
 
 	private async void TrainNearby_Click(object? sender, RoutedEventArgs e)
 	{
-		LoadingArea.IsVisible = true;
-		LoadingName.Text = "Trying to connect to train...";
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			LoadingArea.IsVisible = true;
+			LoadingName.Text = "Trying to connect to train...";
+		});
 		
 		Button button = (Button)sender!;
 		TrainAd trainAd = (TrainAd)button.DataContext!;
 
-		if (!TryConnectToNetwork(trainAd.TrainName))
+		bool success = false;
+		
+		for (int i = 1; i < 4; i++)
 		{
-			LoadingName.Text = "Could not find train network...\nRetrying...";
+			if (TryConnectToNetwork(trainAd.TrainName, i))
+			{
+				success = true;
+				break;
+			}
+		}
 
-			if (!TryConnectToNetwork(trainAd.TrainName, false))
+		if (!success)
+		{
+			Dispatcher.UIThread.Invoke(() =>
 			{
 				ErrorBox.Text = "Could not connect to train. Please move closer and retry.";
 				LoadingArea.IsVisible = false;
-				return;
-			}
+			});
+			return;
 		}
 
 		Statics.Connection = ConnectionType.Train;
 
-		LoadingName.Text = "Established connection.\nInitializing...";
+		Dispatcher.UIThread.Invoke(() => LoadingName.Text = "Established connection.\nInitializing...");
 		
 		try
 		{
-			string url = "192.168.1.1/information/login?macAddr=" + ExecuteCommand("cat /sys/class/net/wlan0/address") + "&serialNumber=" + Statics.YubiSerial + "&timestamp=" + Statics.YubiTime;
+			string url = "http://192.168.1.1/information/login?macAddr=" + ExecuteCommand("cat /sys/class/net/wlan0/address") + "&serialNumber=" + Statics.YubiSerial + "&timestamp=" + Statics.YubiTime;
 
 			using HttpClient client = new HttpClient();
 			
@@ -176,22 +188,25 @@ public partial class TrainSelectionScreen : UserControl
 			
 			response.EnsureSuccessStatusCode();
 
-			LoadingName.Text = "Logged in...";
+			Dispatcher.UIThread.Invoke(() => LoadingName.Text = "Logged in...");
 			// TODO: Send hello message
 		}
 		catch (Exception ex)
 		{
-			ErrorBox.Text = "Could not login. " + ex.Message;
-			LoadingArea.IsVisible = false;
+			Dispatcher.UIThread.Invoke(() =>
+			{
+				ErrorBox.Text = "Could not login. " + ex.Message;
+				LoadingArea.IsVisible = false;
+			});
 		}
 	}
 
-	private bool TryConnectToNetwork(string name, bool isFirstTry = true)
+	private bool TryConnectToNetwork(string name, int tryCount)
 	{
 		string commandResult = ExecuteCommand(
 			$"nmcli dev wifi connect \"{name}\" password \"CentralBridgePW\" hidden yes ifname wlan0");
 
-		if (isFirstTry && commandResult.Contains("No network with SSID"))
+		if (tryCount <= 2 && commandResult.Contains("No network with SSID"))
 			return false;
 
 		if (commandResult.Contains("successfully activated with"))
