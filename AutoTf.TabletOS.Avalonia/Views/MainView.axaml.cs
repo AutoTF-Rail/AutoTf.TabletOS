@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
@@ -44,24 +43,13 @@ public partial class MainView : UserControl
 				{
 					Dispatcher.UIThread.Invoke(() =>
 					{	
-						Thread.Sleep(250);
 						LoadingName.Text = "Getting key..";
 						LoadingArea.IsVisible = true;
 						
 						IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
-						
 						if (device == null)
 							return;
-						if (!device.TryConnect(YubiKeyApplication.Oath, out _))
-						{
-							Dispatcher.UIThread.Invoke(() =>
-							{
-								LoadingArea.IsVisible = false;
-							});
-							Console.WriteLine("Failed to connect to YubiKey.");
-							return;
-						}
-						
+
 						using (OathSession session = new OathSession(device))
 						{
 							foreach (Credential credential in session.GetCredentials())
@@ -87,6 +75,7 @@ public partial class MainView : UserControl
 
 		process.Start();
 		process.BeginOutputReadLine();
+		process.WaitForExit();
 	}
 
 	private void BrightnessChanged()
