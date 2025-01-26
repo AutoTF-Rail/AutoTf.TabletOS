@@ -215,6 +215,7 @@ public partial class TrainSelectionScreen : UserControl
 		if (commandResult.Contains("successfully activated with"))
 			return true;
 		
+		Console.WriteLine("Connection output: " + commandResult);
 		return false;
 	}
 	
