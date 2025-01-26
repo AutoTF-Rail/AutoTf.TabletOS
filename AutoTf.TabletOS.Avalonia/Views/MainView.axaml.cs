@@ -1,9 +1,13 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels;
+using AutoTf.TabletOS.Models;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using Yubico.YubiKey;
+using Yubico.YubiKey.Oath;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -39,9 +43,25 @@ public partial class MainView : UserControl
 				{
 					Dispatcher.UIThread.Invoke(() =>
 					{	
-						LoadingName.Text = "";
+						LoadingName.Text = "Getting key..";
 						LoadingArea.IsVisible = true;
 						
+						IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
+						if (device == null)
+							return;
+
+						using (OathSession session = new OathSession(device))
+						{
+							foreach (Credential credential in session.GetCredentials())
+							{
+								if (credential.Issuer != "AutoTF")
+									return;
+								Statics.YubiCode = session.CalculateCredential(credential).Value!;
+								Statics.YubiSerial = device.SerialNumber!.Value;
+								Statics.YubiTime = DateTime.UtcNow;
+							}
+						}
+						// TODO: Error handling if no cred was found.
 						if (DataContext is MainWindowViewModel viewModel)
 						{
 							viewModel.ActiveView = new TrainSelectionScreen();

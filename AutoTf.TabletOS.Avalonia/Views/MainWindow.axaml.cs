@@ -1,4 +1,5 @@
 using AutoTf.TabletOS.Avalonia.ViewModels;
+using AutoTf.TabletOS.Models;
 using Avalonia.Controls;
 using ReactiveUI;
 
