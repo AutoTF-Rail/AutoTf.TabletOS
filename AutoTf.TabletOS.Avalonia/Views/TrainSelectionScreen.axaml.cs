@@ -182,7 +182,7 @@ public partial class TrainSelectionScreen : UserControl
 		
 		try
 		{
-			string url = "http://192.168.1.1/information/login?macAddr=" + ExecuteCommand("cat /sys/class/net/wlan0/address") + "&serialNumber=" + Statics.YubiSerial + "&timestamp=" + Statics.YubiTime;
+			string url = "http://192.168.1.1/information/login?macAddr=" + ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd() + "&serialNumber=" + Statics.YubiSerial + "&timestamp=" + Statics.YubiTime.ToString("yyyy-MM-ddTHH:mm:ss");
 
 			Console.WriteLine("Logging in with: " + url);
 			using HttpClient client = new HttpClient();
