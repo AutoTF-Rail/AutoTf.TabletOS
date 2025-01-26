@@ -236,7 +236,13 @@ public partial class TrainSelectionScreen : UserControl
 
 		process.Start();
 		string result = process.StandardOutput.ReadToEnd();
+		string error = process.StandardError.ReadToEnd();
+		
 		process.WaitForExit();
+		
+		if (result == "")
+			return error;
+		
 		return result;
 	}
 }
