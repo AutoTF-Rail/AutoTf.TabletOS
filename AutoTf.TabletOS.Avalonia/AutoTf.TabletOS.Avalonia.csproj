@@ -47,6 +47,7 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
         <PackageReference Include="Iot.Device.Bindings" Version="3.2.0" />
         <PackageReference Include="Yubico.Core" Version="1.12.1" />
+        <PackageReference Include="Yubico.DotNetPolyfills" Version="1.12.1" />
         <PackageReference Include="Yubico.NativeShims" Version="1.12.1" />
         <PackageReference Include="Yubico.YubiKey" Version="1.12.1" />
     </ItemGroup>
