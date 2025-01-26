@@ -162,8 +162,10 @@ public partial class TrainSelectionScreen : UserControl
 				success = true;
 				break;
 			}
+			Thread.Sleep(250);
 		}
 
+		// TODO: set this export YUBICO_LOG_LEVEL=ERROR
 		if (!success)
 		{
 			Dispatcher.UIThread.Invoke(() =>
@@ -182,6 +184,7 @@ public partial class TrainSelectionScreen : UserControl
 		{
 			string url = "http://192.168.1.1/information/login?macAddr=" + ExecuteCommand("cat /sys/class/net/wlan0/address") + "&serialNumber=" + Statics.YubiSerial + "&timestamp=" + Statics.YubiTime;
 
+			Console.WriteLine("Logging in with: " + url);
 			using HttpClient client = new HttpClient();
 			
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
