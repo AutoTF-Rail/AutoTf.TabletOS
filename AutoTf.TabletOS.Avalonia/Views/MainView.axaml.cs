@@ -80,6 +80,7 @@ public partial class MainView : UserControl
 						}
 						LoadingArea.IsVisible = false;
 					});
+					// TODO: Requires ppa:yubico/stable - yubikey-manager
 				}
 			}
 		};
