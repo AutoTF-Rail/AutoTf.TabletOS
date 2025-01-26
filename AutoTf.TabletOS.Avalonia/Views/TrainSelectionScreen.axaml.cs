@@ -162,7 +162,7 @@ public partial class TrainSelectionScreen : UserControl
 				success = true;
 				break;
 			}
-			Thread.Sleep(250);
+			await Task.Delay(250);
 		}
 
 		// TODO: set this export YUBICO_LOG_LEVEL=ERROR
