@@ -75,7 +75,6 @@ public partial class MainView : UserControl
 
 		process.Start();
 		process.BeginOutputReadLine();
-		process.WaitForExit();
 	}
 
 	private void BrightnessChanged()
