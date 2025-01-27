@@ -163,8 +163,10 @@ public partial class TrainSelectionScreen : UserControl
 
 		// TODO: set this: export YUBICO_LOG_LEVEL=ERROR
 		
-		if (connOutput.Contains("Connection successfully activated1"))
+		if (connOutput.Contains("Connection successfully activated"))
 		{
+			Console.WriteLine("Connection error:");
+			Console.WriteLine(connOutput);
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				ErrorBox.Text = "Could not connect to train. Please move closer and retry.";
