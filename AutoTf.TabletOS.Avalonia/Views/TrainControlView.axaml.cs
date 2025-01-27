@@ -53,7 +53,7 @@ public partial class TrainControlView : UserControl
 				using (MemoryStream ms = new MemoryStream(imageBytes))
 				{
 					Bitmap bitmap = new Bitmap(ms);
-					PreviewImage.Source = bitmap;
+					Dispatcher.UIThread.Invoke(() => PreviewImage.Source = bitmap);
 				}
 			}
 			else
