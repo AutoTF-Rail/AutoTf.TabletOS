@@ -42,7 +42,7 @@ public partial class TrainControlView : UserControl
 		_syncTimer.Stop();
 		try
 		{
-			string url = "192.168.1.1/information/latestFramePreview";
+			string url = "http://192.168.1.1/information/latestFramePreview";
 
 			using HttpClient loginClient = new HttpClient();
 			loginClient.DefaultRequestHeaders.Add("macAddr", ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
@@ -63,7 +63,9 @@ public partial class TrainControlView : UserControl
 			else
 			{
 				Console.WriteLine("Failed to load image");
+				Console.WriteLine(await response.Content.ReadAsStringAsync());
 			}
+			
 			_syncTimer.Start();
 		}
 		catch (Exception ex)
