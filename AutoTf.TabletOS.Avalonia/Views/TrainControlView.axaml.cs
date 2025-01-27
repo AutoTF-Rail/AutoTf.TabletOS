@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -29,44 +30,47 @@ public partial class TrainControlView : UserControl
 		InitializeComponent();
 
 		Task.Run(Initialize);
+		Task.Run(InitializeStream);
 	}
 	
-	private void StartInternetListener()
+	private async Task InitializeStream()
 	{
-		_syncTimer.Elapsed += SyncSyncTimerElapsed;
-		_syncTimer.Start();
-	}
-
-	private async void SyncSyncTimerElapsed(object? sender, ElapsedEventArgs e)
-	{
-		_syncTimer.Stop();
 		try
 		{
-			string url = "http://192.168.1.1/information/latestFramePreview";
+			string url = "ws://192.168.1.1/stream";
 
-			using HttpClient loginClient = new HttpClient();
-			loginClient.DefaultRequestHeaders.Add("macAddr", ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
-			loginClient.Timeout = TimeSpan.FromMilliseconds(2000);
-			
-			HttpResponseMessage response = await loginClient.GetAsync(url);
-			
-			if (response.IsSuccessStatusCode)
+			using ClientWebSocket ws = new ClientWebSocket();
+			await ws.ConnectAsync(new Uri(url), CancellationToken.None);
+
+			byte[] buffer = new byte[4096];
+			MemoryStream ms = new MemoryStream();
+
+			while (ws.State == WebSocketState.Open)
 			{
-				byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
+				WebSocketReceiveResult result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
-				using (MemoryStream ms = new MemoryStream(imageBytes))
+				if (result.MessageType == WebSocketMessageType.Close)
 				{
+					await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by client", CancellationToken.None);
+					break;
+				}
+
+				ms.Write(buffer, 0, result.Count);
+
+				if (result.EndOfMessage)
+				{
+					ms.Seek(0, SeekOrigin.Begin);
+
 					Bitmap bitmap = new Bitmap(ms);
-					Dispatcher.UIThread.Invoke(() => PreviewImage.Source = bitmap);
+
+					Dispatcher.UIThread.Invoke(() =>
+					{
+						PreviewImage.Source = bitmap;
+					});
+
+					ms.SetLength(0);
 				}
 			}
-			else
-			{
-				Console.WriteLine("Failed to load image");
-				Console.WriteLine(await response.Content.ReadAsStringAsync());
-			}
-			
-			_syncTimer.Start();
 		}
 		catch (Exception ex)
 		{
