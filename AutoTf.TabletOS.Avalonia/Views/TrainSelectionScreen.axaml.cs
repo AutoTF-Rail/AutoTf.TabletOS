@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -200,7 +201,16 @@ public partial class TrainSelectionScreen : UserControl
 			
 			HttpResponseMessage helloResponse = await helloClient.PostAsync(url, new StringContent(""));
 			
+			Console.WriteLine("Hello response:");
+			Console.WriteLine(helloResponse.StatusCode);
+			Console.WriteLine(await helloResponse.Content.ReadAsStringAsync());
+			
 			helloResponse.EnsureSuccessStatusCode();
+			
+			if (DataContext is MainWindowViewModel viewModel)
+			{
+				viewModel.ActiveView = new TrainControlView();
+			}
 		}
 		catch (Exception ex)
 		{
