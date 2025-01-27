@@ -42,7 +42,7 @@ public partial class TrainControlView : UserControl
 			using ClientWebSocket ws = new ClientWebSocket();
 			await ws.ConnectAsync(new Uri(url), CancellationToken.None);
 
-			byte[] buffer = new byte[4096];
+			byte[] buffer = new byte[8192];
 			MemoryStream ms = new MemoryStream();
 
 			while (ws.State == WebSocketState.Open)
