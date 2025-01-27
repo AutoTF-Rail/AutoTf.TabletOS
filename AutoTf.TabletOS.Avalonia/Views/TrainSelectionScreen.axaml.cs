@@ -162,7 +162,7 @@ public partial class TrainSelectionScreen : UserControl
 				success = true;
 				break;
 			}
-			await Task.Delay(400);  
+			await Task.Delay(750);  
 		}
 
 		// TODO: set this export YUBICO_LOG_LEVEL=ERROR
@@ -214,6 +214,7 @@ public partial class TrainSelectionScreen : UserControl
 
 	private bool TryConnectToNetwork(string name, int tryCount)
 	{
+		Console.WriteLine(ExecuteCommand("nmcli dev status"));
 		string commandResult = ExecuteCommand(
 			$"nmcli dev wifi connect \"{name}\" password \"CentralBridgePW\" hidden yes ifname wlan0");
 
