@@ -102,6 +102,8 @@ public partial class MainView : UserControl
 		else
 		{
 			Thread.Sleep(1500);
+			
+			ListenForYubikey();
 		}
 	}
 
