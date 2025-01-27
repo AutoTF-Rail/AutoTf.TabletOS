@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
@@ -25,6 +26,7 @@ public partial class MainView : UserControl
 
 	private void ListenForYubikey()
 	{
+		bool failed = true;
 		try
 		{
 
@@ -48,31 +50,26 @@ public partial class MainView : UserControl
 						{
 							LoadingName.Text = "Getting key..";
 							LoadingArea.IsVisible = true;
-
-							IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
-							if (device == null)
-								return;
-
-							using (OathSession session = new OathSession(device))
-							{
-								foreach (Credential credential in session.GetCredentials())
-								{
-									if (credential.Issuer != "AutoTF")
-										return;
-									Statics.YubiCode = session.CalculateCredential(credential).Value!;
-									Statics.YubiSerial = device.SerialNumber!.Value;
-									Statics.YubiTime = DateTime.UtcNow;
-								}
-							}
-
-							// TODO: Error handling if no cred was found.
-							if (DataContext is MainWindowViewModel viewModel)
-							{
-								viewModel.ActiveView = new TrainSelectionScreen();
-							}
-
-							LoadingArea.IsVisible = false;
 						});
+
+						IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
+						if (device == null)
+							return;
+
+						using (OathSession session = new OathSession(device))
+						{
+							foreach (Credential credential in session.GetCredentials())
+							{
+								if (credential.Issuer != "AutoTF")
+									return;
+								Statics.YubiCode = session.CalculateCredential(credential).Value!;
+								Statics.YubiSerial = device.SerialNumber!.Value;
+								Statics.YubiTime = DateTime.UtcNow;
+								failed = false;
+							}
+						}
+						
+						// TODO: Error handling if no cred was found.
 						// TODO: Requires ppa:yubico/stable - yubikey-manager
 					}
 				}
@@ -88,6 +85,24 @@ public partial class MainView : UserControl
 		finally
 		{
 			Dispatcher.UIThread.Invoke(() => { LoadingArea.IsVisible = false; });
+		}
+
+		if (!failed)
+		{
+			Dispatcher.UIThread.Invoke(() =>
+			{
+				if (DataContext is MainWindowViewModel viewModel)
+				{
+					viewModel.ActiveView = new TrainSelectionScreen();
+				}
+
+				LoadingArea.IsVisible = false;
+			});
+		}
+		else
+		{
+			Thread.Sleep(1500);
+			
 			ListenForYubikey();
 		}
 	}
