@@ -206,11 +206,13 @@ public partial class TrainSelectionScreen : UserControl
 			Console.WriteLine(await helloResponse.Content.ReadAsStringAsync());
 			
 			helloResponse.EnsureSuccessStatusCode();
-			
-			if (DataContext is MainWindowViewModel viewModel)
+			Dispatcher.UIThread.Invoke(() =>
 			{
-				viewModel.ActiveView = new TrainControlView();
-			}
+				if (DataContext is MainWindowViewModel viewModel)
+				{
+					viewModel.ActiveView = new TrainControlView();
+				}
+			});
 		}
 		catch (Exception ex)
 		{
