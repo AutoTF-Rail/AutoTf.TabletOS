@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
@@ -33,18 +34,19 @@ public partial class TrainControlView : UserControl
 	private void StartInternetListener()
 	{
 		_syncTimer.Elapsed += SyncSyncTimerElapsed;
-		_syncTimer.AutoReset = true;
 		_syncTimer.Start();
 	}
 
 	private async void SyncSyncTimerElapsed(object? sender, ElapsedEventArgs e)
 	{
+		_syncTimer.Stop();
 		try
 		{
-			string url = "http://192.168.1.1/information/latestFramePreview";
+			string url = "192.168.1.1/information/latestFramePreview";
 
 			using HttpClient loginClient = new HttpClient();
-			loginClient.Timeout = TimeSpan.FromMilliseconds(600);
+			loginClient.DefaultRequestHeaders.Add("macAddr", ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			loginClient.Timeout = TimeSpan.FromMilliseconds(2000);
 			
 			HttpResponseMessage response = await loginClient.GetAsync(url);
 			
@@ -62,12 +64,40 @@ public partial class TrainControlView : UserControl
 			{
 				Console.WriteLine("Failed to load image");
 			}
+			_syncTimer.Start();
 		}
 		catch (Exception ex)
 		{
 			Console.WriteLine("Error while getting preview:");
 			Console.WriteLine(ex.Message);
 		}
+	}
+	
+	private string ExecuteCommand(string command)
+	{
+		Process process = new Process
+		{
+			StartInfo = new ProcessStartInfo
+			{
+				FileName = "/bin/bash",
+				Arguments = $"-c \"{command}\"",
+				RedirectStandardOutput = true,
+				RedirectStandardError = true,
+				UseShellExecute = false,
+				CreateNoWindow = true,
+			}
+		};
+
+		process.Start();
+		string result = process.StandardOutput.ReadToEnd();
+		string error = process.StandardError.ReadToEnd();
+		
+		process.WaitForExit();
+		
+		if (result == "")
+			return error;
+		
+		return result;
 	}
 
 	private async void Initialize()
