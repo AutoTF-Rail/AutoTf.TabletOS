@@ -24,4 +24,12 @@ public static class Statics
 	public static int YubiSerial { get; set; }
 	public static DateTime YubiTime { get; set; }
 	// TODO: Tablet gets a key from trains
+	
+	public static string GenerateRandomString()
+	{
+		Random random = new Random();
+		const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		return new string(Enumerable.Repeat(chars, 10)
+			.Select(s => s[random.Next(s.Length)]).ToArray());
+	}
 }

@@ -154,26 +154,16 @@ public partial class TrainSelectionScreen : UserControl
 		Button button = (Button)sender!;
 		TrainAd trainAd = (TrainAd)button.DataContext!;
 
-		bool success = false;
 		
-		Console.WriteLine(ExecuteCommand("nmcli dev wifi rescan"));
-		await Task.Delay(500);
-		
-		for (int i = 1; i < 4; i++)
-		{
-			Console.WriteLine(ExecuteCommand("nmcli dev wifi rescan"));
-			await Task.Delay(500);
-			if (TryConnectToNetwork(trainAd.TrainName, i))
-			{
-				success = true;
-				break;
-			}
-			Console.WriteLine("Retry: " + i);
-			await Task.Delay(750);  
-		}
+		string connectionId = Statics.GenerateRandomString();
+		ExecuteCommand($"nmcli c add type wifi con-name {connectionId} ifname wlan0 ssid {trainAd.TrainName}");
+		ExecuteCommand($"nmcli con modify {connectionId} wifi-sec.key-mgmt wpa-psk");
+		ExecuteCommand($"nmcli con modify {connectionId} wifi-sec.psk CentralBridgePW");
+		string connOutput = ExecuteCommand($"nmcli con up {connectionId}");
 
-		// TODO: set this export YUBICO_LOG_LEVEL=ERROR
-		if (!success)
+		// TODO: set this: export YUBICO_LOG_LEVEL=ERROR
+		
+		if (connOutput.Contains("Connection successfully activated1"))
 		{
 			Dispatcher.UIThread.Invoke(() =>
 			{
@@ -216,24 +206,7 @@ public partial class TrainSelectionScreen : UserControl
 		}
 	}
 
-	private bool TryConnectToNetwork(string name, int tryCount)
-	{
-		Console.WriteLine(ExecuteCommand("nmcli dev status"));
-		string commandResult = ExecuteCommand(
-			$"nmcli dev wifi connect \"{name}\" password \"CentralBridgePW\" hidden yes ifname wlan0");
-
-		if (commandResult.Contains("NetworkManager is not running."))
-			ExecuteCommand("Systemctl restart networkmanager");
-			
-		if (tryCount <= 2 && commandResult.Contains("No network with SSID"))
-			return false;
-
-		if (commandResult.Contains("successfully activated with"))
-			return true;
-		
-		Console.WriteLine("Connection output: " + commandResult);
-		return false;
-	}
+	// TODO: Dont auto connect to a train in this screen
 	
 	private string ExecuteCommand(string command)
 	{

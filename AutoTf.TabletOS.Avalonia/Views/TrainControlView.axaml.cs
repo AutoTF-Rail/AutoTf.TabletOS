@@ -44,6 +44,7 @@ public partial class TrainControlView : UserControl
 			string url = "http://192.168.1.1/information/latestFramePreview";
 
 			using HttpClient loginClient = new HttpClient();
+			loginClient.Timeout = TimeSpan.FromMilliseconds(250);
 			
 			HttpResponseMessage response = await loginClient.GetAsync(url);
 			
