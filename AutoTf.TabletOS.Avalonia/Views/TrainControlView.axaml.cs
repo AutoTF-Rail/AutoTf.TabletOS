@@ -21,7 +21,7 @@ public partial class TrainControlView : UserControl
 {
 	private readonly IDataManager _dataManager = Statics.DataManager;
 	private readonly ITrainInformationService _trainInfo = Statics.TrainInformationService;
-	private readonly System.Timers.Timer _syncTimer = new System.Timers.Timer(250);
+	private readonly System.Timers.Timer _syncTimer = new System.Timers.Timer(600);
 	
 	public TrainControlView()
 	{
@@ -44,7 +44,7 @@ public partial class TrainControlView : UserControl
 			string url = "http://192.168.1.1/information/latestFramePreview";
 
 			using HttpClient loginClient = new HttpClient();
-			loginClient.Timeout = TimeSpan.FromMilliseconds(250);
+			loginClient.Timeout = TimeSpan.FromMilliseconds(600);
 			
 			HttpResponseMessage response = await loginClient.GetAsync(url);
 			
