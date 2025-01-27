@@ -25,56 +25,65 @@ public partial class MainView : UserControl
 
 	private void ListenForYubikey()
 	{
-		ProcessStartInfo processStartInfo = new ProcessStartInfo
+		try
 		{
-			FileName = "udevadm",
-			Arguments = "monitor --subsystem-match=usb --property",
-			RedirectStandardOutput = true,
-			UseShellExecute = false,
-			CreateNoWindow = true
-		};
 
-		Process process = new Process { StartInfo = processStartInfo };
-		process.OutputDataReceived += (sender, e) =>
-		{
-			if (e.Data != null)
+			ProcessStartInfo processStartInfo = new ProcessStartInfo
 			{
-				if (e.Data.Contains("Yubico") || e.Data.Contains("YubiKey"))
+				FileName = "udevadm",
+				Arguments = "monitor --subsystem-match=usb --property",
+				RedirectStandardOutput = true,
+				UseShellExecute = false,
+				CreateNoWindow = true
+			};
+
+			Process process = new Process { StartInfo = processStartInfo };
+			process.OutputDataReceived += (sender, e) =>
+			{
+				if (e.Data != null)
 				{
-					Dispatcher.UIThread.Invoke(() =>
-					{	
-						LoadingName.Text = "Getting key..";
-						LoadingArea.IsVisible = true;
-						
-						IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
-						if (device == null)
-							return;
+					if (e.Data.Contains("Yubico") || e.Data.Contains("YubiKey"))
+					{
+						Dispatcher.UIThread.Invoke(() =>
+						{	
+							LoadingName.Text = "Getting key..";
+							LoadingArea.IsVisible = true;
+							
+							IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
+							if (device == null)
+								return;
 
-						using (OathSession session = new OathSession(device))
-						{
-							foreach (Credential credential in session.GetCredentials())
+							using (OathSession session = new OathSession(device))
 							{
-								if (credential.Issuer != "AutoTF")
-									return;
-								Statics.YubiCode = session.CalculateCredential(credential).Value!;
-								Statics.YubiSerial = device.SerialNumber!.Value;
-								Statics.YubiTime = DateTime.UtcNow;
+								foreach (Credential credential in session.GetCredentials())
+								{
+									if (credential.Issuer != "AutoTF")
+										return;
+									Statics.YubiCode = session.CalculateCredential(credential).Value!;
+									Statics.YubiSerial = device.SerialNumber!.Value;
+									Statics.YubiTime = DateTime.UtcNow;
+								}
 							}
-						}
-						// TODO: Error handling if no cred was found.
-						if (DataContext is MainWindowViewModel viewModel)
-						{
-							viewModel.ActiveView = new TrainSelectionScreen();
-						}
-						LoadingArea.IsVisible = false;
-					});
-					// TODO: Requires ppa:yubico/stable - yubikey-manager
+							// TODO: Error handling if no cred was found.
+							if (DataContext is MainWindowViewModel viewModel)
+							{
+								viewModel.ActiveView = new TrainSelectionScreen();
+							}
+							LoadingArea.IsVisible = false;
+						});
+						// TODO: Requires ppa:yubico/stable - yubikey-manager
+					}
 				}
-			}
-		};
+			};
 
-		process.Start();
-		process.BeginOutputReadLine();
+			process.Start();
+			process.BeginOutputReadLine();
+		}
+		catch (Exception e)
+		{
+			Dispatcher.UIThread.Invoke(() => { LoadingArea.IsVisible = false; });
+			ListenForYubikey();
+		}
 	}
 
 	private void BrightnessChanged()
