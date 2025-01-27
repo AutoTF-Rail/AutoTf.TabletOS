@@ -45,10 +45,10 @@ public partial class MainView : UserControl
 					if (e.Data.Contains("Yubico") || e.Data.Contains("YubiKey"))
 					{
 						Dispatcher.UIThread.Invoke(() =>
-						{	
+						{
 							LoadingName.Text = "Getting key..";
 							LoadingArea.IsVisible = true;
-							
+
 							IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
 							if (device == null)
 								return;
@@ -64,11 +64,13 @@ public partial class MainView : UserControl
 									Statics.YubiTime = DateTime.UtcNow;
 								}
 							}
+
 							// TODO: Error handling if no cred was found.
 							if (DataContext is MainWindowViewModel viewModel)
 							{
 								viewModel.ActiveView = new TrainSelectionScreen();
 							}
+
 							LoadingArea.IsVisible = false;
 						});
 						// TODO: Requires ppa:yubico/stable - yubikey-manager
@@ -80,6 +82,10 @@ public partial class MainView : UserControl
 			process.BeginOutputReadLine();
 		}
 		catch (Exception e)
+		{
+			// ignored
+		}
+		finally
 		{
 			Dispatcher.UIThread.Invoke(() => { LoadingArea.IsVisible = false; });
 			ListenForYubikey();
