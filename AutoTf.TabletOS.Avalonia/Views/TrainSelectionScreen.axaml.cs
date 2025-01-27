@@ -156,6 +156,7 @@ public partial class TrainSelectionScreen : UserControl
 
 		
 		string connectionId = Statics.GenerateRandomString();
+		Console.WriteLine("Connection ID: " + connectionId);
 		ExecuteCommand($"nmcli c add type wifi con-name {connectionId} ifname wlan0 ssid {trainAd.TrainName}");
 		ExecuteCommand($"nmcli con modify {connectionId} wifi-sec.key-mgmt wpa-psk");
 		ExecuteCommand($"nmcli con modify {connectionId} wifi-sec.psk CentralBridgePW");
@@ -163,7 +164,7 @@ public partial class TrainSelectionScreen : UserControl
 
 		// TODO: set this: export YUBICO_LOG_LEVEL=ERROR
 		
-		if (connOutput.Contains("Connection successfully activated"))
+		if (!connOutput.Contains("Connection successfully activated"))
 		{
 			Console.WriteLine("Connection error:");
 			Console.WriteLine(connOutput);
