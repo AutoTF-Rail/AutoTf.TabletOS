@@ -25,6 +25,15 @@ public class NetworkManager
 		return false;
 	}
 
+	public void EstablishConnection()
+	{
+
+		
+		// TODO: Do we even need to sync anything?
+		// Updates?
+		Statics.DataManager.SaveLastSynced(DateTime.Now);
+	}
+
 	public void ScanForMesh()
 	{
 		// string scanResult = ExecuteBashCommand("sudo iwlist wlan0 scan");

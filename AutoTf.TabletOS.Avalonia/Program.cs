@@ -48,9 +48,11 @@ sealed class Program
 #if RELEASE
 		Statics.DataManager = new DataManager();
 		Statics.ProcessReader = new ProcessReader();
+		Statics.TrainInformationService = new TrainInformationService();
 #else
 		Statics.DataManager = new FakeDataManager();
 		Statics.ProcessReader = new FakeProcessReader();
+		Statics.TrainInformationService = new FakeTrainInfo();
 #endif
 	}
 

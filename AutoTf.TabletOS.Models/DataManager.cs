@@ -44,5 +44,10 @@ public class DataManager : IDataManager
 	}
 
 	// We don't need to create the file here afterwards, because we didn't sync yet.
-	public string GetLastSynced() => !File.Exists(Path.Combine(_directory, "LastSynced")) ? "Unknown" : File.ReadAllText(Path.Combine(_directory, "LastSynced"));
+	public DateTime GetLastSynced() => !File.Exists(Path.Combine(_directory, "LastSynced")) ? DateTime.MinValue : DateTime.Parse(File.ReadAllText(Path.Combine(_directory, "LastSynced")));
+
+	public void SaveLastSynced(DateTime time)
+	{
+		File.WriteAllText(Path.Combine(_directory, "LastSynced"), time.ToString("MM/dd/yyyyTHH:mm:ss"));
+	}
 }

@@ -7,5 +7,8 @@ namespace AutoTf.TabletOS.Models;
 /// </summary>
 public class FakeDataManager : IDataManager
 {
-	public string GetLastSynced() => "Unknown";
+	public DateTime GetLastSynced() => DateTime.Now.Subtract(TimeSpan.FromDays(1));
+	public void SaveLastSynced(DateTime time)
+	{
+	}
 }

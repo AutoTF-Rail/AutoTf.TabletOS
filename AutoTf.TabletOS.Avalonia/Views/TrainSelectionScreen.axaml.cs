@@ -162,7 +162,7 @@ public partial class TrainSelectionScreen : UserControl
 				success = true;
 				break;
 			}
-			await Task.Delay(250);
+			await Task.Delay(400);  
 		}
 
 		// TODO: set this export YUBICO_LOG_LEVEL=ERROR
@@ -182,17 +182,25 @@ public partial class TrainSelectionScreen : UserControl
 		
 		try
 		{
+			// Key login
 			string url = "http://192.168.1.1/information/login?macAddr=" + ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd() + "&serialNumber=" + Statics.YubiSerial + "&code=" + Statics.YubiCode + "&timestamp=" + Statics.YubiTime.ToString("yyyy-MM-ddTHH:mm:ss");
 
-			Console.WriteLine("Logging in with: " + url);
-			using HttpClient client = new HttpClient();
+			using HttpClient loginClient = new HttpClient();
 			
-			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
+			HttpResponseMessage loginResponse = await loginClient.PostAsync(url, new StringContent(""));
 			
-			response.EnsureSuccessStatusCode();
+			loginResponse.EnsureSuccessStatusCode();
 
-			Dispatcher.UIThread.Invoke(() => LoadingName.Text = "Logged in...");
-			// TODO: Send hello message
+			Dispatcher.UIThread.Invoke(() => LoadingName.Text = "Sending hello...");
+			
+			// Hello
+			url = "http://192.168.1.1/information/hello?macAddr=" + ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd() + "&loginUsername=" + Statics.Username;
+
+			using HttpClient helloClient = new HttpClient();
+			
+			HttpResponseMessage helloResponse = await helloClient.PostAsync(url, new StringContent(""));
+			
+			helloResponse.EnsureSuccessStatusCode();
 		}
 		catch (Exception ex)
 		{

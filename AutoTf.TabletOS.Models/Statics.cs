@@ -9,7 +9,10 @@ public static class Statics
 	public static double CurrentBrightness = 1.0;
 	public static IDataManager DataManager;
 	public static IProcessReader ProcessReader;
+	public static ITrainInformationService TrainInformationService;
+	
 	public static NetworkManager NetworkManager = new NetworkManager();
+	
 	public static Window Window;
 	public static string Username { get; set; }
 	public static string Password { get; set; }
