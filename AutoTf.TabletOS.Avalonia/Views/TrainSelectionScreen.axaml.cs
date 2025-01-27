@@ -194,21 +194,7 @@ public partial class TrainSelectionScreen : UserControl
 			HttpResponseMessage loginResponse = await loginClient.PostAsync(url, new StringContent(""));
 			
 			loginResponse.EnsureSuccessStatusCode();
-
-			Dispatcher.UIThread.Invoke(() => LoadingName.Text = "Sending hello...");
 			
-			// Hello
-			url = "http://192.168.1.1/information/hello?macAddr=" + ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd() + "&loginUsername=" + Statics.Username;
-
-			using HttpClient helloClient = new HttpClient();
-			
-			HttpResponseMessage helloResponse = await helloClient.PostAsync(url, new StringContent(""));
-			
-			Console.WriteLine("Hello response:");
-			Console.WriteLine(helloResponse.StatusCode);
-			Console.WriteLine(await helloResponse.Content.ReadAsStringAsync());
-			
-			helloResponse.EnsureSuccessStatusCode();
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				if (DataContext is MainWindowViewModel viewModel)
