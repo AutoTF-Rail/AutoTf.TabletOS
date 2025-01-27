@@ -156,10 +156,13 @@ public partial class TrainSelectionScreen : UserControl
 
 		bool success = false;
 		
+		Console.WriteLine(ExecuteCommand("nmcli dev wifi scan"));
+		await Task.Delay(500);
+		
 		for (int i = 1; i < 4; i++)
 		{
 			Console.WriteLine(ExecuteCommand("nmcli dev wifi rescan"));
-			await Task.Delay(250);
+			await Task.Delay(500);
 			if (TryConnectToNetwork(trainAd.TrainName, i))
 			{
 				success = true;
