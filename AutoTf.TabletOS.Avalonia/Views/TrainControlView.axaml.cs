@@ -108,7 +108,6 @@ public partial class TrainControlView : UserControl
 
 	private async void Initialize()
 	{
-		StartInternetListener();
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
 			LoadingName.Text = "Loading data...";
