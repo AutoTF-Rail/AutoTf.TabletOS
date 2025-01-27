@@ -37,12 +37,13 @@ public partial class TrainControlView : UserControl
 	{
 		try
 		{
+			// TODO: Change to udp?
 			string url = "ws://192.168.1.1/stream";
 
 			using ClientWebSocket ws = new ClientWebSocket();
 			await ws.ConnectAsync(new Uri(url), CancellationToken.None);
 
-			byte[] buffer = new byte[8192];
+			byte[] buffer = new byte[16384];
 			MemoryStream ms = new MemoryStream();
 
 			while (ws.State == WebSocketState.Open)
