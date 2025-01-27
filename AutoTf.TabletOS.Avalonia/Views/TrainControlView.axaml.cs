@@ -33,6 +33,7 @@ public partial class TrainControlView : UserControl
 	private void StartInternetListener()
 	{
 		_syncTimer.Elapsed += SyncSyncTimerElapsed;
+		_syncTimer.AutoReset = true;
 		_syncTimer.Start();
 	}
 
@@ -63,7 +64,8 @@ public partial class TrainControlView : UserControl
 		}
 		catch (Exception ex)
 		{
-			// TODO: Log
+			Console.WriteLine("Error while getting preview:");
+			Console.WriteLine(ex.Message);
 		}
 	}
 

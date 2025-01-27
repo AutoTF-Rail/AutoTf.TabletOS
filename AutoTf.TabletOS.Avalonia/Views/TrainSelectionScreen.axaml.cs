@@ -156,7 +156,7 @@ public partial class TrainSelectionScreen : UserControl
 
 		bool success = false;
 		
-		Console.WriteLine(ExecuteCommand("nmcli dev wifi scan"));
+		Console.WriteLine(ExecuteCommand("nmcli dev wifi rescan"));
 		await Task.Delay(500);
 		
 		for (int i = 1; i < 4; i++)
@@ -222,6 +222,9 @@ public partial class TrainSelectionScreen : UserControl
 		string commandResult = ExecuteCommand(
 			$"nmcli dev wifi connect \"{name}\" password \"CentralBridgePW\" hidden yes ifname wlan0");
 
+		if (commandResult.Contains("NetworkManager is not running."))
+			ExecuteCommand("Systemctl restart networkmanager");
+			
 		if (tryCount <= 2 && commandResult.Contains("No network with SSID"))
 			return false;
 
