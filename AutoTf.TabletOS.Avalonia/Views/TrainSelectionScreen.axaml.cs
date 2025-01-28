@@ -103,6 +103,7 @@ public partial class TrainSelectionScreen : UserControl
 		{
 			if (line.Contains("name") && line.Contains("CentralBridge-"))
 			{
+				Console.WriteLine("------------" + line);
 				if(isFirst)
 					AddBridge(line.Replace("name ", ""));
 				else
