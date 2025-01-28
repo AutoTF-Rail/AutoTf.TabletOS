@@ -43,7 +43,6 @@ public partial class TrainSelectionScreen : UserControl
 		{
 			LoadingArea.IsVisible = false;
 		});
-		InTheHand.Bluetooth.Bluetooth.AdvertisementReceived += BluetoothOnAdvertisementReceived;
 		
 		LoadInternetTrains();
 		LoadNearbyTrains();
@@ -83,13 +82,15 @@ public partial class TrainSelectionScreen : UserControl
 			Console.WriteLine("Scanning for trains.");
 			_nearbyTrains.Clear();
 
-			// foreach (BluetoothDevice device in devices)
-			// {
-			// 	Console.WriteLine("Found device: " + device.Id);
-			// 	Console.WriteLine("Found device2: " + device.Name);
-			// 	if(device.Name.Contains("CentralBridge-"))
-			// 		AddBridge(device.Name);
-			// }
+			IReadOnlyCollection<BluetoothDevice> devices = await InTheHand.Bluetooth.Bluetooth.ScanForDevicesAsync();
+			
+			foreach (BluetoothDevice device in devices)
+			{
+				Console.WriteLine("Found device: " + device.Id);
+				Console.WriteLine("Found device2: " + device.Name);
+				if(device.Name.Contains("CentralBridge-"))
+					AddBridge(device.Name);
+			}
 
 			
 			Dispatcher.UIThread.Invoke(() =>
@@ -105,12 +106,6 @@ public partial class TrainSelectionScreen : UserControl
 			Console.WriteLine("------------------Scan error:");
 			Console.WriteLine(e.Message);
 		}
-	}
-
-	private void BluetoothOnAdvertisementReceived(object? sender, BluetoothAdvertisingEvent e)
-	{
-		Console.WriteLine("Received:");
-		Console.WriteLine(e.Name);
 	}
 
 	private void AddBridge(string name)
