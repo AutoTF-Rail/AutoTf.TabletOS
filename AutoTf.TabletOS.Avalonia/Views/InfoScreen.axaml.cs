@@ -1,4 +1,6 @@
+using System.IO;
 using AutoTf.TabletOS.Avalonia.ViewModels;
+using AutoTf.TabletOS.Models;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -29,5 +31,19 @@ public partial class InfoScreen : UserControl
 		{
 			viewModel.ActiveView = _previousControl;
 		}
+	}
+
+	private void Update_Click(object? sender, RoutedEventArgs e)
+	{
+		if (!NetworkManager.IsInternetAvailable())
+			return;
+
+		string prevDir = Directory.GetCurrentDirectory();
+		Directory.SetCurrentDirectory("/home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia");
+		Statics.ExecuteCommand("eval $(\"ssh-agent\")");
+		Statics.ExecuteCommand("ssh-add /home/display/githubKey");
+		Statics.ExecuteCommand("git pull");
+		Statics.ExecuteCommand("dotnet build -c RELEASE -m");
+		Statics.ExecuteCommand("reboot now");
 	}
 }

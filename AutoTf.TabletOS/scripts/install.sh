@@ -18,58 +18,32 @@ if systemctl list-units --full --all | grep -Fq 'startupScript.service'; then
     sudo rm -f /etc/systemd/system/startupScript.service
 fi
 
-if systemctl list-units --full --all | grep -Fq 'osStartupScreenScript.service'; then
-    echo "Disabling and removing existing osStartupScreenScript service..."
-    sudo systemctl stop osStartupScreenScript.service
-    sudo systemctl disable osStartupScreenScript.service
-    sudo rm -f /etc/systemd/system/osStartupScreenScript.service
-fi
-
 echo "Setting up the script to run at startup..."
 
 cat <<EOF | sudo tee /etc/systemd/system/startupScript.service
 [Unit]
-Description=Run startup script
+Description=Auto Start Avalonia App with DRM
 After=network.target
 
 [Service]
-Type=simple
-ExecStart=/bin/bash /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh
-User=root
-Group=root
-StandardInput=tty
+ExecStart=/usr/local/bin/dotnet run --no-build -m -c RELEASE --drm
+WorkingDirectory=/home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia
+Restart=on-failure
+RestartSec=5
 StandardOutput=journal
 StandardError=journal
-TTYPath=/dev/tty1
-TTYReset=yes
-TTYVHangup=yes
-TTYVTDisallocate=yes
-Restart=always
+Environment=DOTNET_CLI_TELEMETRY_OPTOUT=1
+Environment="HOME=/home/display"
+Environment="DOTNET_CLI_HOME=/home/display"
+Environment="APP_NON_INTERACTIVE=true"
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-cat <<EOF | sudo tee /etc/systemd/system/osStartupScreenScript.service
-[Unit]
-Description=Run os startup script
-After=multi-user.target getty@tty1.service
-Before=tty1.service
-
-[Service]
-Type=simple
-ExecStart=/bin/bash /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/showStartupScreen.sh
-Restart=no
-
-[Install]
-WantedBy=multi-user.target
-EOF
 
 sudo systemctl enable startupScript.service
 sudo systemctl start startupScript.service
-sudo systemctl enable osStartupScreenScript.service
-sudo systemctl start osStartupScreenScript.service
-
 
 # Add disable_splash=1 to /boot/firmware/config.txt if it doesn't exist
 config_file="/boot/firmware/config.txt"

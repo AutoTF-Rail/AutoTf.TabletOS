@@ -5,7 +5,7 @@ namespace AutoTf.TabletOS.Models;
 
 public class NetworkManager
 {
-	public bool IsInternetAvailable()
+	public static bool IsInternetAvailable()
 	{
 		try
 		{

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Controls;
 
@@ -31,5 +32,26 @@ public static class Statics
 		const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		return new string(Enumerable.Repeat(chars, 10)
 			.Select(s => s[random.Next(s.Length)]).ToArray());
+	}
+	
+	public static string ExecuteCommand(string command)
+	{
+		Process process = new Process
+		{
+			StartInfo = new ProcessStartInfo
+			{
+				FileName = "/bin/bash",
+				Arguments = $"-c \"{command}\"",
+				RedirectStandardOutput = true,
+				RedirectStandardError = true,
+				UseShellExecute = false,
+				CreateNoWindow = true,
+			}
+		};
+
+		process.Start();
+		string result = process.StandardOutput.ReadToEnd();
+		process.WaitForExit();
+		return result;
 	}
 }

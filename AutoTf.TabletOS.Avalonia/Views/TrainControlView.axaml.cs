@@ -38,7 +38,7 @@ public partial class TrainControlView : UserControl
 		try
 		{
 			// TODO: Change to udp?
-			string url = "ws://192.168.1.1/stream";
+			string url = "ws://192.168.1.1/camera/stream";
 
 			using ClientWebSocket ws = new ClientWebSocket();
 			await ws.ConnectAsync(new Uri(url), CancellationToken.None);
