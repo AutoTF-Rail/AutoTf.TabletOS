@@ -86,8 +86,7 @@ public partial class TrainSelectionScreen : UserControl
 			
 			foreach (BluetoothDevice device in devices)
 			{
-				Console.WriteLine("Found device: " + device.Id);
-				Console.WriteLine("Found device2: " + device.Name);
+				Console.WriteLine("Found device: " + device.Name);
 				if(device.Name.Contains("CentralBridge-"))
 					AddBridge(device.Name);
 			}
