@@ -43,13 +43,22 @@ public partial class InfoScreen : UserControl
 			return;
 
 		Dispatcher.UIThread.Invoke(() => UpdateText.IsVisible = true);
-		
+
 		string prevDir = Directory.GetCurrentDirectory();
 		Directory.SetCurrentDirectory("/home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia");
-		UpdateText.Text = Statics.ExecuteCommand("eval $(\"ssh-agent\")");
-		UpdateText.Text = Statics.ExecuteCommand("ssh-add /home/display/githubKey");
-		UpdateText.Text = Statics.ExecuteCommand("git pull");
-		UpdateText.Text = Statics.ExecuteCommand("dotnet build -c RELEASE -m");
-		UpdateText.Text = Statics.ExecuteCommand("reboot now");
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			InfoOutput.Text = Statics.ExecuteCommand("eval $(\"ssh-agent\")");
+			InfoOutput.Text = Statics.ExecuteCommand("ssh-add /home/display/githubKey");
+			InfoStatus.Text = "Pulling";
+
+			InfoOutput.Text = Statics.ExecuteCommand("git pull");
+			InfoStatus.Text = "Building";
+			
+			InfoOutput.Text = Statics.ExecuteCommand("dotnet build -c RELEASE -m");
+			
+			InfoStatus.Text = "Reboot";
+			InfoOutput.Text = Statics.ExecuteCommand("reboot now");
+		});
 	}
 }
