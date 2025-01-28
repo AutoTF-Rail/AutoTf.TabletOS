@@ -39,8 +39,6 @@ Environment="APP_NON_INTERACTIVE=true"
 SupplementaryGroups=bluetooth
 Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
 Environment=DISPLAY=:0
-User=root
-Group=root
 
 [Install]
 WantedBy=multi-user.target

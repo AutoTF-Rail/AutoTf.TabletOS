@@ -15,7 +15,6 @@ using AutoTf.TabletOS.Models;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using InTheHand.Bluetooth;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -81,17 +80,39 @@ public partial class TrainSelectionScreen : UserControl
 		{
 			Console.WriteLine("Scanning for trains.");
 			_nearbyTrains.Clear();
-
-			IReadOnlyCollection<BluetoothDevice> devices = await InTheHand.Bluetooth.Bluetooth.ScanForDevicesAsync();
-			
-			foreach (BluetoothDevice device in devices)
+			ProcessStartInfo processStartInfo = new ProcessStartInfo()
 			{
-				Console.WriteLine("Found device: " + device.Name);
-				if(device.Name.Contains("CentralBridge-"))
-					AddBridge(device.Name);
+				FileName = "btmgmt",
+				Arguments = "find",
+				RedirectStandardOutput = true,
+				RedirectStandardError = false,
+				UseShellExecute = false,
+				CreateNoWindow = true
+			};
+
+			Process process = new Process()
+			{
+				StartInfo = processStartInfo
+			};
+
+			process.Start();
+			Thread.Sleep(2500);
+
+			StreamReader outputReader = process.StandardOutput;
+
+			List<string> trains = new List<string>();
+			
+			string? line;
+			while ((line = await outputReader.ReadLineAsync()) != null)
+			{
+				Console.WriteLine("------------" + line);
+				if (line.Contains("name") && line.Contains("CentralBridge-"))
+				{
+					Console.WriteLine("------------" + line);
+					AddBridge(line.Replace("name ", ""));
+				}
 			}
 
-			
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				if (NearbyLoadingArea.IsVisible)
