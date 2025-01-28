@@ -116,6 +116,8 @@ public partial class TrainSelectionScreen : UserControl
 			}));
 		}
 
+		Console.WriteLine("---------Bluetooth error: " + process.StandardError.ReadToEnd());
+
 		Dispatcher.UIThread.Invoke(() =>
 		{
 			if (NearbyLoadingArea.IsVisible)

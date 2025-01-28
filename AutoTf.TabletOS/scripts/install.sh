@@ -23,10 +23,10 @@ echo "Setting up the script to run at startup..."
 cat <<EOF | sudo tee /etc/systemd/system/startupScript.service
 [Unit]
 Description=Auto Start Avalonia App with DRM
-After=network.target
+After=network.target bluetooth.target
 
 [Service]
-ExecStart=/usr/local/bin/dotnet run --no-build -m -c RELEASE --drm
+ExecStart=/usr/local/bin/dotnet run --no-build -c RELEASE -m --drm
 WorkingDirectory=/home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia
 Restart=on-failure
 RestartSec=5
@@ -36,6 +36,7 @@ Environment=DOTNET_CLI_TELEMETRY_OPTOUT=1
 Environment="HOME=/home/display"
 Environment="DOTNET_CLI_HOME=/home/display"
 Environment="APP_NON_INTERACTIVE=true"
+SupplementaryGroups=bluetooth
 
 [Install]
 WantedBy=multi-user.target
