@@ -67,7 +67,7 @@ public partial class InfoScreen : UserControl
 			InfoOutput.Text = pull;
 			
 			InfoStatus.Text = "Building";
-			string build = Statics.ExecuteCommand("dotnet build -c RELEASE -m\"");
+			string build = Statics.ExecuteCommand("dotnet build -c RELEASE -m");
 			Console.WriteLine(build);
 			InfoOutput.Text = build;
 			
