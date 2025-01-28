@@ -91,10 +91,9 @@ public partial class TrainSelectionScreen : UserControl
 					{
 						NamePrefix = "CentralBridge-"
 					}
-				}
+				},
+				
 			});
-			
-			Console.WriteLine(scan.Active);
 
 			// foreach (BluetoothDevice device in devices)
 			// {
