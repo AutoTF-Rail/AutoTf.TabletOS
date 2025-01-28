@@ -16,9 +16,8 @@ public partial class InfoScreen : UserControl
 	public InfoScreen(object previousControl)
 	{
 		_previousControl = previousControl;
+		Dispatcher.UIThread.Invoke(() => { UpdateButton.IsVisible = NetworkManager.IsInternetAvailable(); });
 
-		UpdateButton.IsVisible = NetworkManager.IsInternetAvailable();
-		
 		InitializeComponent();
 
 		Initialize();

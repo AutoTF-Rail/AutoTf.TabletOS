@@ -9,7 +9,7 @@ public class NetworkManager
 	{
 		try
 		{
-			using var ping = new Ping();
+			using Ping ping = new Ping();
 
 			PingReply reply = ping.Send("1.1.1.1", 1500);
 			if (reply.Status == IPStatus.Success)
