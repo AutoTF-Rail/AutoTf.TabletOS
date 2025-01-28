@@ -16,10 +16,9 @@ public partial class MainView : UserControl
 	public MainView()
 	{
 		InitializeComponent();
-		LoadingArea.IsVisible = true;
 		
 		Statics.BrightnessChanged += BrightnessChanged;
-		// LoadingArea.IsVisible = false;
+		LoadingArea.IsVisible = false;
 
 		Task.Run(ListenForYubikey);
 	}
