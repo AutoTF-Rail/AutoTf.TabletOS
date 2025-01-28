@@ -80,8 +80,8 @@ public partial class TrainSelectionScreen : UserControl
 		{
 			FileName = "btmgmt",
 			Arguments = "find",
-			RedirectStandardOutput = false,
-			RedirectStandardError = true,
+			RedirectStandardOutput = true,
+			RedirectStandardError = false,
 			UseShellExecute = false,
 			CreateNoWindow = true
 		};
@@ -119,8 +119,6 @@ public partial class TrainSelectionScreen : UserControl
 				TrainName = x
 			}));
 		}
-
-		Console.WriteLine("---------Bluetooth error: " + process.StandardError.ReadToEnd());
 
 		Dispatcher.UIThread.Invoke(() =>
 		{
