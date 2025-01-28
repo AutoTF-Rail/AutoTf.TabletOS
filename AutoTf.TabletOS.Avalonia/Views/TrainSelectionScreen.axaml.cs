@@ -49,9 +49,11 @@ public partial class TrainSelectionScreen : UserControl
 
 	private void LoadNearbyTrains()
 	{
-#if RELEASE
-		RunBridgeScan(true);
+#if DEBUG
+		return;
+		Console.WriteLine("Not running bluetooth scan due to not being in RELEASE");
 #endif
+		RunBridgeScan(true);
 	}
 
 	private void LoadInternetTrains()
