@@ -82,19 +82,6 @@ public partial class TrainSelectionScreen : UserControl
 		{
 			Console.WriteLine("Scanning for trains.");
 			_nearbyTrains.Clear();
-			Console.WriteLine(await Bluetooth.GetAvailabilityAsync());
-			BluetoothDevice scan2 = await Bluetooth.RequestDeviceAsync(new RequestDeviceOptions()
-			{
-				Filters =
-				{
-					new BluetoothLEScanFilter()
-					{
-						NamePrefix = "CentralBridge-"
-					}
-				}
-			});
-			
-			Console.WriteLine(scan.Active);
 
 			// foreach (BluetoothDevice device in devices)
 			// {
