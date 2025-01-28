@@ -56,7 +56,7 @@ public partial class TrainSelectionScreen : UserControl
 
 	private void LoadInternetTrains()
 	{
-		if (Statics.NetworkManager.IsInternetAvailable())
+		if (NetworkManager.IsInternetAvailable())
 		{
 			// Show text that trains aren't available due to no internet
 		}
