@@ -37,6 +37,8 @@ Environment="HOME=/home/display"
 Environment="DOTNET_CLI_HOME=/home/display"
 Environment="APP_NON_INTERACTIVE=true"
 SupplementaryGroups=bluetooth
+User=root
+Group=root
 
 [Install]
 WantedBy=multi-user.target

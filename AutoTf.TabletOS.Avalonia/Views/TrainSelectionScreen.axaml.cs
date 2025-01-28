@@ -78,6 +78,7 @@ public partial class TrainSelectionScreen : UserControl
 	{
 		try
 		{
+			Console.WriteLine("Scanning for trains.");
 			ProcessStartInfo processStartInfo = new ProcessStartInfo()
 			{
 				FileName = "btmgmt",
