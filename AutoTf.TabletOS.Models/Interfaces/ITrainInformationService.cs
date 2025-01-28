@@ -6,4 +6,9 @@ public interface ITrainInformationService
 	public Task<string?> GetTrainId();
 	public Task<string?> GetTrainName();
 	public Task<string?> GetLastSync();
+	public Task<string?> GetVersion();
+	public Task<DateTime?> GetNextSave();
+	public Task PostUpdate();
+	public Task PostShutdown();
+	public Task PostRestart();
 }

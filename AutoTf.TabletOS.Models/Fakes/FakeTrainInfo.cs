@@ -21,6 +21,31 @@ public class FakeTrainInfo : ITrainInformationService
 
 	public Task<string?> GetLastSync()
 	{
-		return Task.FromResult(DateTime.Now.ToString())!;
+		return Task.FromResult(DateTime.Now.ToString("o"))!;
+	}
+
+	public Task<string?> GetVersion()
+	{
+		return Task.FromResult("9ahf8v")!;
+	}
+
+	public Task<DateTime?> GetNextSave()
+	{
+		return Task.FromResult(new DateTime?(DateTime.Now));
+	}
+
+	public Task PostUpdate()
+	{
+		return Task.CompletedTask;
+	}
+
+	public Task PostShutdown()
+	{
+		return Task.CompletedTask;
+	}
+
+	public Task PostRestart()
+	{
+		return Task.CompletedTask;
 	}
 }

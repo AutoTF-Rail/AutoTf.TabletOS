@@ -16,6 +16,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
+using Timer = System.Timers.Timer;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -23,7 +24,7 @@ public partial class TrainControlView : UserControl
 {
 	private readonly IDataManager _dataManager = Statics.DataManager;
 	private readonly ITrainInformationService _trainInfo = Statics.TrainInformationService;
-	private readonly System.Timers.Timer _syncTimer = new System.Timers.Timer(600);
+	private Timer? _saveTimer = new Timer(600);
 	
 	public TrainControlView()
 	{
@@ -127,8 +128,10 @@ public partial class TrainControlView : UserControl
 		string? trainId = await _trainInfo.GetTrainId();
 		string? trainName = await _trainInfo.GetTrainName();
 		string? lastTrainSync = await _trainInfo.GetLastSync();
+		string? trainVersion = await _trainInfo.GetVersion();
+		await UpdateSaveTimer();
 		
-		if (evuName == null || trainId == null || trainName == null || lastTrainSync == null)
+		if (evuName == null || trainId == null || trainName == null || lastTrainSync == null || trainVersion == null)
 		{
 			// TODO: Disconnect
 			// TODO: Log
@@ -150,6 +153,22 @@ public partial class TrainControlView : UserControl
 		await Dispatcher.UIThread.InvokeAsync(() => EvuNameBox.Text = evuName);
 		await Dispatcher.UIThread.InvokeAsync(() => TrainIdBox.Text = trainId);
 		await Dispatcher.UIThread.InvokeAsync(() => TrainNameBox.Text = trainName);
+		await Dispatcher.UIThread.InvokeAsync(() => TrainVersion.Text = trainVersion);
+	}
+
+	private async Task UpdateSaveTimer()
+	{
+		DateTime? nextSave = await _trainInfo.GetNextSave();
+		int nextSaveInMs = (nextSave!.Value.Add(TimeSpan.FromSeconds(2)) - DateTime.Now).Milliseconds;
+		
+		_saveTimer?.Dispose();
+		_saveTimer = new Timer(nextSaveInMs);
+		_saveTimer.Elapsed += (_, _) => _ = UpdateSaveTimer();
+		
+		_saveTimer.Start();
+
+		string date = nextSave.Value.ToString("HH:mm:ss");
+		await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = date);
 	}
 
 	private async Task LoadLastConnected()
@@ -189,5 +208,20 @@ public partial class TrainControlView : UserControl
 		{
 			viewModel.ActiveView = new TrainSelectionScreen();
 		}
+	}
+	
+	private async void ShutdownTrain_Click(object? sender, RoutedEventArgs e)
+	{
+		await _trainInfo.PostShutdown();
+	}
+
+	private async void RestartTrain_Click(object? sender, RoutedEventArgs e)
+	{
+		await _trainInfo.PostRestart();
+	}
+
+	private async void UpdateTrain_Click(object? sender, RoutedEventArgs e)
+	{
+		await _trainInfo.PostUpdate();
 	}
 }

@@ -95,4 +95,102 @@ public class TrainInformationService : ITrainInformationService
 			return null;
 		}
 	}
+
+	public async Task<string?> GetVersion()
+	{
+		try
+		{
+			string url = "http://192.168.1.1/information/version";
+
+			using HttpClient loginClient = new HttpClient();
+			
+			HttpResponseMessage response = await loginClient.GetAsync(url);
+			
+			response.EnsureSuccessStatusCode();
+
+			string content = await response.Content.ReadAsStringAsync();
+			
+			return content;
+		}
+		catch (Exception ex)
+		{
+			// TODO: Log
+			return null;
+		}
+	}
+
+	public async Task<DateTime?> GetNextSave()
+	{
+		try
+		{
+			string url = "http://192.168.1.1/camera/nextSave";
+
+			using HttpClient loginClient = new HttpClient();
+			
+			HttpResponseMessage response = await loginClient.GetAsync(url);
+			
+			response.EnsureSuccessStatusCode();
+
+			return DateTime.Parse(await response.Content.ReadAsStringAsync());
+		}
+		catch (Exception ex)
+		{
+			// TODO: Log
+			return null;
+		}
+	}
+
+	public async Task PostUpdate()
+	{
+		try
+		{
+			string url = "http://192.168.1.1/update";
+
+			using HttpClient client = new HttpClient();
+			// TODO: Cache mac address
+			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+
+			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
+		}
+		catch (Exception ex)
+		{
+			// TODO: Log
+		}
+	}
+
+	public async Task PostShutdown()
+	{
+		try
+		{
+			string url = "http://192.168.1.1/shutdown";
+
+			using HttpClient client = new HttpClient();
+			// TODO: Cache mac address
+			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+
+			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
+		}
+		catch (Exception ex)
+		{
+			// TODO: Log
+		}
+	}
+
+	public async Task PostRestart()
+	{
+		try
+		{
+			string url = "http://192.168.1.1/restart";
+
+			using HttpClient client = new HttpClient();
+			// TODO: Cache mac address
+			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+
+			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
+		}
+		catch (Exception ex)
+		{
+			// TODO: Log
+		}
+	}
 }
