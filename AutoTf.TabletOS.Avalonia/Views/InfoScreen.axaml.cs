@@ -46,6 +46,7 @@ public partial class InfoScreen : UserControl
 
 		string prevDir = Directory.GetCurrentDirectory();
 		Directory.SetCurrentDirectory("/home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia");
+		
 		Dispatcher.UIThread.Invoke(() =>
 		{
 			InfoOutput.Text = Statics.ExecuteCommand("eval $(\"ssh-agent\")");
@@ -60,5 +61,7 @@ public partial class InfoScreen : UserControl
 			InfoStatus.Text = "Reboot";
 			InfoOutput.Text = Statics.ExecuteCommand("reboot now");
 		});
+		
+		Directory.SetCurrentDirectory(prevDir);
 	}
 }
