@@ -20,13 +20,15 @@ fi
 
 echo "Setting up the script to run at startup..."
 
+chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh
+
 cat <<EOF | sudo tee /etc/systemd/system/startupScript.service
 [Unit]
 Description=Auto Start Avalonia App with DRM
 After=network.target bluetooth.target
 
 [Service]
-ExecStart=/usr/local/bin/dotnet run --no-build -c RELEASE -m --drm
+ExecStart=/home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh
 WorkingDirectory=/home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia
 Restart=on-failure
 RestartSec=2
