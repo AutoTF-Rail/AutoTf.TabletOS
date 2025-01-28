@@ -61,6 +61,10 @@ public partial class InfoScreen : UserControl
 			Console.WriteLine(add);
 			InfoOutput.Text = add;
 			
+			string aasddd = Statics.ExecuteCommand("git reset --hard");
+			Console.WriteLine(aasddd);
+			InfoOutput.Text = aasddd;
+			
 			InfoStatus.Text = "Pulling";
 			string pull = Statics.ExecuteCommand("git pull");
 			Console.WriteLine(pull);
