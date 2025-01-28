@@ -74,11 +74,12 @@ public partial class TrainSelectionScreen : UserControl
 		OtherTrains.SelectedItem = null;
 	}
 
-	private async void RunBridgeScan(bool isFirst)
+	private async void RunBridgeScan()
 	{
 		try
 		{
 			Console.WriteLine("Scanning for trains.");
+			_nearbyTrains.Clear();
 			ProcessStartInfo processStartInfo = new ProcessStartInfo()
 			{
 				FileName = "btmgmt",
@@ -95,7 +96,7 @@ public partial class TrainSelectionScreen : UserControl
 			};
 
 			process.Start();
-			Thread.Sleep(1500);
+			Thread.Sleep(2500);
 
 			StreamReader outputReader = process.StandardOutput;
 
@@ -108,19 +109,8 @@ public partial class TrainSelectionScreen : UserControl
 				if (line.Contains("name") && line.Contains("CentralBridge-"))
 				{
 					Console.WriteLine("------------" + line);
-					if(isFirst)
-						AddBridge(line.Replace("name ", ""));
-					else
-						trains.Add(line.Replace("name ", ""));
+					AddBridge(line.Replace("name ", ""));
 				}
-			}
-
-			if (isFirst)
-			{
-				_nearbyTrains = new ObservableCollection<TrainAd>(trains.Select(x => new TrainAd
-				{
-					TrainName = x
-				}));
 			}
 
 			Dispatcher.UIThread.Invoke(() =>
@@ -128,6 +118,8 @@ public partial class TrainSelectionScreen : UserControl
 				if (NearbyLoadingArea.IsVisible)
 					NearbyLoadingArea.IsVisible = false;
 			});
+			
+			Console.WriteLine("Done scanning for nearby devices");
 		}
 		catch (Exception e)
 		{
