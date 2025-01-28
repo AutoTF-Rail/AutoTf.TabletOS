@@ -76,55 +76,63 @@ public partial class TrainSelectionScreen : UserControl
 
 	private async void RunBridgeScan(bool isFirst)
 	{
-		ProcessStartInfo processStartInfo = new ProcessStartInfo()
+		try
 		{
-			FileName = "btmgmt",
-			Arguments = "find",
-			RedirectStandardOutput = true,
-			RedirectStandardError = false,
-			UseShellExecute = false,
-			CreateNoWindow = true
-		};
+			ProcessStartInfo processStartInfo = new ProcessStartInfo()
+			{
+				FileName = "btmgmt",
+				Arguments = "find",
+				RedirectStandardOutput = true,
+				RedirectStandardError = false,
+				UseShellExecute = false,
+				CreateNoWindow = true
+			};
 
-		Process process = new Process()
-		{
-			StartInfo = processStartInfo
-		};
+			Process process = new Process()
+			{
+				StartInfo = processStartInfo
+			};
 
-		process.Start();
-		Thread.Sleep(1500);
+			process.Start();
+			Thread.Sleep(1500);
 
-		StreamReader outputReader = process.StandardOutput;
+			StreamReader outputReader = process.StandardOutput;
 
-		List<string> trains = new List<string>();
-		
-		string? line;
-		while ((line = await outputReader.ReadLineAsync()) != null)
-		{
-			Console.WriteLine("------------" + line);
-			if (line.Contains("name") && line.Contains("CentralBridge-"))
+			List<string> trains = new List<string>();
+			
+			string? line;
+			while ((line = await outputReader.ReadLineAsync()) != null)
 			{
 				Console.WriteLine("------------" + line);
-				if(isFirst)
-					AddBridge(line.Replace("name ", ""));
-				else
-					trains.Add(line.Replace("name ", ""));
+				if (line.Contains("name") && line.Contains("CentralBridge-"))
+				{
+					Console.WriteLine("------------" + line);
+					if(isFirst)
+						AddBridge(line.Replace("name ", ""));
+					else
+						trains.Add(line.Replace("name ", ""));
+				}
 			}
-		}
 
-		if (isFirst)
-		{
-			_nearbyTrains = new ObservableCollection<TrainAd>(trains.Select(x => new TrainAd
+			if (isFirst)
 			{
-				TrainName = x
-			}));
-		}
+				_nearbyTrains = new ObservableCollection<TrainAd>(trains.Select(x => new TrainAd
+				{
+					TrainName = x
+				}));
+			}
 
-		Dispatcher.UIThread.Invoke(() =>
+			Dispatcher.UIThread.Invoke(() =>
+			{
+				if (NearbyLoadingArea.IsVisible)
+					NearbyLoadingArea.IsVisible = false;
+			});
+		}
+		catch (Exception e)
 		{
-			if (NearbyLoadingArea.IsVisible)
-				NearbyLoadingArea.IsVisible = false;
-		});
+			Console.WriteLine("------------------Scan error:");
+			Console.WriteLine(e.Message);
+		}
 	}
 
 	private void AddBridge(string name)

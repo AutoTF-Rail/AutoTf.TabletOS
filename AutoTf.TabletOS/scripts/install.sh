@@ -26,7 +26,7 @@ Description=Auto Start Avalonia App with DRM
 After=network.target bluetooth.target
 
 [Service]
-ExecStart=/usr/local/bin/dotnet run -c RELEASE -m --drm
+ExecStart=/usr/local/bin/dotnet run --no-build -c RELEASE -m --drm
 WorkingDirectory=/home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia
 Restart=on-failure
 RestartSec=2
