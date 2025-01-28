@@ -159,6 +159,11 @@ public partial class TrainControlView : UserControl
 	private async Task UpdateSaveTimer()
 	{
 		DateTime? nextSave = await _trainInfo.GetNextSave();
+		if (nextSave == null)
+		{
+			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Unknown");
+			return;
+		}
 		int nextSaveInMs = (nextSave!.Value.Add(TimeSpan.FromSeconds(2)) - DateTime.Now).Milliseconds;
 		
 		_saveTimer?.Dispose();
