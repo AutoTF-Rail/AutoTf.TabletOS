@@ -53,7 +53,7 @@ public partial class TrainSelectionScreen : UserControl
 		return;
 		Console.WriteLine("Not running bluetooth scan due to not being in RELEASE");
 #endif
-		RunBridgeScan(true);
+		RunBridgeScan();
 	}
 
 	private void LoadInternetTrains()
