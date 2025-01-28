@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -15,6 +16,9 @@ public partial class InfoScreen : UserControl
 	public InfoScreen(object previousControl)
 	{
 		_previousControl = previousControl;
+
+		UpdateButton.IsVisible = NetworkManager.IsInternetAvailable();
+		
 		InitializeComponent();
 
 		Initialize();
@@ -38,12 +42,14 @@ public partial class InfoScreen : UserControl
 		if (!NetworkManager.IsInternetAvailable())
 			return;
 
+		Dispatcher.UIThread.Invoke(() => UpdateText.IsVisible = true);
+		
 		string prevDir = Directory.GetCurrentDirectory();
 		Directory.SetCurrentDirectory("/home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia");
-		Statics.ExecuteCommand("eval $(\"ssh-agent\")");
-		Statics.ExecuteCommand("ssh-add /home/display/githubKey");
-		Statics.ExecuteCommand("git pull");
-		Statics.ExecuteCommand("dotnet build -c RELEASE -m");
-		Statics.ExecuteCommand("reboot now");
+		UpdateText.Text = Statics.ExecuteCommand("eval $(\"ssh-agent\")");
+		UpdateText.Text = Statics.ExecuteCommand("ssh-add /home/display/githubKey");
+		UpdateText.Text = Statics.ExecuteCommand("git pull");
+		UpdateText.Text = Statics.ExecuteCommand("dotnet build -c RELEASE -m");
+		UpdateText.Text = Statics.ExecuteCommand("reboot now");
 	}
 }

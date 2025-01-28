@@ -51,7 +51,12 @@ public static class Statics
 
 		process.Start();
 		string result = process.StandardOutput.ReadToEnd();
+		string error = process.StandardError.ReadToEnd();
 		process.WaitForExit();
+		
+		if (string.IsNullOrEmpty(result))
+			return error;
+		
 		return result;
 	}
 }
