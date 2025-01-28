@@ -145,7 +145,7 @@ public partial class TrainSelectionScreen : UserControl
 
 	private void RescanButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		RunBridgeScan(false);
+		RunBridgeScan();
 	}
 
 	private async void TrainNearby_Click(object? sender, RoutedEventArgs e)
