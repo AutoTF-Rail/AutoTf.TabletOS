@@ -35,7 +35,7 @@ RestartSec=2
 StandardOutput=journal
 StandardError=journal
 Environment=DOTNET_CLI_TELEMETRY_OPTOUT=1
-Environment="HOME=/home/display"
+Environment="HOME=/root"
 Environment="DOTNET_CLI_HOME=/home/display"
 Environment="APP_NON_INTERACTIVE=true"
 SupplementaryGroups=bluetooth
