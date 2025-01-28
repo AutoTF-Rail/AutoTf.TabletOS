@@ -48,6 +48,10 @@ public partial class InfoScreen : UserControl
 		
 		Dispatcher.UIThread.Invoke(() =>
 		{
+			UpdateText.IsVisible = true;
+			InfoStatus.IsVisible = true;
+			InfoOutput.IsVisible = true;
+			
 			InfoOutput.Text = Statics.ExecuteCommand("eval $(\"ssh-agent\")");
 			InfoOutput.Text = Statics.ExecuteCommand("ssh-add /home/display/githubKey");
 			InfoStatus.Text = "Pulling";
