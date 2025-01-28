@@ -58,6 +58,11 @@ sealed class Program
 
 	private static void SilenceConsole()
 	{
+		if (!IsInteractiveEnvironment())
+		{
+			return;
+		}
+		
 		new Thread(() =>
 			{
 				Console.CursorVisible = false;
@@ -65,6 +70,13 @@ sealed class Program
 					Console.ReadKey(true);
 			})
 			{ IsBackground = true }.Start();
+	}
+	
+	private static bool IsInteractiveEnvironment()
+	{
+		return Environment.UserInteractive &&
+		       !Console.IsOutputRedirected &&
+		       !Console.IsErrorRedirected;
 	}
 	
 	public static string GetGitVersion()
