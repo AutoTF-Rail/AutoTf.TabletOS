@@ -80,7 +80,7 @@ public partial class TrainSelectionScreen : UserControl
 		{
 			FileName = "btmgmt",
 			Arguments = "find",
-			RedirectStandardOutput = true,
+			RedirectStandardOutput = false,
 			RedirectStandardError = true,
 			UseShellExecute = false,
 			CreateNoWindow = true
