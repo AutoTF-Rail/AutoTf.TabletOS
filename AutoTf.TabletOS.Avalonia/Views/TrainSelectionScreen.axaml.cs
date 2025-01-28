@@ -101,6 +101,7 @@ public partial class TrainSelectionScreen : UserControl
 		string? line;
 		while ((line = await outputReader.ReadLineAsync()) != null)
 		{
+			Console.WriteLine("------------" + line);
 			if (line.Contains("name") && line.Contains("CentralBridge-"))
 			{
 				Console.WriteLine("------------" + line);
