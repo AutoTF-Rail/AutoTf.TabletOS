@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
@@ -51,15 +52,24 @@ public partial class InfoScreen : UserControl
 			UpdateText.IsVisible = true;
 			InfoStatus.IsVisible = true;
 			InfoOutput.IsVisible = true;
-			
-			InfoOutput.Text = Statics.ExecuteCommand("eval $(\"ssh-agent\")");
-			InfoOutput.Text = Statics.ExecuteCommand("ssh-add /home/display/githubKey");
-			InfoStatus.Text = "Pulling";
 
-			InfoOutput.Text = Statics.ExecuteCommand("git pull");
-			InfoStatus.Text = "Building";
+			string evalOutput = Statics.ExecuteCommand("eval $(\"ssh-agent\")");
+			Console.WriteLine(evalOutput);
+			InfoOutput.Text = evalOutput;
+
+			string add = Statics.ExecuteCommand("ssh-add /home/display/githubKey");
+			Console.WriteLine(add);
+			InfoOutput.Text = add;
 			
-			InfoOutput.Text = Statics.ExecuteCommand("dotnet build -c RELEASE -m");
+			InfoStatus.Text = "Pulling";
+			string pull = Statics.ExecuteCommand("git pull");
+			Console.WriteLine(pull);
+			InfoOutput.Text = pull;
+			
+			InfoStatus.Text = "Building";
+			string build = Statics.ExecuteCommand("dotnet build -c RELEASE -m\"");
+			Console.WriteLine(build);
+			InfoOutput.Text = build;
 			
 			InfoStatus.Text = "Reboot";
 			InfoOutput.Text = Statics.ExecuteCommand("reboot now");
