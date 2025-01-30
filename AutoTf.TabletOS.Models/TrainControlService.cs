@@ -80,7 +80,7 @@ public class TrainControlService : ITrainControlService
 	{
 		try
 		{
-			string url = "http://192.168.1.1/system/setLever";
+			string url = "http://192.168.1.1/control/setLever";
 
 			using HttpClient client = new HttpClient();
 			
@@ -97,7 +97,7 @@ public class TrainControlService : ITrainControlService
 			if (!response.IsSuccessStatusCode)
 			{
 				_logger.Log("Could not set lever:");
-				_logger.Log(await response.Content.ReadAsStringAsync());
+				_logger.Log(response.StatusCode + ": " + await response.Content.ReadAsStringAsync());
 
 				return false;
 			}
