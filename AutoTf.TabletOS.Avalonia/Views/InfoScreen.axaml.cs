@@ -88,6 +88,8 @@ public partial class InfoScreen : UserControl
 				InfoStatus.Text = "Already Up to Date.";
 			});
 			await Task.Delay(50);
+			
+			Statics.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
 			return;
 		}
 		
