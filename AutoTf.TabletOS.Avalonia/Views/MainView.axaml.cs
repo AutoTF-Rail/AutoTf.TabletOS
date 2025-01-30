@@ -36,13 +36,6 @@ public partial class MainView : UserControl
 		Process process = new Process { StartInfo = processStartInfo };
 		process.OutputDataReceived += async (sender, e) =>
 		{
-			await Dispatcher.UIThread.InvokeAsync(() =>
-			{	
-				LoadingName.Text = "Identifying key...";
-				LoadingArea.IsVisible = true;
-			});
-			await Task.Delay(50);
-			
 			if (e.Data != null)
 			{
 				if (e.Data.Contains("Yubico") || e.Data.Contains("YubiKey"))
