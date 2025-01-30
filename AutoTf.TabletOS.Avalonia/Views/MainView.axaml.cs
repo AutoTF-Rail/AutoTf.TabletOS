@@ -41,26 +41,27 @@ public partial class MainView : UserControl
 				if (e.Data.Contains("Yubico") || e.Data.Contains("YubiKey"))
 				{
 					ShowLoading();
-						
-					IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
-					if (device == null)
-						return;
+					
+					Dispatcher.UIThread.InvokeAsync(() =>
+					{	
+						IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
+						if (device == null)
+							return;
 
-					using (OathSession session = new OathSession(device))
-					{
-						foreach (Credential credential in session.GetCredentials())
+						using (OathSession session = new OathSession(device))
 						{
-							if (credential.Issuer != "AutoTF")
-								return;
-							
-							Statics.YubiCode = session.CalculateCredential(credential).Value!;
-							Statics.YubiSerial = device.SerialNumber!.Value;
-							Statics.YubiTime = DateTime.UtcNow;
+							foreach (Credential credential in session.GetCredentials())
+							{
+								if (credential.Issuer != "AutoTF")
+									return;
+								
+								Statics.YubiCode = session.CalculateCredential(credential).Value!;
+								Statics.YubiSerial = device.SerialNumber!.Value;
+								Statics.YubiTime = DateTime.UtcNow;
+							}
 						}
-					}
-					// TODO: Error handling if no cred was found.
-					Dispatcher.UIThread.Post(() =>
-					{
+						
+						// TODO: Error handling if no cred was found.
 						((MainWindowViewModel)DataContext!).ActiveView = new TrainSelectionScreen();
 						LoadingArea.IsVisible = false;
 					});
