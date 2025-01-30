@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,36 +43,42 @@ public partial class TrainControlView : UserControl
 			// TODO: Change to udp?
 			string url = "ws://192.168.1.1/camera/stream";
 
-			using ClientWebSocket ws = new ClientWebSocket();
-			await ws.ConnectAsync(new Uri(url), CancellationToken.None);
+			Uri uri = new Uri(url);
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+			request.Headers.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
-			byte[] buffer = new byte[16384];
-			MemoryStream ms = new MemoryStream();
-
-			while (ws.State == WebSocketState.Open)
+			using (ClientWebSocket ws = new ClientWebSocket())
 			{
-				WebSocketReceiveResult result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+				await ws.ConnectAsync(uri, CancellationToken.None);
 
-				if (result.MessageType == WebSocketMessageType.Close)
+				byte[] buffer = new byte[16384];
+				MemoryStream ms = new MemoryStream();
+
+				while (ws.State == WebSocketState.Open)
 				{
-					await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by client", CancellationToken.None);
-					break;
-				}
+					WebSocketReceiveResult result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
 
-				ms.Write(buffer, 0, result.Count);
-
-				if (result.EndOfMessage)
-				{
-					ms.Seek(0, SeekOrigin.Begin);
-
-					Bitmap bitmap = new Bitmap(ms);
-
-					Dispatcher.UIThread.Invoke(() =>
+					if (result.MessageType == WebSocketMessageType.Close)
 					{
-						PreviewImage.Source = bitmap;
-					});
+						await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by client", CancellationToken.None);
+						break;
+					}
 
-					ms.SetLength(0);
+					ms.Write(buffer, 0, result.Count);
+
+					if (result.EndOfMessage)
+					{
+						ms.Seek(0, SeekOrigin.Begin);
+
+						Bitmap bitmap = new Bitmap(ms);
+
+						Dispatcher.UIThread.Invoke(() =>
+						{
+							PreviewImage.Source = bitmap;
+						});
+
+						ms.SetLength(0);
+					}
 				}
 			}
 		}
