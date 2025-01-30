@@ -59,10 +59,8 @@ public partial class MainView : UserControl
 						}
 					}
 					// TODO: Error handling if no cred was found.
-					if (DataContext is MainWindowViewModel viewModel)
-					{
-						viewModel.ActiveView = new TrainSelectionScreen();
-					}
+					Dispatcher.UIThread.Invoke(() =>
+						((MainWindowViewModel)DataContext!).ActiveView = new TrainSelectionScreen());
 					LoadingArea.IsVisible = false;
 					// TODO: Requires ppa:yubico/stable - yubikey-manager
 				}
