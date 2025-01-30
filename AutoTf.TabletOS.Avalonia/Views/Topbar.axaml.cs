@@ -35,7 +35,9 @@ public partial class TopBar : UserControl
 	public void Initialize()
 	{
 		QuickMenuGrid.IsVisible = false;
+#if RELEASE
 		_brightness = int.Parse(File.ReadAllText("/sys/class/backlight/10-0045/brightness"));
+#endif
 		// LastSynced.Text = "Last Synced: " + Statics.DataManager.GetLastSynced();
 
 		
@@ -89,8 +91,10 @@ public partial class TopBar : UserControl
 		if (_brightness - 25 <= 50)
 			return;
 		_brightness -= 25;
+#if RELEASE
 		Statics.ExecuteCommand("echo " + _brightness.ToString() +
 		                       " | sudo tee /sys/class/backlight/10-0045/brightness");
+#endif
 	}
 
 	private void BrighterButton_Click(object? sender, RoutedEventArgs e)
@@ -98,8 +102,10 @@ public partial class TopBar : UserControl
 		if (_brightness + 25 >= 255)
 			return;
 		_brightness += 25;
+#if RELEASE
 		Statics.ExecuteCommand("echo " + _brightness.ToString() +
 		                       " | sudo tee /sys/class/backlight/10-0045/brightness");
+#endif
 	}
 
 	private void InfoButton_OnClick(object? sender, RoutedEventArgs e)

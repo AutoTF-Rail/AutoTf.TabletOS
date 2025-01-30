@@ -50,7 +50,7 @@
                             </DockPanel>
                         </Grid>
                     </Border>
-                    <Button Grid.Column="1" Padding="0" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
+                    <Button Grid.Column="1" Padding="0" Width="95" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
                         <Grid HorizontalAlignment="Center">
                             <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
                             <Image Source="../Assets/TrainSwitchIcon.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="10"/>
@@ -96,30 +96,265 @@
                     </Border>
                 </Grid>
                 
-                <Grid Grid.Column="1">
+                <Grid Grid.Column="1" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="115" />
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1.5*" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="1.4*" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     
-                    <Border Margin="5, 5, 15, 0" Grid.Row="0" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
-                        <Grid>
-                            <Border CornerRadius="10, 10, 0, 0" Background="Gray" Opacity=".2"/>
-                            <StackPanel HorizontalAlignment="Stretch">
-                                <Button HorizontalAlignment="Stretch" Padding="0" Background="Transparent" BorderBrush="Black" BorderThickness="0, 0, 0, 2">
-                                    <Grid>
-                                        <Border Background="Gray" Opacity="0.2" />
-                                        <DockPanel>
-                                            <Image DockPanel.Dock="Right" Source="../Assets/Arrow_Right.png" Height="20" Margin="10" />
-                                            <TextBlock FontSize="25" Margin="10, 5">All Controls</TextBlock>
-                                        </DockPanel>
-                                    </Grid>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                    <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Left">
+                        <Button Padding="0" Width="95" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
+                            <Grid HorizontalAlignment="Center">
+                                <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
+                                <Image Source="../Assets/PromileAnzeigeWhite.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="16"/>
+                            </Grid>
+                        </Button>
+                        <Button Padding="0" Width="95" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
+                            <Grid HorizontalAlignment="Center">
+                                <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
+                                <Image Source="../Assets/SpeedSign.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="12"/>
+                            </Grid>
+                        </Button>
+                        <Button Padding="0" Width="95" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
+                            <Grid HorizontalAlignment="Center">
+                                <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
+                                <Image Source="../Assets/SpeedIndicator.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="20"/>
+                            </Grid>
+                        </Button>
+                        <Button Padding="0" Width="95" Height="75" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="DarkRed" BorderThickness="2" Margin="5">
+                            <Grid HorizontalAlignment="Stretch">
+                                <Border CornerRadius="10" Background="Red" Opacity=".4"/>
+                                <TextBlock HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold">Emergency <LineBreak /> Break</TextBlock>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
                     
-                    <Border Margin="5, 20, 15, 20" Grid.Row="1" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
+                    <Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" Margin="5, 5, 5, 0" Padding="0" CornerRadius="10" Background="Transparent" BorderBrush="Black" BorderThickness="2">
+                        <Grid>
+                            <Border Background="Gray" CornerRadius="10" Opacity="0.2" />
+                            <DockPanel>
+                                <Image DockPanel.Dock="Right" Source="../Assets/Arrow_Right.png" Height="20" Margin="10" />
+                                <TextBlock FontSize="25" Margin="10, 5">All Controls</TextBlock>
+                            </DockPanel>
+                        </Grid>
+                    </Button>
+                    <DockPanel Grid.Column="0" Grid.Row="1" LastChildFill="False" HorizontalAlignment="Left">
+                        <Border Width="165" HorizontalAlignment="Center" Margin="5, 5, 5, 0" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
+                            <Grid>
+                                <Border CornerRadius="10, 10, 0, 0" Background="Gray" Opacity=".2"/>
+                                <StackPanel HorizontalAlignment="Stretch">
+                                    <Border HorizontalAlignment="Stretch" Padding="0" Height="34" Background="Transparent" BorderBrush="Black" BorderThickness="0, 0, 0, 2">
+                                        <Grid>
+                                            <Border Background="Gray" Opacity="0.2" />
+                                            <DockPanel>
+                                                <TextBlock FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10, 5">Combined throttle</TextBlock>
+                                            </DockPanel>
+                                        </Grid>
+                                    </Border>
+                                    <DockPanel VerticalAlignment="Stretch" MinHeight="400" HorizontalAlignment="Stretch">
+                                        <StackPanel>
+                                            <TextBlock FontSize="20" Foreground="Black" VerticalAlignment="Center" Margin="5, 4, 5, 0" FontWeight="Bold" HorizontalAlignment="Center">
+                                                <Run>--</Run>
+                                                <Run Name="CombinedThrottlePercentage">75%</Run>
+                                                <Run>--</Run>
+                                            </TextBlock>
+                                            
+                                            <Button Click="CombinedThrottleUp_Click" Background="Transparent" BorderBrush="Black" CornerRadius="5" Height="40" Padding="0" HorizontalAlignment="Stretch" Margin="6, 3, 5, 5" BorderThickness="2, 0">
+                                                <Grid>
+                                                    <Border Background="Gray" Opacity=".4"></Border>
+                                                    <TextBlock Text="Up" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            
+                                            <Button Background="Transparent"  CornerRadius="5" Height="30" Padding="0" HorizontalAlignment="Stretch" Margin="6, 1">
+                                                <Grid>
+                                                    <Border Background="Black" Opacity=".4"></Border>
+                                                    <TextBlock Text="25%" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            <Button Background="Transparent" CornerRadius="5" Height="30" Padding="0" HorizontalAlignment="Stretch" Margin="6, 1">
+                                                <Grid>
+                                                    <Border Background="Black" Opacity=".4"></Border>
+                                                    <TextBlock Text="10%" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            <Button Background="Transparent" BorderBrush="Black" CornerRadius="5" Height="35" Padding="0" HorizontalAlignment="Stretch" Margin="6, 3" BorderThickness="2, 0">
+                                                <Grid>
+                                                    <Border Background="Gray" Opacity=".4"></Border>
+                                                    <TextBlock Text="0%" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            <Button Background="Transparent" CornerRadius="5" Height="30" Padding="0" HorizontalAlignment="Stretch" Margin="6, 1">
+                                                <Grid>
+                                                    <Border Background="Black" Opacity=".4"></Border>
+                                                    <TextBlock Text="-10%" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            <Button Background="Transparent" CornerRadius="5" Height="30" Padding="0" HorizontalAlignment="Stretch" Margin="6, 1">
+                                                <Grid>
+                                                    <Border Background="Black" Opacity=".4"></Border>
+                                                    <TextBlock Text="-100%" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            
+                                            <Button Click="CombinedThrottleDown_Click" Background="Transparent" BorderBrush="Black" CornerRadius="5" Height="45" Padding="0" HorizontalAlignment="Stretch" Margin="6, 5" BorderThickness="2, 0">
+                                                <Grid>
+                                                    <Border Background="Gray" Opacity=".4"></Border>
+                                                    <TextBlock Text="Down" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <Border Width="165" HorizontalAlignment="Center" Margin="5, 5, 5, 0" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
+                            <Grid>
+                                <Border CornerRadius="10, 10, 0, 0" Background="Gray" Opacity=".2"/>
+                                <StackPanel HorizontalAlignment="Stretch">
+                                    <Border HorizontalAlignment="Stretch" Height="34" Padding="0" Background="Transparent" BorderBrush="Black" BorderThickness="0, 0, 0, 2">
+                                        <Grid>
+                                            <Border Background="Gray" Opacity="0.2" />
+                                            <DockPanel>
+                                                <TextBlock FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10, 5">Throttle</TextBlock>
+                                            </DockPanel>
+                                        </Grid>
+                                    </Border>
+                                    <DockPanel VerticalAlignment="Stretch" MinHeight="400" HorizontalAlignment="Stretch">
+                                        <StackPanel>
+                                            <TextBlock FontSize="20" Foreground="Black" VerticalAlignment="Center" Margin="5, 4, 5, 0" FontWeight="Bold" HorizontalAlignment="Center">
+                                                <Run>--</Run>
+                                                <Run>75%</Run>
+                                                <Run>--</Run>
+                                            </TextBlock>
+                                            
+                                            <Button Background="Transparent" BorderBrush="Black" CornerRadius="5" Height="40" Padding="0" HorizontalAlignment="Stretch" Margin="6, 3, 5, 5" BorderThickness="2, 0">
+                                                <Grid>
+                                                    <Border Background="Gray" Opacity=".4"></Border>
+                                                    <TextBlock Text="Up" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            
+                                            <Button Background="Transparent"  CornerRadius="5" Height="30" Padding="0" HorizontalAlignment="Stretch" Margin="6, 1">
+                                                <Grid>
+                                                    <Border Background="Black" Opacity=".4"></Border>
+                                                    <TextBlock Text="100%" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            <Button Background="Transparent"  CornerRadius="5" Height="30" Padding="0" HorizontalAlignment="Stretch" Margin="6, 1">
+                                                <Grid>
+                                                    <Border Background="Black" Opacity=".4"></Border>
+                                                    <TextBlock Text="50%" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            <Button Background="Transparent"  CornerRadius="5" Height="30" Padding="0" HorizontalAlignment="Stretch" Margin="6, 1">
+                                                <Grid>
+                                                    <Border Background="Black" Opacity=".4"></Border>
+                                                    <TextBlock Text="25%" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            <Button Background="Transparent" CornerRadius="5" Height="30" Padding="0" HorizontalAlignment="Stretch" Margin="6, 1">
+                                                <Grid>
+                                                    <Border Background="Black" Opacity=".4"></Border>
+                                                    <TextBlock Text="10%" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            <Button Background="Transparent" BorderBrush="Black" CornerRadius="5" Height="35" Padding="0" HorizontalAlignment="Stretch" Margin="6, 3" BorderThickness="2, 0">
+                                                <Grid>
+                                                    <Border Background="Gray" Opacity=".4"></Border>
+                                                    <TextBlock Text="0%" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            
+                                            <Button Background="Transparent" BorderBrush="Black" CornerRadius="5" Height="45" Padding="0" HorizontalAlignment="Stretch" Margin="6, 5" BorderThickness="2, 0">
+                                                <Grid>
+                                                    <Border Background="Gray" Opacity=".4"></Border>
+                                                    <TextBlock Text="Down" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <StackPanel Height="350" VerticalAlignment="Center">
+                            <Border Width="165" HorizontalAlignment="Center" Margin="5, 6, 5, 0" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
+                                <Grid>
+                                    <Border CornerRadius="10, 10, 0, 0" Background="Gray" Opacity=".2"/>
+                                    <StackPanel HorizontalAlignment="Stretch">
+                                        <Border HorizontalAlignment="Stretch" Height="34" Padding="0" Background="Transparent" BorderBrush="Black" BorderThickness="0, 0, 0, 2">
+                                            <Grid>
+                                                <Border Background="Gray" Opacity="0.2" />
+                                                <DockPanel>
+                                                    <TextBlock FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10, 5">Brake</TextBlock>
+                                                </DockPanel>
+                                            </Grid>
+                                        </Border>
+                                        <StackPanel>
+                                            <TextBlock FontSize="20" Foreground="Black" VerticalAlignment="Center" Margin="5, 4, 5, 0" FontWeight="Bold" HorizontalAlignment="Center">
+                                                <Run>--</Run>
+                                                <Run>Applied</Run>
+                                                <Run>--</Run>
+                                            </TextBlock>
+                                            
+                                            <Button Background="Transparent" BorderBrush="Black" CornerRadius="5" Height="45" Padding="0" HorizontalAlignment="Stretch" Margin="6, 3, 5, 5" BorderThickness="2, 0">
+                                                <Grid>
+                                                    <Border Background="Gray" Opacity=".4"></Border>
+                                                    <TextBlock Text="Release" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            
+                                            <Button Background="Transparent" BorderBrush="Black" CornerRadius="5" Height="45" Padding="0" HorizontalAlignment="Stretch" Margin="6, 5, 5, 10" BorderThickness="2, 0">
+                                                <Grid>
+                                                    <Border Background="Gray" Opacity=".4"></Border>
+                                                    <TextBlock Text="Apply" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            
+                            <Border Width="165" HorizontalAlignment="Center" Margin="5, 5, 5, 0" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
+                                <Grid>
+                                    <Border CornerRadius="10, 10, 0, 0" Background="Gray" Opacity=".2"/>
+                                    <StackPanel HorizontalAlignment="Stretch">
+                                        <Border HorizontalAlignment="Stretch" Height="34" Padding="0" Background="Transparent" BorderBrush="Black" BorderThickness="0, 0, 0, 2">
+                                            <Grid>
+                                                <Border Background="Gray" Opacity="0.2" />
+                                                <DockPanel>
+                                                    <TextBlock FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10, 5">Doors</TextBlock>
+                                                </DockPanel>
+                                            </Grid>
+                                        </Border>
+                                        <StackPanel>
+                                            <Button Background="Transparent" BorderBrush="Black" CornerRadius="5" Height="45" Padding="0" HorizontalAlignment="Stretch" Margin="6, 10, 5, 10" BorderThickness="2, 0">
+                                                <Grid>
+                                                    <Border Background="Gray" Opacity=".4"></Border>
+                                                    <TextBlock Text="Open Left" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                            
+                                            <Button Background="Transparent" BorderBrush="Black" CornerRadius="5" Height="45" Padding="0" HorizontalAlignment="Stretch" Margin="6, 5" BorderThickness="2, 0">
+                                                <Grid>
+                                                    <Border Background="Gray" Opacity=".4"></Border>
+                                                    <TextBlock Text="Open Right" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                        
+                    </DockPanel>
+                    
+                    <Border Grid.Column="0" Grid.ColumnSpan="2" Margin="5, 10, 15, 20" Grid.Row="2" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
                         <Grid>
                             <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
                             <StackPanel HorizontalAlignment="Stretch">

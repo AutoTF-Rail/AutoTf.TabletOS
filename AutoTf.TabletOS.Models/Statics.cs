@@ -11,6 +11,8 @@ public static class Statics
 	public static IDataManager DataManager;
 	public static IProcessReader ProcessReader;
 	public static ITrainInformationService TrainInformationService;
+	public static ITrainControlService TrainControlService;
+	
 	public static Logger Logger = new Logger(true);
 	
 	public static NetworkManager NetworkManager = new NetworkManager();
