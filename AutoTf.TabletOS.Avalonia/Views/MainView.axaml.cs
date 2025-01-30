@@ -45,8 +45,8 @@ public partial class MainView : UserControl
 					{
 						LoadingName.Text = "Getting key..";
 						LoadingArea.IsVisible = true;
-						Thread.Sleep(50);
 					});
+					Thread.Sleep(50);
 					Dispatcher.UIThread.Invoke(() =>
 					{
 						IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
