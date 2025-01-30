@@ -166,6 +166,7 @@ public partial class TrainSelectionScreen : UserControl
 			LoadingArea.IsVisible = true;
 			LoadingName.Text = "Trying to connect to train...";
 		});
+		await Task.Delay(250);
 		
 		
 		Button button = (Button)sender!;
