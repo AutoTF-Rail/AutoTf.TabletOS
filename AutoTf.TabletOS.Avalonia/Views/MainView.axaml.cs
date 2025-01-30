@@ -34,39 +34,48 @@ public partial class MainView : UserControl
 		};
 
 		Process process = new Process { StartInfo = processStartInfo };
-		process.OutputDataReceived += (sender, e) =>
+		process.OutputDataReceived += async (sender, e) =>
 		{
+			await Dispatcher.UIThread.InvokeAsync(() =>
+			{	
+				LoadingName.Text = "Identifying key...";
+				LoadingArea.IsVisible = true;
+			});
+			await Task.Delay(50);
+			
 			if (e.Data != null)
 			{
 				if (e.Data.Contains("Yubico") || e.Data.Contains("YubiKey"))
 				{
-					Dispatcher.UIThread.Invoke(() =>
+					await Dispatcher.UIThread.InvokeAsync(() =>
 					{	
-						LoadingName.Text = "Getting key..";
+						LoadingName.Text = "Getting data...";
 						LoadingArea.IsVisible = true;
-						
-						IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
-						if (device == null)
-							return;
-
-						using (OathSession session = new OathSession(device))
-						{
-							foreach (Credential credential in session.GetCredentials())
-							{
-								if (credential.Issuer != "AutoTF")
-									return;
-								Statics.YubiCode = session.CalculateCredential(credential).Value!;
-								Statics.YubiSerial = device.SerialNumber!.Value;
-								Statics.YubiTime = DateTime.UtcNow;
-							}
-						}
-						// TODO: Error handling if no cred was found.
-						if (DataContext is MainWindowViewModel viewModel)
-						{
-							viewModel.ActiveView = new TrainSelectionScreen();
-						}
-						LoadingArea.IsVisible = false;
 					});
+					await Task.Delay(50);
+						
+					IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
+					if (device == null)
+						return;
+
+					using (OathSession session = new OathSession(device))
+					{
+						foreach (Credential credential in session.GetCredentials())
+						{
+							if (credential.Issuer != "AutoTF")
+								return;
+							
+							Statics.YubiCode = session.CalculateCredential(credential).Value!;
+							Statics.YubiSerial = device.SerialNumber!.Value;
+							Statics.YubiTime = DateTime.UtcNow;
+						}
+					}
+					// TODO: Error handling if no cred was found.
+					if (DataContext is MainWindowViewModel viewModel)
+					{
+						viewModel.ActiveView = new TrainSelectionScreen();
+					}
+					LoadingArea.IsVisible = false;
 					// TODO: Requires ppa:yubico/stable - yubikey-manager
 				}
 			}
