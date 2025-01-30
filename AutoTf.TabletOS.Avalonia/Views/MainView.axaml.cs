@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
@@ -44,7 +45,10 @@ public partial class MainView : UserControl
 					{
 						LoadingName.Text = "Getting key..";
 						LoadingArea.IsVisible = true;
-
+						Thread.Sleep(50);
+					});
+					Dispatcher.UIThread.Invoke(() =>
+					{
 						IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
 						if (device == null)
 							return;
