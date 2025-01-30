@@ -145,9 +145,18 @@ public partial class TrainSelectionScreen : UserControl
 
 	private async void RescanButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		await Dispatcher.UIThread.InvokeAsync(() => RescanButton.IsVisible = false);
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			RescanButton.IsVisible = false;
+			NearbyLoadingArea.IsVisible = true;
+		});
+		Thread.Sleep(250);
 		await RunBridgeScan();
-		await Dispatcher.UIThread.InvokeAsync(() => RescanButton.IsVisible = true);
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			RescanButton.IsVisible = true;
+			NearbyLoadingArea.IsVisible = true;
+		});
 	}
 
 	private async void TrainNearby_Click(object? sender, RoutedEventArgs e)
