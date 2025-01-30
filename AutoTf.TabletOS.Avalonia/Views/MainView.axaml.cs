@@ -59,7 +59,7 @@ public partial class MainView : UserControl
 						}
 					}
 					// TODO: Error handling if no cred was found.
-					Dispatcher.UIThread.Invoke(() =>
+					Dispatcher.UIThread.Post(() =>
 					{
 						((MainWindowViewModel)DataContext!).ActiveView = new TrainSelectionScreen();
 						LoadingArea.IsVisible = false;
