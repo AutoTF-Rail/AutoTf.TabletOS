@@ -80,6 +80,16 @@ public partial class InfoScreen : UserControl
 		
 		string pull = Statics.ExecuteCommand("git pull");
 		Console.WriteLine(pull);
+		if (pull.Contains("Already"))
+		{
+			await Dispatcher.UIThread.InvokeAsync(() =>
+			{
+				InfoOutput.Text = "";
+				InfoStatus.Text = "Already Up to Date.";
+			});
+			await Task.Delay(50);
+			return;
+		}
 		
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
