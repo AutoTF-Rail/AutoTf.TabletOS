@@ -1,9 +1,12 @@
+using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Interfaces;
 
 namespace AutoTf.TabletOS.Models;
 
 public class TrainInformationService : ITrainInformationService
 {
+	private readonly Logger _logger = Statics.Logger;
+	
 	public async Task<string?> GetEvuName()
 	{
 		try
@@ -140,7 +143,7 @@ public class TrainInformationService : ITrainInformationService
 		}
 	}
 
-	public async Task PostUpdate()
+	public async Task<bool> PostUpdate()
 	{
 		try
 		{
@@ -151,14 +154,24 @@ public class TrainInformationService : ITrainInformationService
 			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.Log("Could not send update signal:");
+				_logger.Log(await response.Content.ReadAsStringAsync());
+				return false;
+			}
+
+			return true;
 		}
 		catch (Exception ex)
 		{
-			// TODO: Log
+			_logger.Log("Could not send update signal:");
+			_logger.Log(ex.Message);
+			return false;
 		}
 	}
 
-	public async Task PostShutdown()
+	public async Task<bool> PostShutdown()
 	{
 		try
 		{
@@ -169,14 +182,24 @@ public class TrainInformationService : ITrainInformationService
 			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.Log("Could not send shutdown signal:");
+				_logger.Log(await response.Content.ReadAsStringAsync());
+				return false;
+			}
+
+			return true;
 		}
 		catch (Exception ex)
 		{
-			// TODO: Log
+			_logger.Log("Could not send shutdown signal:");
+			_logger.Log(ex.Message);
+			return false;
 		}
 	}
 
-	public async Task PostRestart()
+	public async Task<bool> PostRestart()
 	{
 		try
 		{
@@ -187,10 +210,20 @@ public class TrainInformationService : ITrainInformationService
 			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.Log("Could not send restart signal:");
+				_logger.Log(await response.Content.ReadAsStringAsync());
+				return false;
+			}
+
+			return true;
 		}
 		catch (Exception ex)
 		{
-			// TODO: Log
+			_logger.Log("Could not send restart signal:");
+			_logger.Log(ex.Message);
+			return false;
 		}
 	}
 }

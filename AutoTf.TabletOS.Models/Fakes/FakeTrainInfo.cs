@@ -34,17 +34,17 @@ public class FakeTrainInfo : ITrainInformationService
 		return Task.FromResult(new DateTime?(DateTime.Now));
 	}
 
-	public Task PostUpdate()
+	public Task<bool> PostUpdate()
 	{
 		return Task.CompletedTask;
 	}
 
-	public Task PostShutdown()
+	public Task<bool> PostShutdown()
 	{
 		return Task.CompletedTask;
 	}
 
-	public Task PostRestart()
+	public Task<bool> PostRestart()
 	{
 		return Task.CompletedTask;
 	}
