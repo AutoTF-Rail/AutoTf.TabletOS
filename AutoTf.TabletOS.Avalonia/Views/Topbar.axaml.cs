@@ -89,15 +89,17 @@ public partial class TopBar : UserControl
 		if (_brightness - 25 <= 50)
 			return;
 		_brightness -= 25;
-		File.WriteAllText("/sys/class/backlight/10-0045/brightness", _brightness.ToString());
+		Statics.ExecuteCommand("echo " + _brightness.ToString() +
+		                       " | sudo tee /sys/class/backlight/10-0045/brightness");
 	}
 
 	private void BrighterButton_Click(object? sender, RoutedEventArgs e)
 	{
-		if (_brightness + 25 <= 255)
+		if (_brightness + 25 >= 255)
 			return;
 		_brightness += 25;
-		File.WriteAllText("/sys/class/backlight/10-0045/brightness", _brightness.ToString());
+		Statics.ExecuteCommand("echo " + _brightness.ToString() +
+		                       " | sudo tee /sys/class/backlight/10-0045/brightness");
 	}
 
 	private void InfoButton_OnClick(object? sender, RoutedEventArgs e)
