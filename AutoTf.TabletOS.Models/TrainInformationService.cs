@@ -147,7 +147,7 @@ public class TrainInformationService : ITrainInformationService
 	{
 		try
 		{
-			string url = "http://192.168.1.1/update";
+			string url = "http://192.168.1.1/system/update";
 
 			using HttpClient client = new HttpClient();
 			// TODO: Cache mac address
@@ -175,7 +175,7 @@ public class TrainInformationService : ITrainInformationService
 	{
 		try
 		{
-			string url = "http://192.168.1.1/shutdown";
+			string url = "http://192.168.1.1/system/shutdown";
 
 			using HttpClient client = new HttpClient();
 			// TODO: Cache mac address
@@ -203,7 +203,7 @@ public class TrainInformationService : ITrainInformationService
 	{
 		try
 		{
-			string url = "http://192.168.1.1/restart";
+			string url = "http://192.168.1.1/system/restart";
 
 			using HttpClient client = new HttpClient();
 			// TODO: Cache mac address
