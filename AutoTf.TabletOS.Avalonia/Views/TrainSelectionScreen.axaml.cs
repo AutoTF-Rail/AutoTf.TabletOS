@@ -150,12 +150,12 @@ public partial class TrainSelectionScreen : UserControl
 			RescanButton.IsVisible = false;
 			NearbyLoadingArea.IsVisible = true;
 		});
-		Thread.Sleep(250);
+		await Task.Delay(250);
 		await RunBridgeScan();
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
 			RescanButton.IsVisible = true;
-			NearbyLoadingArea.IsVisible = true;
+			NearbyLoadingArea.IsVisible = false;
 		});
 	}
 
