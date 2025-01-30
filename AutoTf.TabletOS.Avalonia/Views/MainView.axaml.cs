@@ -40,10 +40,11 @@ public partial class MainView : UserControl
 			{
 				if (e.Data.Contains("Yubico") || e.Data.Contains("YubiKey"))
 				{
-					ShowLoading();
-					
-					Dispatcher.UIThread.InvokeAsync(() =>
-					{	
+					Dispatcher.UIThread.Invoke(() =>
+					{
+						LoadingName.Text = "Getting key..";
+						LoadingArea.IsVisible = true;
+
 						IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
 						if (device == null)
 							return;
@@ -54,18 +55,21 @@ public partial class MainView : UserControl
 							{
 								if (credential.Issuer != "AutoTF")
 									return;
-								
 								Statics.YubiCode = session.CalculateCredential(credential).Value!;
 								Statics.YubiSerial = device.SerialNumber!.Value;
 								Statics.YubiTime = DateTime.UtcNow;
 							}
 						}
-						
+
 						// TODO: Error handling if no cred was found.
+						if (DataContext is MainWindowViewModel viewModel)
+						{
+							viewModel.ActiveView = new TrainSelectionScreen();
+						}
+
 						LoadingArea.IsVisible = false;
-						((MainWindowViewModel)DataContext!).ActiveView = new TrainSelectionScreen();
 					});
-					
+
 					// TODO: Requires ppa:yubico/stable - yubikey-manager
 				}
 			}
