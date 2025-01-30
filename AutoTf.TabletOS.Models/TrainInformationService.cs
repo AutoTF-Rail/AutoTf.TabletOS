@@ -157,7 +157,7 @@ public class TrainInformationService : ITrainInformationService
 			if (!response.IsSuccessStatusCode)
 			{
 				_logger.Log("Could not send update signal:");
-				_logger.Log(await response.Content.ReadAsStringAsync());
+				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
 				return false;
 			}
 
@@ -185,7 +185,7 @@ public class TrainInformationService : ITrainInformationService
 			if (!response.IsSuccessStatusCode)
 			{
 				_logger.Log("Could not send shutdown signal:");
-				_logger.Log(await response.Content.ReadAsStringAsync());
+				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
 				return false;
 			}
 
@@ -213,7 +213,7 @@ public class TrainInformationService : ITrainInformationService
 			if (!response.IsSuccessStatusCode)
 			{
 				_logger.Log("Could not send restart signal:");
-				_logger.Log(await response.Content.ReadAsStringAsync());
+				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
 				return false;
 			}
 
