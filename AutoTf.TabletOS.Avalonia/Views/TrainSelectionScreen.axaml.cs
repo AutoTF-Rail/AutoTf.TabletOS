@@ -74,7 +74,7 @@ public partial class TrainSelectionScreen : UserControl
 		OtherTrains.SelectedItem = null;
 	}
 
-	private async void RunBridgeScan()
+	private async Task RunBridgeScan()
 	{
 		try
 		{
@@ -82,8 +82,8 @@ public partial class TrainSelectionScreen : UserControl
 			_nearbyTrains.Clear();
 			ProcessStartInfo processStartInfo = new ProcessStartInfo()
 			{
-				FileName = "btmgmt",
-				Arguments = "find",
+				FileName = "timeout",
+				Arguments = "3s btmgmt find",
 				RedirectStandardOutput = true,
 				RedirectStandardError = false,
 				UseShellExecute = false,
@@ -143,18 +143,21 @@ public partial class TrainSelectionScreen : UserControl
 		});
 	}
 
-	private void RescanButton_OnClick(object? sender, RoutedEventArgs e)
+	private async void RescanButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		RunBridgeScan();
+		await Dispatcher.UIThread.InvokeAsync(() => RescanButton.IsVisible = false);
+		await RunBridgeScan();
+		await Dispatcher.UIThread.InvokeAsync(() => RescanButton.IsVisible = true);
 	}
 
 	private async void TrainNearby_Click(object? sender, RoutedEventArgs e)
 	{
-		Dispatcher.UIThread.Invoke(() =>
+		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
 			LoadingArea.IsVisible = true;
 			LoadingName.Text = "Trying to connect to train...";
 		});
+		
 		
 		Button button = (Button)sender!;
 		TrainAd trainAd = (TrainAd)button.DataContext!;
