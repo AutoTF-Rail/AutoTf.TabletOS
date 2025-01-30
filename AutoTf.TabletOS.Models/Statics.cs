@@ -8,7 +8,6 @@ namespace AutoTf.TabletOS.Models;
 public static class Statics
 {
 	public static Action? BrightnessChanged;
-	public static double CurrentBrightness = 1.0;
 	public static IDataManager DataManager;
 	public static IProcessReader ProcessReader;
 	public static ITrainInformationService TrainInformationService;

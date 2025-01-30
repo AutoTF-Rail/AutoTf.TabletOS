@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
@@ -16,6 +17,7 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 public partial class TopBar : UserControl
 {
 	private DispatcherTimer _timer;
+	private int _brightness;
 	
 	public TopBar()
 	{
@@ -33,7 +35,7 @@ public partial class TopBar : UserControl
 	public void Initialize()
 	{
 		QuickMenuGrid.IsVisible = false;
-
+		_brightness = int.Parse(File.ReadAllText("/sys/class/backlight/10-0045/brightness"));
 		// LastSynced.Text = "Last Synced: " + Statics.DataManager.GetLastSynced();
 
 		
@@ -84,18 +86,18 @@ public partial class TopBar : UserControl
 
 	private void DarkerButton_Click(object? sender, RoutedEventArgs e)
 	{
-		if (Statics.CurrentBrightness <= .4)
+		if (_brightness - 25 <= 50)
 			return;
-		Statics.CurrentBrightness -= .1f;
-		Statics.BrightnessChanged?.Invoke();
+		_brightness -= 25;
+		File.WriteAllText("/sys/class/backlight/10-0045/brightness", _brightness.ToString());
 	}
 
 	private void BrighterButton_Click(object? sender, RoutedEventArgs e)
 	{
-		if (Statics.CurrentBrightness >= 1.0f)
+		if (_brightness + 25 <= 255)
 			return;
-		Statics.CurrentBrightness += .1f;
-		Statics.BrightnessChanged?.Invoke();
+		_brightness += 25;
+		File.WriteAllText("/sys/class/backlight/10-0045/brightness", _brightness.ToString());
 	}
 
 	private void InfoButton_OnClick(object? sender, RoutedEventArgs e)

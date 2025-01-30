@@ -17,7 +17,6 @@ public partial class MainView : UserControl
 	{
 		InitializeComponent();
 		
-		Statics.BrightnessChanged += BrightnessChanged;
 		LoadingArea.IsVisible = false;
 
 		Task.Run(ListenForYubikey);
@@ -75,10 +74,5 @@ public partial class MainView : UserControl
 
 		process.Start();
 		process.BeginOutputReadLine();
-	}
-
-	private void BrightnessChanged()
-	{
-		this.Opacity = Statics.CurrentBrightness;
 	}
 }

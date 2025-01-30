@@ -83,7 +83,7 @@ public partial class TrainSelectionScreen : UserControl
 			ProcessStartInfo processStartInfo = new ProcessStartInfo()
 			{
 				FileName = "timeout",
-				Arguments = "3s btmgmt find",
+				Arguments = "6s btmgmt find",
 				RedirectStandardOutput = true,
 				RedirectStandardError = false,
 				UseShellExecute = false,
