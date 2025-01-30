@@ -62,8 +62,8 @@ public partial class MainView : UserControl
 						}
 						
 						// TODO: Error handling if no cred was found.
-						((MainWindowViewModel)DataContext!).ActiveView = new TrainSelectionScreen();
 						LoadingArea.IsVisible = false;
+						((MainWindowViewModel)DataContext!).ActiveView = new TrainSelectionScreen();
 					});
 					
 					// TODO: Requires ppa:yubico/stable - yubikey-manager
