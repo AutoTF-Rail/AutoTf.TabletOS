@@ -36,16 +36,16 @@ public class FakeTrainInfo : ITrainInformationService
 
 	public Task<bool> PostUpdate()
 	{
-		return Task.CompletedTask;
+		return Task.FromResult(true);
 	}
 
 	public Task<bool> PostShutdown()
 	{
-		return Task.CompletedTask;
+		return Task.FromResult(true);
 	}
 
 	public Task<bool> PostRestart()
 	{
-		return Task.CompletedTask;
+		return Task.FromResult(true);
 	}
 }

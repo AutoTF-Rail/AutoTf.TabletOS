@@ -75,6 +75,11 @@ public partial class InfoScreen : UserControl
 			Console.WriteLine(build);
 			InfoOutput.Text = build;
 			
+			InfoStatus.Text = "Perms";
+			string perms = Statics.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
+			Console.WriteLine(perms);
+			InfoOutput.Text = perms;
+			
 			InfoStatus.Text = "Reboot";
 			InfoOutput.Text = Statics.ExecuteCommand("reboot now");
 		});
