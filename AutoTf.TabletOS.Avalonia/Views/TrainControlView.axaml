@@ -71,7 +71,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     
-                    <Border Margin="15, 5, 5, 0" Grid.Row="0" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
+                    <Border Margin="15, 5, 5, 0" Grid.Row="0" BorderBrush="Black" CornerRadius="10" ClipToBounds="True" BorderThickness="2">
                         <Grid>
                             <Border CornerRadius="10, 10, 0, 0" Background="Gray" Opacity=".2"/>
                             <StackPanel HorizontalAlignment="Stretch">
@@ -84,7 +84,7 @@
                                         </DockPanel>
                                     </Grid>
                                 </Button>
-                                <Image Name="PreviewImage" Width="616" Source="../Assets/ImageExampleSmall.png"></Image>
+                                <Image ClipToBounds="True" Name="PreviewImage" Width="616" Source="../Assets/ImageExampleSmall.png"></Image>
                             </StackPanel>
                         </Grid>
                     </Border>
