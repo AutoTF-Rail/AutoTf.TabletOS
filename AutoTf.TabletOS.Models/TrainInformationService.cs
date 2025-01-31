@@ -25,6 +25,8 @@ public class TrainInformationService : ITrainInformationService
 		}
 		catch (Exception ex)
 		{
+			_logger.Log("TIS: Could not get EVU Name:");
+			_logger.Log(ex.Message);
 			// TODO: Log
 			return null;
 		}
@@ -48,6 +50,8 @@ public class TrainInformationService : ITrainInformationService
 		}
 		catch (Exception ex)
 		{
+			_logger.Log("TIS: Could not get train Id:");
+			_logger.Log(ex.Message);
 			// TODO: Log
 			return null;
 		}
@@ -71,6 +75,8 @@ public class TrainInformationService : ITrainInformationService
 		}
 		catch (Exception ex)
 		{
+			_logger.Log("TIS: Could not get train name:");
+			_logger.Log(ex.Message);
 			// TODO: Log
 			return null;
 		}
@@ -94,6 +100,8 @@ public class TrainInformationService : ITrainInformationService
 		}
 		catch (Exception ex)
 		{
+			_logger.Log("TIS: Could not get last sync try:");
+			_logger.Log(ex.Message);
 			// TODO: Log
 			return null;
 		}
@@ -117,6 +125,8 @@ public class TrainInformationService : ITrainInformationService
 		}
 		catch (Exception ex)
 		{
+			_logger.Log("TIS: Could not get version:");
+			_logger.Log(ex.Message);
 			// TODO: Log
 			return null;
 		}
@@ -138,6 +148,8 @@ public class TrainInformationService : ITrainInformationService
 		}
 		catch (Exception ex)
 		{
+			_logger.Log("TIS: Could not get next save date:");
+			_logger.Log(ex.Message);
 			// TODO: Log
 			return null;
 		}
