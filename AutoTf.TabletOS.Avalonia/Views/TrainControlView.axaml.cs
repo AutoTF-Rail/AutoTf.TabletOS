@@ -180,8 +180,12 @@ public partial class TrainControlView : UserControl
 			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Unknown");
 			return;
 		}
-		int nextSaveInMs = (nextSave!.Value.Add(TimeSpan.FromSeconds(2)) - DateTime.Now).Milliseconds;
-		
+		int nextSaveInMs = (nextSave.Value.Add(TimeSpan.FromSeconds(2)) - DateTime.Now).Milliseconds;
+		if (nextSaveInMs <= 0)
+		{
+			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Past Due");
+			return;
+		}
 		_saveTimer?.Dispose();
 		_saveTimer = new Timer(nextSaveInMs);
 		_saveTimer.Elapsed += (_, _) => _ = UpdateSaveTimer();
