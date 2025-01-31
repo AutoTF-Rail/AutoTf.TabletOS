@@ -13,7 +13,7 @@ public class FakeTrainControlService : ITrainControlService
 	
 	public Task<int> GetLeverCount()
 	{
-		return Task.FromResult(2);
+		return Task.FromResult(0);
 	}
 
 	public Task<double> GetLeverPosition(int leverIndex)

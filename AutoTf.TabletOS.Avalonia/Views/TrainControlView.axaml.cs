@@ -128,6 +128,11 @@ public partial class TrainControlView : UserControl
 
 	private async Task LoadControlData()
 	{
+		if (await _trainControl.GetLeverCount() != 0)
+		{
+			await Dispatcher.UIThread.InvokeAsync(() => ControlsUnavailableSection.IsVisible = false);
+			await Dispatcher.UIThread.InvokeAsync(() => EmergencyStopButton.IsEnabled = true);
+		}
 		_combinedThrottlePosition = await _trainControl.GetLeverPosition(0);
 		
 		await Dispatcher.UIThread.InvokeAsync(() => CombinedThrottlePercentage.Text = _combinedThrottlePosition.ToString());

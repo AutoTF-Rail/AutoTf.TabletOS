@@ -126,7 +126,7 @@
                                 <Image Source="../Assets/SpeedIndicator.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="20"/>
                             </Grid>
                         </Button>
-                        <Button Padding="0" Width="95" Height="75" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="DarkRed" BorderThickness="2" Margin="5">
+                        <Button IsEnabled="False" Name="EmergencyStopButton" Padding="0" Width="95" Height="75" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="DarkRed" BorderThickness="2" Margin="5">
                             <Grid HorizontalAlignment="Stretch">
                                 <Border CornerRadius="10" Background="Red" Opacity=".4"/>
                                 <TextBlock HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold">Emergency <LineBreak /> Break</TextBlock>
@@ -353,6 +353,13 @@
                         </StackPanel>
                         
                     </DockPanel>
+                    
+                    <Border Grid.Row="1" Grid.Column="0" Margin="5, 5, 5, 0" Name="ControlsUnavailableSection" Background="Transparent" ClipToBounds="True" BorderThickness="0" CornerRadius="10" HorizontalAlignment="Stretch">
+                        <Grid>
+                            <Grid Background="Black" Opacity=".7"></Grid>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="20">Controls are not available.</TextBlock>
+                        </Grid>
+                    </Border>
                     
                     <Border Grid.Column="0" Grid.ColumnSpan="2" Margin="5, 10, 15, 20" Grid.Row="2" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
                         <Grid>
