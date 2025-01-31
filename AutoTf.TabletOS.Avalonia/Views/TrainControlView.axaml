@@ -67,7 +67,7 @@
                 
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1.5*" />
+                        <RowDefinition Height="1.6*" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     
@@ -89,7 +89,7 @@
                         </Grid>
                     </Border>
                     
-                    <Border Margin="15, 20, 5, 20" Grid.Row="1" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
+                    <Border Margin="15, 10, 5, 20" Grid.Row="1" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
                         <Grid>
                             <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
                         </Grid>
