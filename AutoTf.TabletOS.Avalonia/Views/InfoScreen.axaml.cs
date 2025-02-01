@@ -113,12 +113,16 @@ public partial class InfoScreen : UserControl
 		string perms = Statics.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
 		Console.WriteLine(perms);
 		
+		// TODO: make global
+		if(Statics.TrainConnectionId != null)
+			Statics.ExecuteCommand("nmcli connection delete id CentralBridge-" + Statics.TrainConnectionId);
+		
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
 			InfoOutput.Text = perms;
 		
 			InfoStatus.Text = "Reboot";
-			InfoOutput.Text = Statics.ExecuteCommand("reboot now");
+			InfoOutput.Text = Statics.ExecuteCommand("systemctl restart startupScript.service");
 		});
 		await Task.Delay(50);
 		
