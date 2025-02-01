@@ -69,10 +69,13 @@ public partial class MainView : UserControl
 
 	private void ChangeScreen()
 	{
-		if (DataContext is MainWindowViewModel viewModel)
+		Dispatcher.UIThread.Invoke(() =>
 		{
-			viewModel.ActiveView = new TrainSelectionScreen();
-		}
-		_listener.Dispose();
+			if (DataContext is MainWindowViewModel viewModel)
+			{
+				viewModel.ActiveView = new TrainSelectionScreen();
+			}
+			_listener.Dispose();
+		});
 	}
 }
