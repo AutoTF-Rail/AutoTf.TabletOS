@@ -16,6 +16,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
+using MemoryStream = System.IO.MemoryStream;
 using Timer = System.Timers.Timer;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
@@ -51,7 +52,7 @@ public partial class TrainControlView : UserControl
 
 	            if (!response.IsSuccessStatusCode)
 	            {
-	                Console.WriteLine("Failed to start the stream on the server.");
+	                Console.WriteLine(response.StatusCode +  ": Failed to start the stream on the server.");
 	                return;
 	            }
 	        }
@@ -72,18 +73,25 @@ public partial class TrainControlView : UserControl
 
 	                ms.Seek(0, SeekOrigin.Begin);
 
-	                await Task.Run(() =>
+	                await Task.Run(async () =>
 	                {
 	                    try
 	                    {
-	                        using (Bitmap bitmap = new Bitmap(ms))
-	                        {
-		                        Bitmap bitmapLocal = bitmap;
-	                            Dispatcher.UIThread.Invoke(() =>
-	                            {
-	                                PreviewImage.Source = bitmapLocal;
-	                            });
-	                        }
+		                    using (Bitmap bitmap = new Bitmap(ms))
+		                    {
+			                    using (MemoryStream clonedStream = new MemoryStream())
+			                    {
+				                    bitmap.Save(clonedStream);
+				                    clonedStream.Seek(0, SeekOrigin.Begin);
+
+				                    Bitmap avaloniaBitmap = new Bitmap(clonedStream);
+
+				                    await Dispatcher.UIThread.InvokeAsync(() =>
+				                    {
+					                    PreviewImage.Source = avaloniaBitmap;
+				                    });
+			                    }
+		                    }
 	                    }
 	                    catch (Exception ex)
 	                    {
