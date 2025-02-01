@@ -2,6 +2,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,51 +40,67 @@ public partial class TrainControlView : UserControl
 	
 	private async Task InitializeStream()
 	{
-		try
-		{
-			// TODO: Change to udp?
-			string url = "ws://192.168.1.1/camera/stream";
+	    try
+	    {
+	        string url = "http://192.168.1.1/camera/startStream";
+	        using (HttpClient client = new HttpClient())
+	        {
+	            client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
-			using ClientWebSocket ws = new ClientWebSocket();
-			ws.Options.SetRequestHeader("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+	            HttpResponseMessage response = await client.GetAsync(url);
 
-			await ws.ConnectAsync(new Uri(url), CancellationToken.None);
+	            if (!response.IsSuccessStatusCode)
+	            {
+	                Console.WriteLine("Failed to start the stream on the server.");
+	                return;
+	            }
+	        }
 
-			byte[] buffer = new byte[65536];
-			MemoryStream ms = new MemoryStream();
+	        UdpClient udpClient = new UdpClient(5001);
+	        
+	        MemoryStream ms = new MemoryStream();
 
-			while (ws.State == WebSocketState.Open)
-			{
-				WebSocketReceiveResult result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+	        Console.WriteLine("Waiting for frames from the server...");
 
-				if (result.MessageType == WebSocketMessageType.Close)
-				{
-					await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by client", CancellationToken.None);
-					break;
-				}
+	        while (true)
+	        {
+	            UdpReceiveResult result = await udpClient.ReceiveAsync();
 
-				ms.Write(buffer, 0, result.Count);
+	            if (result.Buffer.Length > 0)
+	            {
+	                ms.Write(result.Buffer, 0, result.Buffer.Length);
 
-				if (result.EndOfMessage)
-				{
-					ms.Seek(0, SeekOrigin.Begin);
-					
-					await Task.Run(() =>
-					{
-						Bitmap bitmap = new Bitmap(ms);
+	                ms.Seek(0, SeekOrigin.Begin);
 
-						Dispatcher.UIThread.Invoke(() => { PreviewImage.Source = bitmap; });
-					});
+	                await Task.Run(() =>
+	                {
+	                    try
+	                    {
+	                        using (Bitmap bitmap = new Bitmap(ms))
+	                        {
+		                        Bitmap bitmapLocal = bitmap;
+	                            Dispatcher.UIThread.Invoke(() =>
+	                            {
+	                                PreviewImage.Source = bitmapLocal;
+	                                bitmapLocal.Dispose();
+	                            });
+	                        }
+	                    }
+	                    catch (Exception ex)
+	                    {
+	                        Console.WriteLine("Error processing frame: " + ex.Message);
+	                    }
+	                });
 
-					ms.SetLength(0);
-				}
-			}
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine("Error while getting preview:");
-			Console.WriteLine(ex.Message);
-		}
+	                ms.SetLength(0);
+	            }
+	        }
+	    }
+	    catch (Exception ex)
+	    {
+	        Console.WriteLine("Error while receiving the stream:");
+	        Console.WriteLine(ex.Message);
+	    }
 	}
 	
 	private string ExecuteCommand(string command)
