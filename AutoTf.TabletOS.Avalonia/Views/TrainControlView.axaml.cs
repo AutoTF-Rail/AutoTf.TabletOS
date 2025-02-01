@@ -82,7 +82,6 @@ public partial class TrainControlView : UserControl
 	                            Dispatcher.UIThread.Invoke(() =>
 	                            {
 	                                PreviewImage.Source = bitmapLocal;
-	                                bitmapLocal.Dispose();
 	                            });
 	                        }
 	                    }
