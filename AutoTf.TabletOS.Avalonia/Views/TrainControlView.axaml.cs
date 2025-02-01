@@ -58,14 +58,20 @@ public partial class TrainControlView : UserControl
 	        }
 
 	        UdpClient udpClient = new UdpClient(5001);
-	        
 	        MemoryStream ms = new MemoryStream();
+	        const int MAX_BUFFER_SIZE = 65507;
 
 	        Console.WriteLine("Waiting for frames from the server...");
 
 	        while (true)
 	        {
 	            UdpReceiveResult result = await udpClient.ReceiveAsync();
+	            
+	            if (result.Buffer.Length > MAX_BUFFER_SIZE)
+	            {
+		            Console.WriteLine("Discarding oversized/stale frame.");
+		            continue;
+	            }
 
 	            if (result.Buffer.Length > 0)
 	            {
