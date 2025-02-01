@@ -122,7 +122,7 @@ public partial class InfoScreen : UserControl
 			InfoOutput.Text = perms;
 		
 			InfoStatus.Text = "Reboot";
-			Statics.ExecuteCommand("reboot now");
+			Environment.Exit(1);
 		});
 		await Task.Delay(50);
 		
