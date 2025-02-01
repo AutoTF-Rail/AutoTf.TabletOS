@@ -178,6 +178,7 @@ public partial class TrainSelectionScreen : UserControl
 		ExecuteCommand($"nmcli c add type wifi con-name CentralBridge-{Statics.TrainConnectionId} ifname wlan0 ssid {trainAd.TrainName}");
 		ExecuteCommand($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.key-mgmt wpa-psk");
 		ExecuteCommand($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.psk CentralBridgePW");
+		ExecuteCommand($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} connection.autoconnect no");
 		string connOutput = ExecuteCommand($"nmcli con up CentralBridge-{Statics.TrainConnectionId}");
 
 		// TODO: set this: export YUBICO_LOG_LEVEL=ERROR
