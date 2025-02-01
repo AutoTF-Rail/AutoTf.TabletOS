@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,82 +13,66 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class MainView : UserControl
 {
+	private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
+	private YubiKeyDeviceListener _listener;
+	
 	public MainView()
 	{
 		InitializeComponent();
 		
 		LoadingArea.IsVisible = false;
 
-		Task.Run(ListenForYubikey);
+		_listener = YubiKeyDeviceListener.Instance;
+		_listener.Arrived += KeyPluggedIn;
+		_listener.Removed += KeyRemoved;
 	}
 
-	private void ListenForYubikey()
+	private void KeyRemoved(object? sender, YubiKeyDeviceEventArgs e)
 	{
-		ProcessStartInfo processStartInfo = new ProcessStartInfo
+		_cancelTokenSource.Cancel();
+		Dispatcher.UIThread.Invoke(() =>
 		{
-			FileName = "udevadm",
-			Arguments = "monitor --subsystem-match=usb --property",
-			RedirectStandardOutput = true,
-			UseShellExecute = false,
-			CreateNoWindow = true
-		};
-
-		Process process = new Process { StartInfo = processStartInfo };
-		process.OutputDataReceived += (sender, e) =>
-		{
-			if (e.Data != null)
-			{
-				if (e.Data.Contains("Yubico") || e.Data.Contains("YubiKey"))
-				{
-					Dispatcher.UIThread.Invoke(() =>
-					{
-						LoadingName.Text = "Getting key..";
-						LoadingArea.IsVisible = true;
-					});
-					Thread.Sleep(50);
-					Dispatcher.UIThread.Invoke(() =>
-					{
-						IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
-						if (device == null)
-							return;
-
-						using (OathSession session = new OathSession(device))
-						{
-							foreach (Credential credential in session.GetCredentials())
-							{
-								if (credential.Issuer != "AutoTF")
-									return;
-								Statics.YubiCode = session.CalculateCredential(credential).Value!;
-								Statics.YubiSerial = device.SerialNumber!.Value;
-								Statics.YubiTime = DateTime.UtcNow;
-							}
-						}
-
-						// TODO: Error handling if no cred was found.
-						if (DataContext is MainWindowViewModel viewModel)
-						{
-							viewModel.ActiveView = new TrainSelectionScreen();
-						}
-
-						LoadingArea.IsVisible = false;
-					});
-
-					// TODO: Requires ppa:yubico/stable - yubikey-manager
-				}
-			}
-		};
-
-		process.Start();
-		process.BeginOutputReadLine();
+			LoadingArea.IsVisible = false;
+		});
 	}
 
-	private async void ShowLoading()
+	private void KeyPluggedIn(object? sender, YubiKeyDeviceEventArgs e)
 	{
-		await Dispatcher.UIThread.InvokeAsync(() =>
-		{	
-			LoadingName.Text = "Getting data...";
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			LoadingName.Text = "Detected key";
 			LoadingArea.IsVisible = true;
 		});
-		await Task.Delay(50);
+		Thread.Sleep(50);
+		Task.Run(GetKey, _cancelTokenSource.Token);
+	}
+
+	private void GetKey()
+	{
+		IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
+		if (device == null)
+			return;
+
+		using OathSession session = new OathSession(device);
+		
+		foreach (Credential credential in session.GetCredentials())
+		{
+			if (credential.Issuer != "AutoTF")
+				return;
+			
+			Statics.YubiCode = session.CalculateCredential(credential).Value!;
+			Statics.YubiSerial = device.SerialNumber!.Value;
+			Statics.YubiTime = DateTime.UtcNow;
+			ChangeScreen();
+		}
+	}
+
+	private void ChangeScreen()
+	{
+		if (DataContext is MainWindowViewModel viewModel)
+		{
+			viewModel.ActiveView = new TrainSelectionScreen();
+		}
+		_listener.Dispose();
 	}
 }
