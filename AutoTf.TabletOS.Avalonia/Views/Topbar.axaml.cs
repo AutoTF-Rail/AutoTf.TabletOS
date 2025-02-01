@@ -23,13 +23,6 @@ public partial class TopBar : UserControl
 	{
 		InitializeComponent();
 		Initialize();
-		
-		Statics.BrightnessChanged += BrightnessChanged;
-	}
-
-	private void BrightnessChanged()
-	{
-		// this.Opacity = StaticEvents.CurrentBrightness;
 	}
 
 	public void Initialize()
@@ -68,8 +61,12 @@ public partial class TopBar : UserControl
 	private async void Shutdown_Click(object? sender, RoutedEventArgs e)
 	{
 		Popup popup = new Popup("Are you sure you want to shutdown?");
+		
 		if (await popup.Show(RootGrid) != DialogResult.Yes)
 			return;
+		
+		if(Statics.TrainConnectionId != null)
+			Statics.ExecuteCommand("nmcli connection delete id CentralBridge-" + Statics.TrainConnectionId);
 		
 		Process process = new Process
 		{

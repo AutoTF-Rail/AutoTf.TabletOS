@@ -7,7 +7,12 @@ namespace AutoTf.TabletOS.Models;
 
 public static class Statics
 {
-	public static Action? BrightnessChanged;
+	
+	
+	public static string? TrainConnectionId;
+	
+	// TODO: Implement global dispose etc
+	public static Action? Shutdown;
 	public static IDataManager DataManager;
 	public static IProcessReader ProcessReader;
 	public static ITrainInformationService TrainInformationService;

@@ -47,7 +47,7 @@ public partial class TrainControlView : UserControl
 
 			await ws.ConnectAsync(new Uri(url), CancellationToken.None);
 
-			byte[] buffer = new byte[16384];
+			byte[] buffer = new byte[65536];
 			MemoryStream ms = new MemoryStream();
 
 			while (ws.State == WebSocketState.Open)
@@ -65,12 +65,12 @@ public partial class TrainControlView : UserControl
 				if (result.EndOfMessage)
 				{
 					ms.Seek(0, SeekOrigin.Begin);
-
-					Bitmap bitmap = new Bitmap(ms);
-
-					Dispatcher.UIThread.Invoke(() =>
+					
+					await Task.Run(() =>
 					{
-						PreviewImage.Source = bitmap;
+						Bitmap bitmap = new Bitmap(ms);
+
+						Dispatcher.UIThread.Invoke(() => { PreviewImage.Source = bitmap; });
 					});
 
 					ms.SetLength(0);
@@ -227,8 +227,8 @@ public partial class TrainControlView : UserControl
 		// Stop streams
 		// Disconnect from wifi
 		// Change screen
-		
-		
+
+		ExecuteCommand("nmcli connection delete id CentralBridge-" + Statics.TrainConnectionId);
 		if (DataContext is MainWindowViewModel viewModel)
 		{
 			viewModel.ActiveView = new TrainSelectionScreen();

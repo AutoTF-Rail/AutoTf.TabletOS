@@ -173,12 +173,12 @@ public partial class TrainSelectionScreen : UserControl
 		TrainAd trainAd = (TrainAd)button.DataContext!;
 
 		
-		string connectionId = Statics.GenerateRandomString();
-		Console.WriteLine("Connection ID: " + connectionId);
-		ExecuteCommand($"nmcli c add type wifi con-name {connectionId} ifname wlan0 ssid {trainAd.TrainName}");
-		ExecuteCommand($"nmcli con modify {connectionId} wifi-sec.key-mgmt wpa-psk");
-		ExecuteCommand($"nmcli con modify {connectionId} wifi-sec.psk CentralBridgePW");
-		string connOutput = ExecuteCommand($"nmcli con up {connectionId}");
+		Statics.TrainConnectionId = Statics.GenerateRandomString();
+		Console.WriteLine("Connection ID: " + Statics.TrainConnectionId);
+		ExecuteCommand($"nmcli c add type wifi con-name CentralBridge-{Statics.TrainConnectionId} ifname wlan0 ssid {trainAd.TrainName}");
+		ExecuteCommand($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.key-mgmt wpa-psk");
+		ExecuteCommand($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.psk CentralBridgePW");
+		string connOutput = ExecuteCommand($"nmcli con up CentralBridge-{Statics.TrainConnectionId}");
 
 		// TODO: set this: export YUBICO_LOG_LEVEL=ERROR
 		
