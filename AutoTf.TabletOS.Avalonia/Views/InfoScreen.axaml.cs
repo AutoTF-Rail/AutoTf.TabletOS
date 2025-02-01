@@ -122,7 +122,7 @@ public partial class InfoScreen : UserControl
 			InfoOutput.Text = perms;
 		
 			InfoStatus.Text = "Reboot";
-			InfoOutput.Text = Statics.ExecuteCommand("systemctl restart startupScript.service");
+			Environment.Exit(1);
 		});
 		await Task.Delay(50);
 		
