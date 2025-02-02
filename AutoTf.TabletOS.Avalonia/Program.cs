@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.Views;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Fakes;
+using AutoTf.TabletOS.Models.TaskManager;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 

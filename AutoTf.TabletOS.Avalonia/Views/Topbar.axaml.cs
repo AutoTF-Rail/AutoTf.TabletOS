@@ -89,8 +89,8 @@ public partial class TopBar : UserControl
 			return;
 		_brightness -= 25;
 #if RELEASE
-		Statics.ExecuteCommand("echo " + _brightness.ToString() +
-		                       " | sudo tee /sys/class/backlight/10-0045/brightness");
+		CommandExecuter.ExecuteSilent("echo " + _brightness.ToString() +
+		                       " | sudo tee /sys/class/backlight/10-0045/brightness", true);
 #endif
 	}
 
@@ -100,8 +100,8 @@ public partial class TopBar : UserControl
 			return;
 		_brightness += 25;
 #if RELEASE
-		Statics.ExecuteCommand("echo " + _brightness.ToString() +
-		                       " | sudo tee /sys/class/backlight/10-0045/brightness");
+		CommandExecuter.ExecuteSilent("echo " + _brightness.ToString() +
+		                              " | sudo tee /sys/class/backlight/10-0045/brightness", true);
 #endif
 	}
 
