@@ -164,6 +164,7 @@ public partial class TrainControlView : UserControl
 		DateTime? nextSave = await _trainInfo.GetNextSave();
 		if (nextSave == null)
 		{
+			ChangeTrain_Click(null, null);
 			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Unknown");
 			return;
 		}
