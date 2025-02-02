@@ -33,23 +33,36 @@ public partial class TrainControlView : UserControl
 
 	public TrainControlView()
 	{
-		InitializeComponent();
+		try
+		{
+			InitializeComponent();
 
-		Statics.Shutdown += () => _trainInfo.PostStopStream();
+			Statics.Shutdown += () => _trainInfo.PostStopStream();
 
-		Task.Run(Initialize);
-		Task.Run(InitializeStream);
+			Task.Run(Initialize);
+			Task.Run(InitializeStream);
+		}
+		catch (Exception e)
+		{
+			_logger.Log("Error while initializing view:");
+			_logger.Log(e.Message);
+		}
 	}
 	
 	private async Task InitializeStream()
 	{
 		try
 		{
+			_logger.Log("Starting stream");
 			if (!await _trainInfo.PostStartStream())
 			{
+				_logger.Log("Could not start stream");
+				return;
 				// TODO: Show error that it failed to start the stream
 			}
 
+			_logger.Log("Listening for images.");
+			
 			int udpPort = 12345;
 			UdpClient udpClient = new UdpClient(udpPort);
 
