@@ -115,7 +115,7 @@ public partial class InfoScreen : UserControl
 		
 		// TODO: make global
 		if(Statics.TrainConnectionId != null)
-			Statics.ExecuteCommand("nmcli connection delete id CentralBridge-" + Statics.TrainConnectionId);
+			Statics.ExecuteCommand("nmcli connection delete CentralBridge-" + Statics.TrainConnectionId);
 		
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
@@ -132,7 +132,7 @@ public partial class InfoScreen : UserControl
 	private void RebootButton_OnClick(object? sender, RoutedEventArgs e)
 	{
 		if(Statics.TrainConnectionId != null)
-			Statics.ExecuteCommand("nmcli connection delete id CentralBridge-" + Statics.TrainConnectionId);
+			Statics.ExecuteCommand("nmcli connection delete CentralBridge-" + Statics.TrainConnectionId);
 		Statics.ExecuteCommand("reboot now");
 	}
 }
