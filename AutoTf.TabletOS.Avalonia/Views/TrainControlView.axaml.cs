@@ -108,7 +108,7 @@ public partial class TrainControlView : UserControl
 							});
 
 							if (oldBitmap != null && oldBitmap != _currentBitmap)
-		,					{
+							{
 								oldBitmap.Dispose();
 							}
 						}
