@@ -3,15 +3,18 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net.WebSockets;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using Avalonia.Threading;
 using Timer = System.Timers.Timer;
 
@@ -44,7 +47,8 @@ public partial class TrainControlView : UserControl
 
 			using ClientWebSocket ws = new ClientWebSocket();
 			ws.Options.SetRequestHeader("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
-
+			ws.Options.SetBuffer(4 * 1024 * 1024, 4 * 1024 * 1024);
+			
 			await ws.ConnectAsync(new Uri(url), CancellationToken.None);
 
 			byte[] buffer = new byte[65536];
@@ -228,7 +232,8 @@ public partial class TrainControlView : UserControl
 		// Disconnect from wifi
 		// Change screen
 
-		ExecuteCommand("nmcli connection delete id CentralBridge-" + Statics.TrainConnectionId);
+		ExecuteCommand("nmcli connection down CentralBridge-" + Statics.TrainConnectionId);
+		ExecuteCommand("nmcli connection delete CentralBridge-" + Statics.TrainConnectionId);
 		if (DataContext is MainWindowViewModel viewModel)
 		{
 			viewModel.ActiveView = new TrainSelectionScreen();

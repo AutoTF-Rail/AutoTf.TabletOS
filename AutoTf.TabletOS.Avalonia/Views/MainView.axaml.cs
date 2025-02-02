@@ -47,24 +47,34 @@ public partial class MainView : UserControl
 		Task.Run(GetKey, _cancelTokenSource.Token);
 	}
 
-	private void GetKey()
+	private bool GetKey()
 	{
 		IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
 		if (device == null)
-			return;
+		{
+			Dispatcher.UIThread.Invoke(() => LoadingArea.IsVisible = false);
+			return false;
+		}
 
 		using OathSession session = new OathSession(device);
 		
 		foreach (Credential credential in session.GetCredentials())
 		{
 			if (credential.Issuer != "AutoTF")
-				return;
+			{
+				Dispatcher.UIThread.Invoke(() => LoadingArea.IsVisible = false);
+				return false;
+			}
 			
 			Statics.YubiCode = session.CalculateCredential(credential).Value!;
 			Statics.YubiSerial = device.SerialNumber!.Value;
 			Statics.YubiTime = DateTime.UtcNow;
 			ChangeScreen();
+			return true;
 		}
+
+		Dispatcher.UIThread.Invoke(() => LoadingArea.IsVisible = false);
+		return false;
 	}
 
 	private void ChangeScreen()
