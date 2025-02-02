@@ -94,8 +94,10 @@ public partial class TrainControlView : UserControl
 							if (_currentBitmap != null && _currentBitmap.Size.Width > 0 &&
 							    _currentBitmap.Size.Height > 0)
 							{
-								PreviewImage.Source = null;
+								PreviewImage.Source = _currentBitmap;
 							}
+							else
+								PreviewImage.Source = null;
 						});
 					}
 				}
