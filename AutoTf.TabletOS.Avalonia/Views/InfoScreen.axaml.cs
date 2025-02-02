@@ -128,4 +128,11 @@ public partial class InfoScreen : UserControl
 		
 		Directory.SetCurrentDirectory(prevDir);
 	}
+
+	private void RebootButton_OnClick(object? sender, RoutedEventArgs e)
+	{
+		if(Statics.TrainConnectionId != null)
+			Statics.ExecuteCommand("nmcli connection delete id CentralBridge-" + Statics.TrainConnectionId);
+		Statics.ExecuteCommand("reboot now");
+	}
 }
