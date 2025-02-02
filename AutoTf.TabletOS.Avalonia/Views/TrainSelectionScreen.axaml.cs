@@ -32,6 +32,7 @@ public partial class TrainSelectionScreen : UserControl
 			TrainName = "Meow"
 		});
 		NearbyLoadingArea.IsVisible = false;
+		LoadingArea.IsVisible = false;
 		#endif
 		Task.Run(Initialize);
 	}
