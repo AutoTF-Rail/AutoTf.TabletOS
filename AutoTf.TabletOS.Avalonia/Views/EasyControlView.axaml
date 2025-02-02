@@ -10,17 +10,17 @@
         <Image Source="../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
         <Grid>
             <Grid.ColumnDefinitions>
-                 <ColumnDefinition Width="3*" />
+                 <ColumnDefinition Width="5*" />
                  <ColumnDefinition />
             </Grid.ColumnDefinitions> 
             <Grid.RowDefinitions>
-                <RowDefinition Height="4*" />
+                <RowDefinition Height="5*" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Button Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackButton_Click" Margin="20" Foreground="Black" BorderBrush="Black">Back</Button>
             
-            <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" VerticalAlignment="Center" ClipToBounds="True" CornerRadius="15" BorderThickness="1" Margin="30">
-                <Image Name="CameraViewBig" Source="../Assets/ImageExampleSmall.png" Margin="0"></Image>
+            <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" VerticalAlignment="Center" ClipToBounds="True" CornerRadius="15" BorderThickness="1" Margin="35">
+                <Image Name="CameraViewBig" Source="../Assets/LoadingCameraFeedImage.png" Margin="0"></Image>
             </Border>
         </Grid>
     </Grid>

@@ -84,7 +84,7 @@
                                         </DockPanel>
                                     </Grid>
                                 </Button>
-                                <Image ClipToBounds="True" Name="PreviewImage" Width="616" Source="../Assets/ImageExampleSmall.png"></Image>
+                                <Image ClipToBounds="True" Name="PreviewImage" Width="616" Source="../Assets/LoadingCameraFeedImage.png"></Image>
                             </StackPanel>
                         </Grid>
                     </Border>
