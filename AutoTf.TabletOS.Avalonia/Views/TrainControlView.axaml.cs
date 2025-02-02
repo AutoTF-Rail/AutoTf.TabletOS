@@ -24,6 +24,8 @@ public partial class TrainControlView : UserControl
 	private readonly ITrainControlService _trainControl = Statics.TrainControlService;
 	private readonly NetworkManager _networkManager = Statics.NetworkManager;
 	private readonly Logger _logger = Statics.Logger;
+
+	private UdpClient _udpClient;
 	
 	private Timer? _saveTimer = new Timer(600);
 	
@@ -39,6 +41,7 @@ public partial class TrainControlView : UserControl
 			InitializeComponent();
 
 			Statics.Shutdown += () => _trainInfo.PostStopStream();
+			Statics.Shutdown += () => _udpClient?.Dispose();
 
 			Task.Run(Initialize);
 			Task.Run(InitializeStream);
@@ -65,11 +68,11 @@ public partial class TrainControlView : UserControl
 			_logger.Log("Listening for images.");
 			
 			int udpPort = 12345;
-			UdpClient udpClient = new UdpClient(udpPort);
+			_udpClient = new UdpClient(udpPort);
 
 			while (_canListenForStream)
 			{
-				UdpReceiveResult result = await udpClient.ReceiveAsync();
+				UdpReceiveResult result = await _udpClient.ReceiveAsync();
 				byte[] frameData = result.Buffer;
 
 				if (frameData.Length == 0)
@@ -114,7 +117,6 @@ public partial class TrainControlView : UserControl
 					}
 				}
 			}
-			udpClient.Dispose();
 		}
 		catch (Exception ex)
 		{
