@@ -81,12 +81,23 @@ public partial class TrainControlView : UserControl
 				
 				using (MemoryStream ms = new MemoryStream(frameData))
 				{
-					if (_currentBitmap != null)
-						_currentBitmap.Dispose();
-					
-					_currentBitmap = new Bitmap(ms);
-					// ReSharper disable once AccessToDisposedClosure
-					Dispatcher.UIThread.Invoke(() => { PreviewImage.Source = _currentBitmap!; });
+					if (ms.Length > 0)
+					{
+						if (_currentBitmap != null)
+							_currentBitmap.Dispose();
+
+						_currentBitmap = new Bitmap(ms);
+
+						// ReSharper disable once AccessToDisposedClosure
+						Dispatcher.UIThread.Invoke(() =>
+						{
+							if (_currentBitmap != null && _currentBitmap.Size.Width > 0 &&
+							    _currentBitmap.Size.Height > 0)
+							{
+								PreviewImage.Source = null;
+							}
+						});
+					}
 				}
 			}
 			udpClient.Dispose();
