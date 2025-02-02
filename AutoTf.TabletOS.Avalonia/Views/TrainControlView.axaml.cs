@@ -2,6 +2,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -42,48 +45,45 @@ public partial class TrainControlView : UserControl
 	{
 		try
 		{
-			// TODO: Change to udp?
-			string url = "ws://192.168.1.1/camera/stream";
-
-			using ClientWebSocket ws = new ClientWebSocket();
-			ws.Options.SetRequestHeader("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
-			ws.Options.SetBuffer(4 * 1024 * 1024, 4 * 1024 * 1024);
+			string serverUrl = "http://192.168.1.1/camera/startStream";
 			
-			await ws.ConnectAsync(new Uri(url), CancellationToken.None);
-
-			byte[] buffer = new byte[65536];
-			MemoryStream ms = new MemoryStream();
-
-			while (ws.State == WebSocketState.Open)
+			using (HttpClient client = new HttpClient())
 			{
-				WebSocketReceiveResult result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-
-				if (result.MessageType == WebSocketMessageType.Close)
+				HttpResponseMessage response = await client.PostAsync(serverUrl, null);
+				
+				if (response.IsSuccessStatusCode)
 				{
-					await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by client", CancellationToken.None);
-					break;
+					Console.WriteLine("Successfully added to receiver list.");
 				}
-
-				ms.Write(buffer, 0, result.Count);
-
-				if (result.EndOfMessage)
+				else
 				{
-					ms.Seek(0, SeekOrigin.Begin);
-					
-					await Task.Run(() =>
-					{
-						Bitmap bitmap = new Bitmap(ms);
+					Console.WriteLine($"Failed to add to receiver list. Status: {response.StatusCode}");
+					return;
+				}
+			}
 
-						Dispatcher.UIThread.Invoke(() => { PreviewImage.Source = bitmap; });
-					});
+			string serverIp = "192.168.1.1";
+			int udpPort = 12345;
+			UdpClient udpClient = new UdpClient(udpPort);
 
-					ms.SetLength(0);
+			// udpClient.Connect(serverIp, udpPort);
+
+			while (true)
+			{
+				Console.WriteLine("Waiting to receive");
+				UdpReceiveResult result = await udpClient.ReceiveAsync();
+				byte[] frameData = result.Buffer;
+
+				using (MemoryStream ms = new MemoryStream(frameData))
+				{
+					Bitmap bitmap = new Bitmap(ms);
+					Dispatcher.UIThread.Invoke(() => { PreviewImage.Source = bitmap; });
 				}
 			}
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine("Error while getting preview:");
+			Console.WriteLine("Error while getting UDP stream:");
 			Console.WriteLine(ex.Message);
 		}
 	}
