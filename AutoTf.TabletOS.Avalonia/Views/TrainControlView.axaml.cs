@@ -99,22 +99,16 @@ public partial class TrainControlView : UserControl
 								if (_currentBitmap != null && _currentBitmap.Size.Width > 0 &&
 								    _currentBitmap.Size.Height > 0)
 								{
-									if (_easyControlView != null)
-										_easyControlView.CameraViewBig.Source = _currentBitmap;
-									else
-										PreviewImage.Source = _currentBitmap;
+									PreviewImage.Source = _currentBitmap;
 								}
 								else
 								{
-									if (_easyControlView != null)
-										_easyControlView.CameraViewBig.Source = _currentBitmap;
-									else
-										PreviewImage.Source = null;
+									PreviewImage.Source = null;
 								}
 							});
 
 							if (oldBitmap != null && oldBitmap != _currentBitmap)
-							{
+		,					{
 								oldBitmap.Dispose();
 							}
 						}
@@ -314,6 +308,7 @@ public partial class TrainControlView : UserControl
 	{
 		_logger.Log("Starting easy control.");
 		_easyControlView = new EasyControlView();
+		_easyControlView.CameraViewBig.Source = _currentBitmap;
 		await _easyControlView.Show(RootGrid);
 		_easyControlView = null;
 		_logger.Log("Exited easy control.");
