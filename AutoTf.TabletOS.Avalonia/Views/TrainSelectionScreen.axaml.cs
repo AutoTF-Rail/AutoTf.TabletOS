@@ -109,6 +109,8 @@ public partial class TrainSelectionScreen : UserControl
 				if (line.Contains("name") && line.Contains("CentralBridge-"))
 				{
 					Console.WriteLine("------------" + line);
+					if (_nearbyTrains.Any(x => x.TrainName == line.Replace("name ", "")))
+						continue;
 					AddBridge(line.Replace("name ", ""));
 				}
 			}
