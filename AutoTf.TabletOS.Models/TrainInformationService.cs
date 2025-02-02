@@ -163,7 +163,7 @@ public class TrainInformationService : ITrainInformationService
 
 			using HttpClient client = new HttpClient();
 			// TODO: Cache mac address
-			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
 			if (!response.IsSuccessStatusCode)
@@ -191,7 +191,7 @@ public class TrainInformationService : ITrainInformationService
 
 			using HttpClient client = new HttpClient();
 			// TODO: Cache mac address
-			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
 			if (!response.IsSuccessStatusCode)
@@ -219,7 +219,7 @@ public class TrainInformationService : ITrainInformationService
 
 			using HttpClient client = new HttpClient();
 			// TODO: Cache mac address
-			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
 			if (!response.IsSuccessStatusCode)
@@ -236,6 +236,36 @@ public class TrainInformationService : ITrainInformationService
 			_logger.Log("Could not send restart signal:");
 			_logger.Log(ex.Message);
 			return false;
+		}
+	}
+
+	public async Task<bool> PostStartStream()
+	{
+		string serverUrl = "http://192.168.1.1/camera/startStream";
+			
+		using (HttpClient client = new HttpClient())
+		{
+			HttpResponseMessage response = await client.PostAsync(serverUrl, null);
+
+			if(!response.IsSuccessStatusCode)
+				_logger.Log("TIS: Could not start stream: " + await response.Content.ReadAsStringAsync());
+			
+			return response.IsSuccessStatusCode;
+		}
+	}
+
+	public async Task<bool> PostStopStream()
+	{
+		string serverUrl = "http://192.168.1.1/camera/stopStream";
+			
+		using (HttpClient client = new HttpClient())
+		{
+			HttpResponseMessage response = await client.PostAsync(serverUrl, null);
+
+			if(!response.IsSuccessStatusCode)
+				_logger.Log("TIS: Could not stop stream: " + await response.Content.ReadAsStringAsync());
+			
+			return response.IsSuccessStatusCode;
 		}
 	}
 }

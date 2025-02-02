@@ -17,7 +17,7 @@ public class TrainControlService : ITrainControlService
 			string url = "http://192.168.1.1/control/levercount";
 
 			using HttpClient client = new HttpClient();
-			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 			
 			HttpResponseMessage response = await client.GetAsync(url);
 			
@@ -39,7 +39,7 @@ public class TrainControlService : ITrainControlService
 			string url = "http://192.168.1.1/control/leverPosition";
 
 			using HttpClient client = new HttpClient();
-			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 			
 			HttpResponseMessage response = await client.GetAsync(url);
 			
@@ -61,7 +61,7 @@ public class TrainControlService : ITrainControlService
 			string url = "http://192.168.1.1/control/leverType";
 
 			using HttpClient client = new HttpClient();
-			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 			
 			HttpResponseMessage response = await client.GetAsync(url);
 			
@@ -84,7 +84,7 @@ public class TrainControlService : ITrainControlService
 
 			using HttpClient client = new HttpClient();
 			
-			client.DefaultRequestHeaders.Add("macAddr", Statics.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
 			LeverSetModel leverModel = new LeverSetModel()
 			{

@@ -1,12 +1,11 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
@@ -14,6 +13,8 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 public partial class InfoScreen : UserControl
 {
 	private readonly object _previousControl;
+	private readonly NetworkManager _networkManager = Statics.NetworkManager;
+	private readonly Logger _logger = Statics.Logger;
 
 	public InfoScreen(object previousControl)
 	{
@@ -57,19 +58,19 @@ public partial class InfoScreen : UserControl
 		});
 		await Task.Delay(50);
 
-		string evalOutput = Statics.ExecuteCommand("eval $(\"ssh-agent\")");
-		Console.WriteLine(evalOutput);
+		string evalOutput = CommandExecuter.ExecuteCommand("eval $(\"ssh-agent\")");
+		_logger.Log(evalOutput);
 		
 		await Dispatcher.UIThread.InvokeAsync(() =>InfoOutput.Text = evalOutput);
 		await Task.Delay(50);
 
-		string add = Statics.ExecuteCommand("ssh-add /home/display/githubKey");
-		Console.WriteLine(add);
+		string add = CommandExecuter.ExecuteCommand("ssh-add /home/display/githubKey");
+		_logger.Log(add);
 		await Dispatcher.UIThread.InvokeAsync(() => InfoOutput.Text = add);
 		await Task.Delay(50);
 		
-		string aasddd = Statics.ExecuteCommand("git reset --hard");
-		Console.WriteLine(aasddd);
+		string aasddd = CommandExecuter.ExecuteCommand("git reset --hard");
+		_logger.Log(aasddd);
 		
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
@@ -78,8 +79,8 @@ public partial class InfoScreen : UserControl
 		});
 		await Task.Delay(50);
 		
-		string pull = Statics.ExecuteCommand("git pull");
-		Console.WriteLine(pull);
+		string pull = CommandExecuter.ExecuteCommand("git pull");
+		_logger.Log(pull);
 		if (pull.Contains("Already"))
 		{
 			await Dispatcher.UIThread.InvokeAsync(() =>
@@ -89,7 +90,7 @@ public partial class InfoScreen : UserControl
 			});
 			await Task.Delay(50);
 			
-			Statics.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
+			CommandExecuter.ExecuteSilent("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh", true);
 			return;
 		}
 		
@@ -100,8 +101,8 @@ public partial class InfoScreen : UserControl
 		});
 		await Task.Delay(50);
 		
-		string build = Statics.ExecuteCommand("dotnet build -c RELEASE -m");
-		Console.WriteLine(build);
+		string build = CommandExecuter.ExecuteCommand("dotnet build -c RELEASE -m");
+		_logger.Log(build);
 		
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
@@ -110,19 +111,17 @@ public partial class InfoScreen : UserControl
 		});
 		await Task.Delay(50);
 		
-		string perms = Statics.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
-		Console.WriteLine(perms);
+		string perms = CommandExecuter.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
+		_logger.Log(perms);
 		
-		// TODO: make global
-		if(Statics.TrainConnectionId != null)
-			Statics.ExecuteCommand("nmcli connection delete CentralBridge-" + Statics.TrainConnectionId);
+		_networkManager.ShutdownConnection();
 		
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
 			InfoOutput.Text = perms;
 		
 			InfoStatus.Text = "Reboot";
-			Statics.ExecuteCommand("reboot now");
+			CommandExecuter.ExecuteSilent("reboot now", true);
 		});
 		await Task.Delay(50);
 		
@@ -131,8 +130,7 @@ public partial class InfoScreen : UserControl
 
 	private void RebootButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		if(Statics.TrainConnectionId != null)
-			Statics.ExecuteCommand("nmcli connection delete CentralBridge-" + Statics.TrainConnectionId);
-		Statics.ExecuteCommand("reboot now");
+		_networkManager.ShutdownConnection();
+		CommandExecuter.ExecuteSilent("reboot now", true);
 	}
 }

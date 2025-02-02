@@ -11,4 +11,6 @@ public interface ITrainInformationService
 	public Task<bool> PostUpdate();
 	public Task<bool> PostShutdown();
 	public Task<bool> PostRestart();
+	public Task<bool> PostStartStream();
+	public Task<bool> PostStopStream();
 }

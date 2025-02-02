@@ -43,8 +43,10 @@
                 </Grid>
             </StackPanel>
         </Grid>
-        <Button Name="UpdateButton" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40" Click="Update_Click">Update</Button>
-        <Button Name="RebootButton" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="60, 40, 60, 40" Click="RebootButton_OnClick">Reboot</Button>
+        <DockPanel Margin="40" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Button Name="UpdateButton" Margin="5" Click="Update_Click">Update</Button>
+            <Button Name="RebootButton" Margin="5" Click="RebootButton_OnClick">Reboot</Button>
+        </DockPanel>
         <TextBlock Name="UpdateText" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="40">Updating...</TextBlock>
         <TextBlock Name="InfoStatus" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15">Pulling</TextBlock>
         <TextBlock Name="InfoOutput" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="8">Pulling</TextBlock>

@@ -1,23 +1,16 @@
 using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Globalization;
 using System.IO;
-using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
-using System.Net.WebSockets;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
+using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Threading;
 using Timer = System.Timers.Timer;
 
@@ -28,14 +21,21 @@ public partial class TrainControlView : UserControl
 	private readonly IDataManager _dataManager = Statics.DataManager;
 	private readonly ITrainInformationService _trainInfo = Statics.TrainInformationService;
 	private readonly ITrainControlService _trainControl = Statics.TrainControlService;
+	private readonly NetworkManager _networkManager = Statics.NetworkManager;
+	private readonly Logger _logger = Statics.Logger;
 	
 	private Timer? _saveTimer = new Timer(600);
-
+	
+	private Bitmap? _currentBitmap;
+	
 	private double _combinedThrottlePosition;
+	private bool _canListenForStream = true;
 
 	public TrainControlView()
 	{
 		InitializeComponent();
+
+		Statics.Shutdown += () => _trainInfo.PostStopStream();
 
 		Task.Run(Initialize);
 		Task.Run(InitializeStream);
@@ -45,74 +45,35 @@ public partial class TrainControlView : UserControl
 	{
 		try
 		{
-			string serverUrl = "http://192.168.1.1/camera/startStream";
-			
-			using (HttpClient client = new HttpClient())
+			if (!await _trainInfo.PostStartStream())
 			{
-				HttpResponseMessage response = await client.PostAsync(serverUrl, null);
-				
-				if (response.IsSuccessStatusCode)
-				{
-					Console.WriteLine("Successfully added to receiver list.");
-				}
-				else
-				{
-					Console.WriteLine($"Failed to add to receiver list. Status: {response.StatusCode}");
-					return;
-				}
+				// TODO: Show error that it failed to start the stream
 			}
 
-			string serverIp = "192.168.1.1";
 			int udpPort = 12345;
 			UdpClient udpClient = new UdpClient(udpPort);
 
-			// udpClient.Connect(serverIp, udpPort);
-
-			while (true)
+			while (_canListenForStream)
 			{
-				Console.WriteLine("Waiting to receive");
 				UdpReceiveResult result = await udpClient.ReceiveAsync();
 				byte[] frameData = result.Buffer;
 
 				using (MemoryStream ms = new MemoryStream(frameData))
 				{
-					Bitmap bitmap = new Bitmap(ms);
-					Dispatcher.UIThread.Invoke(() => { PreviewImage.Source = bitmap; });
+					if (_currentBitmap != null)
+						_currentBitmap.Dispose();
+					
+					_currentBitmap = new Bitmap(ms);
+					// ReSharper disable once AccessToDisposedClosure
+					Dispatcher.UIThread.Invoke(() => { PreviewImage.Source = _currentBitmap!; });
 				}
 			}
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine("Error while getting UDP stream:");
-			Console.WriteLine(ex.Message);
+			_logger.Log("Error while getting UDP stream:");
+			_logger.Log(ex.Message);
 		}
-	}
-	
-	private string ExecuteCommand(string command)
-	{
-		Process process = new Process
-		{
-			StartInfo = new ProcessStartInfo
-			{
-				FileName = "/bin/bash",
-				Arguments = $"-c \"{command}\"",
-				RedirectStandardOutput = true,
-				RedirectStandardError = true,
-				UseShellExecute = false,
-				CreateNoWindow = true,
-			}
-		};
-
-		process.Start();
-		string result = process.StandardOutput.ReadToEnd();
-		string error = process.StandardError.ReadToEnd();
-		
-		process.WaitForExit();
-		
-		if (result == "")
-			return error;
-		
-		return result;
 	}
 
 	private async void Initialize()
@@ -139,7 +100,7 @@ public partial class TrainControlView : UserControl
 		}
 		_combinedThrottlePosition = await _trainControl.GetLeverPosition(0);
 		
-		await Dispatcher.UIThread.InvokeAsync(() => CombinedThrottlePercentage.Text = _combinedThrottlePosition.ToString());
+		await Dispatcher.UIThread.InvokeAsync(() => CombinedThrottlePercentage.Text = _combinedThrottlePosition.ToString(CultureInfo.InvariantCulture));
 	}
 
 	private async Task LoadTrainData()
@@ -225,15 +186,17 @@ public partial class TrainControlView : UserControl
 		};
 	}
 
-	private void ChangeTrain_Click(object? sender, RoutedEventArgs e)
+	private async void ChangeTrain_Click(object? sender, RoutedEventArgs e)
 	{
-		// Tell train that you disconnected (emergency break if connection is lost, or user proceeds)
+		// TODO: Tell train that you disconnected (emergency break if connection is lost, or user proceeds)
 		// Stop streams
 		// Disconnect from wifi
 		// Change screen
+		_canListenForStream = false;
+		await _trainInfo.PostStopStream();
 
-		ExecuteCommand("nmcli connection down CentralBridge-" + Statics.TrainConnectionId);
-		ExecuteCommand("nmcli connection delete CentralBridge-" + Statics.TrainConnectionId);
+		_networkManager.ShutdownConnection();
+		
 		if (DataContext is MainWindowViewModel viewModel)
 		{
 			viewModel.ActiveView = new TrainSelectionScreen();

@@ -15,13 +15,14 @@ public partial class MainView : UserControl
 {
 	private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
 	private YubiKeyDeviceListener _listener;
+	private bool _isHandlingKey = false;
 	
 	public MainView()
 	{
 		InitializeComponent();
 		
 		LoadingArea.IsVisible = false;
-
+		
 		_listener = YubiKeyDeviceListener.Instance;
 		_listener.Arrived += KeyPluggedIn;
 		_listener.Removed += KeyRemoved;
@@ -29,6 +30,7 @@ public partial class MainView : UserControl
 
 	private void KeyRemoved(object? sender, YubiKeyDeviceEventArgs e)
 	{
+		_isHandlingKey = false;
 		_cancelTokenSource.Cancel();
 		Dispatcher.UIThread.Invoke(() =>
 		{
@@ -38,6 +40,9 @@ public partial class MainView : UserControl
 
 	private void KeyPluggedIn(object? sender, YubiKeyDeviceEventArgs e)
 	{
+		if (_isHandlingKey)
+			return;
+		_isHandlingKey = true;
 		Dispatcher.UIThread.Invoke(() =>
 		{
 			LoadingName.Text = "Detected key";

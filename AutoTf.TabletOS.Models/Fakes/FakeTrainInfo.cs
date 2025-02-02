@@ -48,4 +48,14 @@ public class FakeTrainInfo : ITrainInformationService
 	{
 		return Task.FromResult(true);
 	}
+
+	public Task<bool> PostStartStream()
+	{
+		return Task.FromResult(true);
+	}
+
+	public Task<bool> PostStopStream()
+	{
+		return Task.FromResult(true);
+	}
 }

@@ -1,9 +1,12 @@
+using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Interfaces;
 
-namespace AutoTf.TabletOS.Models;
+namespace AutoTf.TabletOS.Models.TaskManager;
 
 public class ProcessReader : IProcessReader
 {
+	private readonly Logger _logger = Statics.Logger;
+	
 	public float GetTotalMemory()
 	{
 		try
@@ -21,7 +24,7 @@ public class ProcessReader : IProcessReader
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Error reading total memory: {ex.Message}");
+			_logger.Log($"Error reading total memory: {ex.Message}");
 		}
 		return -1;
 	}
@@ -30,15 +33,15 @@ public class ProcessReader : IProcessReader
 	{
 		try
 		{
-			var lines = File.ReadAllLines("/proc/meminfo");
-			var totalLine = lines.FirstOrDefault(line => line.StartsWith("MemTotal"));
-			var freeLine = lines.FirstOrDefault(line => line.StartsWith("MemAvailable"));
+			string[] lines = File.ReadAllLines("/proc/meminfo");
+			string? totalLine = lines.FirstOrDefault(line => line.StartsWith("MemTotal"));
+			string? freeLine = lines.FirstOrDefault(line => line.StartsWith("MemAvailable"));
 			if (totalLine != null && freeLine != null)
 			{
-				var totalParts = totalLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-				var freeParts = freeLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+				string[] totalParts = totalLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+				string[] freeParts = freeLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-				if (float.TryParse(totalParts[1], out var totalKb) && float.TryParse(freeParts[1], out var freeKb))
+				if (float.TryParse(totalParts[1], out float totalKb) && float.TryParse(freeParts[1], out float freeKb))
 				{
 					return (totalKb - freeKb) / 1024;
 				}
@@ -46,7 +49,7 @@ public class ProcessReader : IProcessReader
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Error reading used memory: {ex.Message}");
+			_logger.Log($"Error reading used memory: {ex.Message}");
 		}
 		return -1;
 	}
@@ -63,7 +66,7 @@ public class ProcessReader : IProcessReader
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Error reading CPU temperature: {ex.Message}");
+			_logger.Log($"Error reading CPU temperature: {ex.Message}");
 		}
 		return -1;
 	}
@@ -87,7 +90,7 @@ public class ProcessReader : IProcessReader
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Error calculating CPU usage: {ex.Message}");
+			_logger.Log($"Error calculating CPU usage: {ex.Message}");
 			return -1;
 		}
 	}
@@ -108,7 +111,7 @@ public class ProcessReader : IProcessReader
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Error reading CPU stats: {ex.Message}");
+			_logger.Log($"Error reading CPU stats: {ex.Message}");
 		}
 		return null;
 	}

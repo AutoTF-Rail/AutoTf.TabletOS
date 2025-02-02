@@ -18,6 +18,7 @@ public partial class TopBar : UserControl
 {
 	private DispatcherTimer _timer;
 	private int _brightness;
+	private readonly NetworkManager _networkManager = Statics.NetworkManager;
 	
 	public TopBar()
 	{
@@ -65,8 +66,7 @@ public partial class TopBar : UserControl
 		if (await popup.Show(RootGrid) != DialogResult.Yes)
 			return;
 		
-		if(Statics.TrainConnectionId != null)
-			Statics.ExecuteCommand("nmcli connection delete id CentralBridge-" + Statics.TrainConnectionId);
+		_networkManager.ShutdownConnection();
 		
 		Process process = new Process
 		{

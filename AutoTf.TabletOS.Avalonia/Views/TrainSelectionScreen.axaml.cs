@@ -1,15 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using Avalonia.Controls;
@@ -21,6 +18,8 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 public partial class TrainSelectionScreen : UserControl
 {
 	private ObservableCollection<TrainAd> _nearbyTrains = new ObservableCollection<TrainAd>();
+	private readonly NetworkManager _networkManager = Statics.NetworkManager;
+	private readonly Logger _logger = Statics.Logger;
 	
 	public TrainSelectionScreen()
 	{
@@ -52,7 +51,7 @@ public partial class TrainSelectionScreen : UserControl
 	{
 #if DEBUG
 		return;
-		Console.WriteLine("Not running bluetooth scan due to not being in RELEASE");
+		_logger.Log("Not running bluetooth scan due to not being in RELEASE");
 #endif
 		RunBridgeScan();
 	}
@@ -79,7 +78,7 @@ public partial class TrainSelectionScreen : UserControl
 	{
 		try
 		{
-			Console.WriteLine("Scanning for trains.");
+			_logger.Log("Scanning for trains.");
 			_nearbyTrains.Clear();
 			ProcessStartInfo processStartInfo = new ProcessStartInfo()
 			{
@@ -97,19 +96,14 @@ public partial class TrainSelectionScreen : UserControl
 			};
 
 			process.Start();
-			Thread.Sleep(2500);
+			process.WaitForExit(6000);
 
 			StreamReader outputReader = process.StandardOutput;
 
-			List<string> trains = new List<string>();
-			
-			string? line;
-			while ((line = await outputReader.ReadLineAsync()) != null)
+			while (await outputReader.ReadLineAsync() is { } line)
 			{
-				Console.WriteLine("------------" + line);
 				if (line.Contains("name") && line.Contains("CentralBridge-"))
 				{
-					Console.WriteLine("------------" + line);
 					if (_nearbyTrains.Any(x => x.TrainName == line.Replace("name ", "")))
 						continue;
 					AddBridge(line.Replace("name ", ""));
@@ -122,12 +116,12 @@ public partial class TrainSelectionScreen : UserControl
 					NearbyLoadingArea.IsVisible = false;
 			});
 			
-			Console.WriteLine("Done scanning for nearby devices");
+			_logger.Log("Done scanning for nearby devices");
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine("------------------Scan error:");
-			Console.WriteLine(e.Message);
+			_logger.Log("------------------Scan error:");
+			_logger.Log(e.Message);
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				if (NearbyLoadingArea.IsVisible)
@@ -138,17 +132,18 @@ public partial class TrainSelectionScreen : UserControl
 
 	private void AddBridge(string name)
 	{
-		Console.WriteLine("Adding train: " + name);
+		_logger.Log("Adding train: " + name);
+		_nearbyTrains.Add(new TrainAd()
+		{
+			TrainName = name
+		});
+		
 		Dispatcher.UIThread.Invoke(() =>
 		{
-			_nearbyTrains.Add(new TrainAd()
-			{
-				TrainName = name
-			});
-			
 			if (NearbyLoadingArea.IsVisible)
 				NearbyLoadingArea.IsVisible = false;
 		});
+		Thread.Sleep(25);
 	}
 
 	private async void RescanButton_OnClick(object? sender, RoutedEventArgs e)
@@ -158,8 +153,10 @@ public partial class TrainSelectionScreen : UserControl
 			RescanButton.IsVisible = false;
 			NearbyLoadingArea.IsVisible = true;
 		});
-		await Task.Delay(250);
+		await Task.Delay(50);
+		
 		await RunBridgeScan();
+		
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
 			RescanButton.IsVisible = true;
@@ -176,25 +173,17 @@ public partial class TrainSelectionScreen : UserControl
 		});
 		await Task.Delay(250);
 		
-		
-		Button button = (Button)sender!;
-		TrainAd trainAd = (TrainAd)button.DataContext!;
+		TrainAd trainAd = (TrainAd)((Button)sender!).DataContext!;
 
-		
 		Statics.TrainConnectionId = Statics.GenerateRandomString();
-		Console.WriteLine("Connection ID: " + Statics.TrainConnectionId);
-		ExecuteCommand($"nmcli c add type wifi con-name CentralBridge-{Statics.TrainConnectionId} ifname wlan0 ssid {trainAd.TrainName}");
-		ExecuteCommand($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.key-mgmt wpa-psk");
-		ExecuteCommand($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.psk CentralBridgePW");
-		ExecuteCommand($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} connection.autoconnect no");
-		string connOutput = ExecuteCommand($"nmcli con up CentralBridge-{Statics.TrainConnectionId}");
 
 		// TODO: set this: export YUBICO_LOG_LEVEL=ERROR
-		
-		if (!connOutput.Contains("Connection successfully activated"))
+		string? connOutput = _networkManager.EstablishConnection(trainAd.TrainName, true);
+
+		if (connOutput != null)
 		{
-			Console.WriteLine("Connection error:");
-			Console.WriteLine(connOutput);
+			_logger.Log("Connection error:");
+			_logger.Log(connOutput);
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				ErrorBox.Text = "Could not connect to train. Please move closer and retry.";
@@ -203,14 +192,16 @@ public partial class TrainSelectionScreen : UserControl
 			return;
 		}
 
-		Statics.Connection = ConnectionType.Train;
+		await TryLogin();
+	}
 
-		Dispatcher.UIThread.Invoke(() => LoadingName.Text = "Established connection.\nInitializing...");
+	private async Task TryLogin()
+	{
+		Dispatcher.UIThread.Invoke(() => LoadingName.Text = "Logging in...");
 		
 		try
 		{
-			// Key login
-			string url = "http://192.168.1.1/information/login?macAddr=" + ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd() + "&serialNumber=" + Statics.YubiSerial + "&code=" + Statics.YubiCode + "&timestamp=" + Statics.YubiTime.ToString("yyyy-MM-ddTHH:mm:ss");
+			string url = "http://192.168.1.1/information/login?macAddr=" + CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd() + "&serialNumber=" + Statics.YubiSerial + "&code=" + Statics.YubiCode + "&timestamp=" + Statics.YubiTime.ToString("yyyy-MM-ddTHH:mm:ss");
 
 			using HttpClient loginClient = new HttpClient();
 			
@@ -220,6 +211,7 @@ public partial class TrainSelectionScreen : UserControl
 			
 			Dispatcher.UIThread.Invoke(() =>
 			{
+				LoadingName.Text = "Loading panel...";
 				if (DataContext is MainWindowViewModel viewModel)
 				{
 					viewModel.ActiveView = new TrainControlView();
@@ -228,40 +220,12 @@ public partial class TrainSelectionScreen : UserControl
 		}
 		catch (Exception ex)
 		{
+			_networkManager.ShutdownConnection();
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				ErrorBox.Text = "Could not login. " + ex.Message;
 				LoadingArea.IsVisible = false;
 			});
 		}
-	}
-
-	// TODO: Dont auto connect to a train in this screen
-	
-	private string ExecuteCommand(string command)
-	{
-		Process process = new Process
-		{
-			StartInfo = new ProcessStartInfo
-			{
-				FileName = "/bin/bash",
-				Arguments = $"-c \"{command}\"",
-				RedirectStandardOutput = true,
-				RedirectStandardError = true,
-				UseShellExecute = false,
-				CreateNoWindow = true,
-			}
-		};
-
-		process.Start();
-		string result = process.StandardOutput.ReadToEnd();
-		string error = process.StandardError.ReadToEnd();
-		
-		process.WaitForExit();
-		
-		if (result == "")
-			return error;
-		
-		return result;
 	}
 }

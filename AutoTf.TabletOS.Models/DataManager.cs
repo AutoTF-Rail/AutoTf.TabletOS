@@ -9,14 +9,6 @@ public class DataManager : IDataManager
 	public DataManager()
 	{
 		Directory.CreateDirectory(_directory);
-
-		Initialize();
-	}
-
-	private void Initialize()
-	{
-		Statics.Username = ReadFile("username");
-		Statics.Password = ReadFile("password");
 	}
 	
 	public bool ReadFile(string fileName, out string content)
