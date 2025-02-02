@@ -254,6 +254,7 @@ public partial class TrainControlView : UserControl
 		// Change screen
 		_canListenForStream = false;
 		await _trainInfo.PostStopStream();
+		_udpClient.Dispose();
 
 		_networkManager.ShutdownConnection();
 
