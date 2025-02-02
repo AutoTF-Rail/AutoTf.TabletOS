@@ -34,6 +34,8 @@ public partial class TrainControlView : UserControl
 	private double _combinedThrottlePosition;
 	private bool _canListenForStream = true;
 
+	private EasyControlView? _easyControlView;
+
 	public TrainControlView()
 	{
 		try
@@ -97,11 +99,17 @@ public partial class TrainControlView : UserControl
 								if (_currentBitmap != null && _currentBitmap.Size.Width > 0 &&
 								    _currentBitmap.Size.Height > 0)
 								{
-									PreviewImage.Source = _currentBitmap;
+									if (_easyControlView != null)
+										_easyControlView.CameraViewBig.Source = _currentBitmap;
+									else
+										PreviewImage.Source = _currentBitmap;
 								}
 								else
 								{
-									PreviewImage.Source = null;
+									if (_easyControlView != null)
+										_easyControlView.CameraViewBig.Source = _currentBitmap;
+									else
+										PreviewImage.Source = null;
 								}
 							});
 
@@ -300,5 +308,14 @@ public partial class TrainControlView : UserControl
 		_combinedThrottlePosition -= 10;
 		await _trainControl.SetLever(0, _combinedThrottlePosition);
 		await Dispatcher.UIThread.InvokeAsync(() => CombinedThrottlePercentage.Text = _combinedThrottlePosition.ToString());
+	}
+
+	private async void EasyControl_Click(object? sender, RoutedEventArgs e)
+	{
+		_logger.Log("Starting easy control.");
+		_easyControlView = new EasyControlView();
+		await _easyControlView.Show(RootGrid);
+		_easyControlView = null;
+		_logger.Log("Exited easy control.");
 	}
 }

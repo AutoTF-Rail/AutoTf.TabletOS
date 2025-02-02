@@ -75,7 +75,7 @@
                         <Grid>
                             <Border CornerRadius="10, 10, 0, 0" Background="Gray" Opacity=".2"/>
                             <StackPanel HorizontalAlignment="Stretch">
-                                <Button HorizontalAlignment="Stretch" Padding="0" Background="Transparent" BorderBrush="Black" BorderThickness="0, 0, 0, 2">
+                                <Button Click="EasyControl_Click" HorizontalAlignment="Stretch" Padding="0" Background="Transparent" BorderBrush="Black" BorderThickness="0, 0, 0, 2">
                                     <Grid>
                                         <Border Background="Gray" Opacity="0.2" />
                                         <DockPanel>

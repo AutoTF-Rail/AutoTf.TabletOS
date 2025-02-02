@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Height="800"
+             Width="1280"
+             x:Class="AutoTf.TabletOS.Avalonia.Views.EasyControlView">
+    <Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                 <ColumnDefinition Width="3*" />
+                 <ColumnDefinition />
+            </Grid.ColumnDefinitions> 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BackButton_Click" Margin="20" Foreground="Black" BorderBrush="Black">Back</Button>
+            
+            <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" VerticalAlignment="Center" ClipToBounds="True" CornerRadius="15" BorderThickness="1" Margin="30">
+                <Image Name="CameraViewBig" Source="../Assets/ImageExampleSmall.png" Margin="0"></Image>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
