@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
@@ -71,6 +72,13 @@ public partial class TrainControlView : UserControl
 				UdpReceiveResult result = await udpClient.ReceiveAsync();
 				byte[] frameData = result.Buffer;
 
+				if (frameData.Length == 0)
+				{
+					_logger.Log("Received empty frame data.");
+					Thread.Sleep(25);
+					continue;
+				}
+				
 				using (MemoryStream ms = new MemoryStream(frameData))
 				{
 					if (_currentBitmap != null)
@@ -81,11 +89,12 @@ public partial class TrainControlView : UserControl
 					Dispatcher.UIThread.Invoke(() => { PreviewImage.Source = _currentBitmap!; });
 				}
 			}
+			udpClient.Dispose();
 		}
 		catch (Exception ex)
 		{
 			_logger.Log("Error while getting UDP stream:");
-			_logger.Log(ex.Message);
+			_logger.Log(ex.ToString());
 		}
 	}
 

@@ -241,17 +241,27 @@ public class TrainInformationService : ITrainInformationService
 
 	public async Task<bool> PostStartStream()
 	{
-		string serverUrl = "http://192.168.1.1/camera/startStream";
-			
-		using (HttpClient client = new HttpClient())
+		try
 		{
-			HttpResponseMessage response = await client.PostAsync(serverUrl, null);
-
-			if(!response.IsSuccessStatusCode)
-				_logger.Log("TIS: Could not start stream: " + await response.Content.ReadAsStringAsync());
+			string serverUrl = "http://192.168.1.1/camera/startStream";
 			
-			return response.IsSuccessStatusCode;
+			using (HttpClient client = new HttpClient())
+			{
+				HttpResponseMessage response = await client.PostAsync(serverUrl, null);
+
+				if(!response.IsSuccessStatusCode)
+					_logger.Log("TIS: Could not start stream: " + await response.Content.ReadAsStringAsync());
+			
+				return response.IsSuccessStatusCode;
+			}
 		}
+		catch (Exception e)
+		{
+			_logger.Log("Failed to start stream:");
+			_logger.Log(e.ToString());
+		}
+
+		return false;
 	}
 
 	public async Task<bool> PostStopStream()
