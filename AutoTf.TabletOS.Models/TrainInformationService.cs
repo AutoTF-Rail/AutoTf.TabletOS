@@ -256,16 +256,26 @@ public class TrainInformationService : ITrainInformationService
 
 	public async Task<bool> PostStopStream()
 	{
-		string serverUrl = "http://192.168.1.1/camera/stopStream";
-			
-		using (HttpClient client = new HttpClient())
+		try
 		{
-			HttpResponseMessage response = await client.PostAsync(serverUrl, null);
-
-			if(!response.IsSuccessStatusCode)
-				_logger.Log("TIS: Could not stop stream: " + await response.Content.ReadAsStringAsync());
+			string serverUrl = "http://192.168.1.1/camera/stopStream";
 			
-			return response.IsSuccessStatusCode;
+			using (HttpClient client = new HttpClient())
+			{
+				HttpResponseMessage response = await client.PostAsync(serverUrl, null);
+
+				if(!response.IsSuccessStatusCode)
+					_logger.Log("TIS: Could not stop stream: " + await response.Content.ReadAsStringAsync());
+			
+				return response.IsSuccessStatusCode;
+			}
 		}
+		catch (Exception e)
+		{
+			_logger.Log("Error while stopping stream:");
+			_logger.Log(e.ToString());
+		}
+
+		return false;
 	}
 }

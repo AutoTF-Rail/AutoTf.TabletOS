@@ -161,6 +161,7 @@ public partial class TrainControlView : UserControl
 
 	private async Task UpdateSaveTimer()
 	{
+		_saveTimer?.Dispose();
 		DateTime? nextSave = await _trainInfo.GetNextSave();
 		if (nextSave == null)
 		{
@@ -174,11 +175,11 @@ public partial class TrainControlView : UserControl
 			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Past Due");
 			return;
 		}
-		_saveTimer?.Dispose();
 		_saveTimer = new Timer(nextSaveInMs);
 		_saveTimer.Elapsed += (_, _) => _ = UpdateSaveTimer();
 		
 		_saveTimer.Start();
+		
 
 		string date = nextSave.Value.ToString("HH:mm:ss");
 		await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = date);
@@ -219,11 +220,14 @@ public partial class TrainControlView : UserControl
 		await _trainInfo.PostStopStream();
 
 		_networkManager.ShutdownConnection();
-		
-		if (DataContext is MainWindowViewModel viewModel)
+
+		Dispatcher.UIThread.Invoke(() =>
 		{
-			viewModel.ActiveView = new TrainSelectionScreen();
-		}
+			if (DataContext is MainWindowViewModel viewModel)
+			{
+				viewModel.ActiveView = new TrainSelectionScreen();
+			}
+		});
 	}
 	
 	private async void ShutdownTrain_Click(object? sender, RoutedEventArgs e)
