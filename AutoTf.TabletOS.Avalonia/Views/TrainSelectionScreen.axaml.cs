@@ -127,6 +127,11 @@ public partial class TrainSelectionScreen : UserControl
 		{
 			Console.WriteLine("------------------Scan error:");
 			Console.WriteLine(e.Message);
+			Dispatcher.UIThread.Invoke(() =>
+			{
+				if (NearbyLoadingArea.IsVisible)
+					NearbyLoadingArea.IsVisible = false;
+			});
 		}
 	}
 
