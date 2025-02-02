@@ -83,22 +83,34 @@ public partial class TrainControlView : UserControl
 				{
 					if (ms.Length > 0)
 					{
-						if (_currentBitmap != null)
-							_currentBitmap.Dispose();
-
-						_currentBitmap = new Bitmap(ms);
-
-						// ReSharper disable once AccessToDisposedClosure
-						Dispatcher.UIThread.Invoke(() =>
+						try
 						{
-							if (_currentBitmap != null && _currentBitmap.Size.Width > 0 &&
-							    _currentBitmap.Size.Height > 0)
+							Bitmap? oldBitmap = _currentBitmap;
+
+							_currentBitmap = new Bitmap(ms);
+
+							Dispatcher.UIThread.Invoke(() =>
 							{
-								PreviewImage.Source = _currentBitmap;
+								if (_currentBitmap != null && _currentBitmap.Size.Width > 0 &&
+								    _currentBitmap.Size.Height > 0)
+								{
+									PreviewImage.Source = _currentBitmap;
+								}
+								else
+								{
+									PreviewImage.Source = null;
+								}
+							});
+
+							if (oldBitmap != null && oldBitmap != _currentBitmap)
+							{
+								oldBitmap.Dispose();
 							}
-							else
-								PreviewImage.Source = null;
-						});
+						}
+						catch (Exception ex)
+						{
+							_logger.Log($"Error creating bitmap: {ex.Message}");
+						}
 					}
 				}
 			}
