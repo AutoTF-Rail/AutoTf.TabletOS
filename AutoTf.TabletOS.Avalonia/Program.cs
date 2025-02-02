@@ -31,17 +31,26 @@ sealed class Program
 	
 	public static int Main(string[] args)
 	{
-		AppBuilder builder = BuildAvaloniaApp();
-		Initialize();
-		if (args.Contains("--drm"))
+		try
 		{
-			SilenceConsole();
-			// By default, Avalonia will try to detect output card automatically.
-			// But you can specify one, for example "/dev/dri/card1".
-			return builder.StartLinuxDrm(args: args, card: "/dev/dri/card1", scaling: 1.0);
-		}
+			AppBuilder builder = BuildAvaloniaApp();
+			Initialize();
+			if (args.Contains("--drm"))
+			{
+				SilenceConsole();
+				// By default, Avalonia will try to detect output card automatically.
+				// But you can specify one, for example "/dev/dri/card1".
+				return builder.StartLinuxDrm(args: args, card: "/dev/dri/card1", scaling: 1.0);
+			}
 
-		return builder.StartWithClassicDesktopLifetime(args);
+			return builder.StartWithClassicDesktopLifetime(args);
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine("Root error:");
+			Console.WriteLine(e.Message);
+			Console.WriteLine(e.StackTrace);
+		}
 	}
 
 	private static void Initialize()
