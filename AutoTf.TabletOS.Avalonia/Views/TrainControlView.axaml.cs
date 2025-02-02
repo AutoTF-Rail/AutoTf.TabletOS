@@ -78,17 +78,26 @@ public partial class TrainControlView : UserControl
 
 	private async void Initialize()
 	{
-		await Dispatcher.UIThread.InvokeAsync(() =>
+		try
 		{
-			LoadingName.Text = "Loading data...";
-			LoadingArea.IsVisible = true;
-		});
+			await Dispatcher.UIThread.InvokeAsync(() =>
+			{
+				LoadingName.Text = "Loading data...";
+				LoadingArea.IsVisible = true;
+			});
 
-		await LoadLastConnected();
-		await LoadTrainData();
-		await LoadControlData();
+			await LoadLastConnected();
+			await LoadTrainData();
+			await LoadControlData();
 
-		await Dispatcher.UIThread.InvokeAsync(() => LoadingArea.IsVisible = false);
+			await Dispatcher.UIThread.InvokeAsync(() => LoadingArea.IsVisible = false);
+		}
+		catch (Exception e)
+		{
+			_logger.Log("Error during control init.");
+			_logger.Log(e.Message);
+			ChangeTrain_Click(null, null);
+		}
 	}
 
 	private async Task LoadControlData()
