@@ -7,6 +7,7 @@
              Width="1280"
              x:Class="AutoTf.TabletOS.Avalonia.Views.EasyControlView">
     <Grid>
+        <Image Source="../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
         <Grid>
             <Grid.ColumnDefinitions>
                  <ColumnDefinition Width="3*" />

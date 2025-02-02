@@ -8,6 +8,7 @@ using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -29,13 +30,13 @@ public partial class TrainControlView : UserControl
 	
 	private Timer? _saveTimer = new Timer(600);
 	
-	private Bitmap? _currentBitmap;
-	
 	private double _combinedThrottlePosition;
 	private bool _canListenForStream = true;
 
 	private EasyControlView? _easyControlView;
-
+	
+	private Bitmap? _currentBitmap;
+	
 	public TrainControlView()
 	{
 		try
@@ -99,10 +100,14 @@ public partial class TrainControlView : UserControl
 								if (_currentBitmap != null && _currentBitmap.Size.Width > 0 &&
 								    _currentBitmap.Size.Height > 0)
 								{
+									if (_easyControlView != null)
+										_easyControlView.CameraViewBig.Source = _currentBitmap;
 									PreviewImage.Source = _currentBitmap;
 								}
 								else
 								{
+									if (_easyControlView != null)
+										_easyControlView.CameraViewBig.Source = _currentBitmap;
 									PreviewImage.Source = null;
 								}
 							});
@@ -308,7 +313,6 @@ public partial class TrainControlView : UserControl
 	{
 		_logger.Log("Starting easy control.");
 		_easyControlView = new EasyControlView();
-		_easyControlView.CameraViewBig.Source = _currentBitmap;
 		await _easyControlView.Show(RootGrid);
 		_easyControlView = null;
 		_logger.Log("Exited easy control.");
