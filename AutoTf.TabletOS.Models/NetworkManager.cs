@@ -50,7 +50,7 @@ public class NetworkManager
 		
 		string output = CommandExecuter.ExecuteCommand($"nmcli con up CentralBridge-{Statics.TrainConnectionId}");
 
-		if (!output.Contains("Connection successfully activated"))
+		if (output.Contains("Connection successfully activated"))
 		{
 			if (isTrain)
 				Statics.Connection = ConnectionType.Train;
