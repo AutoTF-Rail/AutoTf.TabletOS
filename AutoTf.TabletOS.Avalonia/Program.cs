@@ -50,6 +50,7 @@ sealed class Program
 			Console.WriteLine("Root error:");
 			Console.WriteLine(e.Message);
 			Console.WriteLine(e.StackTrace);
+			Statics.Shutdown?.Invoke();
 		}
 
 		return -1;

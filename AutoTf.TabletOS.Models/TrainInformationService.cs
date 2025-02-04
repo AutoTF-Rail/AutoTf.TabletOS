@@ -13,9 +13,10 @@ public class TrainInformationService : ITrainInformationService
 		{
 			string url = "http://192.168.1.1/information/evuname";
 
-			using HttpClient loginClient = new HttpClient();
+			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
 			
-			HttpResponseMessage response = await loginClient.GetAsync(url);
+			HttpResponseMessage response = await client.GetAsync(url);
 			
 			response.EnsureSuccessStatusCode();
 
@@ -38,9 +39,10 @@ public class TrainInformationService : ITrainInformationService
 		{
 			string url = "http://192.168.1.1/information/trainId";
 
-			using HttpClient loginClient = new HttpClient();
+			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
 			
-			HttpResponseMessage response = await loginClient.GetAsync(url);
+			HttpResponseMessage response = await client.GetAsync(url);
 			
 			response.EnsureSuccessStatusCode();
 
@@ -63,9 +65,10 @@ public class TrainInformationService : ITrainInformationService
 		{
 			string url = "http://192.168.1.1/information/trainName";
 
-			using HttpClient loginClient = new HttpClient();
+			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
 			
-			HttpResponseMessage response = await loginClient.GetAsync(url);
+			HttpResponseMessage response = await client.GetAsync(url);
 			
 			response.EnsureSuccessStatusCode();
 
@@ -88,9 +91,10 @@ public class TrainInformationService : ITrainInformationService
 		{
 			string url = "http://192.168.1.1/information/lastsynced";
 
-			using HttpClient loginClient = new HttpClient();
+			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
 			
-			HttpResponseMessage response = await loginClient.GetAsync(url);
+			HttpResponseMessage response = await client.GetAsync(url);
 			
 			response.EnsureSuccessStatusCode();
 
@@ -113,9 +117,10 @@ public class TrainInformationService : ITrainInformationService
 		{
 			string url = "http://192.168.1.1/information/version";
 
-			using HttpClient loginClient = new HttpClient();
+			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
 			
-			HttpResponseMessage response = await loginClient.GetAsync(url);
+			HttpResponseMessage response = await client.GetAsync(url);
 			
 			response.EnsureSuccessStatusCode();
 
@@ -138,9 +143,10 @@ public class TrainInformationService : ITrainInformationService
 		{
 			string url = "http://192.168.1.1/camera/nextSave";
 
-			using HttpClient loginClient = new HttpClient();
+			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
 			
-			HttpResponseMessage response = await loginClient.GetAsync(url);
+			HttpResponseMessage response = await client.GetAsync(url);
 			
 			response.EnsureSuccessStatusCode();
 
@@ -162,6 +168,7 @@ public class TrainInformationService : ITrainInformationService
 			string url = "http://192.168.1.1/system/update";
 
 			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
 			// TODO: Cache mac address
 			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
@@ -190,6 +197,7 @@ public class TrainInformationService : ITrainInformationService
 			string url = "http://192.168.1.1/system/shutdown";
 
 			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
 			// TODO: Cache mac address
 			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
@@ -218,6 +226,7 @@ public class TrainInformationService : ITrainInformationService
 			string url = "http://192.168.1.1/system/restart";
 
 			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
 			// TODO: Cache mac address
 			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
 
@@ -247,6 +256,7 @@ public class TrainInformationService : ITrainInformationService
 			
 			using (HttpClient client = new HttpClient())
 			{
+				client.Timeout = TimeSpan.FromSeconds(5);
 				HttpResponseMessage response = await client.PostAsync(serverUrl, null);
 
 				if(!response.IsSuccessStatusCode)
@@ -272,6 +282,7 @@ public class TrainInformationService : ITrainInformationService
 			
 			using (HttpClient client = new HttpClient())
 			{
+				client.Timeout = TimeSpan.FromSeconds(5);
 				HttpResponseMessage response = await client.PostAsync(serverUrl, null);
 
 				if(!response.IsSuccessStatusCode)
