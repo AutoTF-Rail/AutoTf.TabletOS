@@ -11,6 +11,7 @@ public partial class LogsViewer : UserControl
 {
 	private TaskCompletionSource _taskCompletionSource;
 	private Grid _parent;
+	private readonly string _logDir = "/var/log/AutoTF/AutoTf.TabletOS.Avalonia/";
 	
 	public LogsViewer()
 	{
@@ -30,20 +31,11 @@ public partial class LogsViewer : UserControl
 	private void Initialize()
 	{
 		// DateBox.Items.Add(DateTime.Now.ToString("yyyy-MM-dd"));
-		string dir = "/var/log/AutoTF/AutoTf.TabletOS.Avalonia/";
-		string[] files = Directory.GetFiles(dir);
+		
+		string[] files = Directory.GetFiles(_logDir);
 		DateBox.ItemsSource = files.Select(Path.GetFileNameWithoutExtension);
 		
-		// string path = dir + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
-		//
-		// if (!File.Exists(path))
-		// {
-		// 	LogViewerBox.Items.Add("No logs found");
-		// }
-		//
-		// string[] logs = File.ReadAllLines(path);
-		// LogViewerBox.ItemsSource = logs;
-		//
+		
 		
 		DateBox.SelectedIndex = 0;
 	}
@@ -57,5 +49,10 @@ public partial class LogsViewer : UserControl
 	{
 		Close();
 		_taskCompletionSource.TrySetResult();
+	}
+
+	private void DateBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+	{
+		LogViewerBox.ItemsSource = File.ReadAllLines(_logDir + (string)DateBox.SelectedItem! + ".txt");
 	}
 }
