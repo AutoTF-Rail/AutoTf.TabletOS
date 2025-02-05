@@ -8,7 +8,7 @@
              Height="800"
              Width="1280"
              x:Class="AutoTf.TabletOS.Avalonia.Views.InfoScreen">
-    <Grid>
+    <Grid Name="RootGrid">
         <Grid>
              <Grid.ColumnDefinitions>
                  <ColumnDefinition Width="*" />
@@ -46,6 +46,7 @@
         <DockPanel Margin="40" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <Button Name="UpdateButton" Margin="5" Click="Update_Click">Update</Button>
             <Button Name="RebootButton" Margin="5" Click="RebootButton_OnClick">Reboot</Button>
+            <Button Name="LogsButton" Margin="5" Click="LogsButton_OnClick">Logs</Button>
         </DockPanel>
         <TextBlock Name="UpdateText" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="40">Updating...</TextBlock>
         <TextBlock Name="InfoStatus" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15">Pulling</TextBlock>

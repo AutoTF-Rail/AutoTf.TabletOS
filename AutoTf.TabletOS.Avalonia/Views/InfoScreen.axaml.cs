@@ -133,4 +133,10 @@ public partial class InfoScreen : UserControl
 		_networkManager.ShutdownConnection();
 		CommandExecuter.ExecuteSilent("reboot now", true);
 	}
+
+	private void LogsButton_OnClick(object? sender, RoutedEventArgs e)
+	{
+		LogsViewer logsViewer = new LogsViewer();
+		logsViewer.Show(RootGrid);
+	}
 }

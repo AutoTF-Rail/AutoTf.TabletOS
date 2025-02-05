@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Height="800"
+             Width="1280"
+             x:Class="AutoTf.TabletOS.Avalonia.Views.LogsViewer">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20">Logs</TextBlock>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20" Click="BackButton_Click">Back</Button>
+        <ListBox Name="LogViewerBox" Margin="30, 75, 30, 75" Padding="5" CornerRadius="15"></ListBox>
+    </Grid>
+</UserControl>

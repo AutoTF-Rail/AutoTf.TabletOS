@@ -16,6 +16,6 @@ public partial class MainWindowViewModel : ReactiveObject
 
 	public MainWindowViewModel()
 	{
-		ActiveView = new EasyControlView();
+		ActiveView = new LogsViewer();
 	}
 }
