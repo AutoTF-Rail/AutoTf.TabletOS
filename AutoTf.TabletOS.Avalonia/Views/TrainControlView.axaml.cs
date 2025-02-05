@@ -259,6 +259,13 @@ public partial class TrainControlView : UserControl
 		// Stop streams
 		// Disconnect from wifi
 		// Change screen
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			LoadingName.Text = "Disconnecting...";
+			LoadingArea.IsVisible = true;
+		});
+		await Task.Delay(25);
+		
 		_canListenForStream = false;
 		await _trainInfo.PostStopStream();
 		_udpClient.Dispose();

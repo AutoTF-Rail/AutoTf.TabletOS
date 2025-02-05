@@ -8,7 +8,7 @@
              x:Class="AutoTf.TabletOS.Avalonia.Views.LogsViewer">
     <Grid>
         <Image Source="../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
-        <Button HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20" Click="BackButton_Click">Back</Button>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20" Click="BackButton_Click" Foreground="Black" BorderBrush="Black">Back</Button>
         <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30, 20" Name="DateBox" MaxDropDownHeight="250" SelectionChanged="DateBox_OnSelectionChanged"></ComboBox>
         <ListBox Name="LogViewerBox" Margin="30, 75, 30, 75" Padding="5" CornerRadius="15"></ListBox>
     </Grid>
