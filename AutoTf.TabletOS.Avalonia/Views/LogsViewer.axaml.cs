@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -28,14 +29,23 @@ public partial class LogsViewer : UserControl
 
 	private void Initialize()
 	{
-		string path = "/var/log/AutoTF/AutoTf.TabletOS.Avalonia/" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
-		if (!File.Exists(path))
-		{
-			LogViewerBox.Items.Add("No logs found");
-		}
-
-		string[] logs = File.ReadAllLines(path);
-		LogViewerBox.ItemsSource = logs;
+		// DateBox.Items.Add(DateTime.Now.ToString("yyyy-MM-dd"));
+		string dir = "/var/log/AutoTF/AutoTf.TabletOS.Avalonia/";
+		string[] files = Directory.GetFiles(dir);
+		DateBox.ItemsSource = files.Select(Path.GetFileNameWithoutExtension);
+		
+		// string path = dir + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+		//
+		// if (!File.Exists(path))
+		// {
+		// 	LogViewerBox.Items.Add("No logs found");
+		// }
+		//
+		// string[] logs = File.ReadAllLines(path);
+		// LogViewerBox.ItemsSource = logs;
+		//
+		
+		DateBox.SelectedIndex = 0;
 	}
 
 	private void Close()

@@ -9,6 +9,7 @@
     <Grid>
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20">Logs</TextBlock>
         <Button HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20" Click="BackButton_Click">Back</Button>
+        <ComboBox HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20" Name="DateBox"></ComboBox>
         <ListBox Name="LogViewerBox" Margin="30, 75, 30, 75" Padding="5" CornerRadius="15"></ListBox>
     </Grid>
 </UserControl>
