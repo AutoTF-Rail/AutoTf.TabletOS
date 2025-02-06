@@ -63,11 +63,13 @@ sealed class Program
 		Statics.ProcessReader = new ProcessReader();
 		Statics.TrainInformationService = new TrainInformationService();
 		Statics.TrainControlService = new TrainControlService();
+		Statics.TrainDataService = new TrainDataService();
 #else
 		Statics.DataManager = new FakeDataManager();
 		Statics.ProcessReader = new FakeProcessReader();
 		Statics.TrainInformationService = new FakeTrainInfo();
 		Statics.TrainControlService = new FakeTrainControlService();
+		Statics.TrainCameraService = new FakeTrainCameraService();
 #endif
 	}
 

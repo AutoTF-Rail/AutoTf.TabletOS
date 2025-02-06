@@ -4,6 +4,11 @@ namespace AutoTf.TabletOS.Models.Fakes;
 
 public class FakeTrainInfo : ITrainInformationService
 {
+	public Task<int?> GetCameraCount()
+	{
+		return Task.FromResult<int?>(null);
+	}
+
 	public Task<string?> GetEvuName()
 	{
 		return Task.FromResult("ExampleEvu2")!;
@@ -47,6 +52,11 @@ public class FakeTrainInfo : ITrainInformationService
 	public Task<bool> PostRestart()
 	{
 		return Task.FromResult(true);
+	}
+
+	public Task<bool> PostStartStream(int port, int cameraIndex)
+	{
+		return Task.FromResult<bool>(true);
 	}
 
 	public Task<bool> PostStartStream()

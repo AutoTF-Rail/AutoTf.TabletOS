@@ -22,6 +22,7 @@ public partial class TrainControlView : UserControl
 	private readonly IDataManager _dataManager = Statics.DataManager;
 	private readonly ITrainInformationService _trainInfo = Statics.TrainInformationService;
 	private readonly ITrainControlService _trainControl = Statics.TrainControlService;
+	private readonly ITrainCameraService _trainCameraService = Statics.TrainCameraService;
 	private readonly NetworkManager _networkManager = Statics.NetworkManager;
 	private readonly Logger _logger = Statics.Logger;
 
@@ -30,11 +31,10 @@ public partial class TrainControlView : UserControl
 	private Timer? _saveTimer = new Timer(600);
 	
 	private double _combinedThrottlePosition;
-	private bool _canListenForStream = true;
 
 	private EasyControlView? _easyControlView;
-	
-	private Bitmap? _currentBitmap;
+
+	private int _currentCamera = 0;
 	
 	public TrainControlView()
 	{
@@ -42,17 +42,30 @@ public partial class TrainControlView : UserControl
 		{
 			InitializeComponent();
 
-			Statics.Shutdown += () => _trainInfo.PostStopStream();
 			Statics.Shutdown += () => _udpClient.Dispose();
+			
+			_trainCameraService.NewFrameReceived += NewFrameReceived;
 
 			Task.Run(Initialize);
-			Task.Run(InitializeStream);
 		}
 		catch (Exception e)
 		{
 			_logger.Log("Error while initializing view:");
 			_logger.Log(e.Message);
 		}
+	}
+
+	private void NewFrameReceived(int cameraIndex, Bitmap bitmap)
+	{
+		if (cameraIndex != _currentCamera)
+			return;
+		
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			if (_easyControlView != null)
+				_easyControlView.CameraViewBig.Source = bitmap;
+			PreviewImage.Source = bitmap;
+		});
 	}
 
 	private async Task LoadControlData()
@@ -127,82 +140,6 @@ public partial class TrainControlView : UserControl
 		await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = date);
 	}
 	
-	private async Task InitializeStream()
-	{
-		try
-		{
-			_logger.Log("Starting stream");
-			if (!await _trainInfo.PostStartStream())
-			{
-				_logger.Log("Could not start stream");
-				return;
-				// TODO: Show error that it failed to start the stream
-			}
-
-			_logger.Log("Listening for images.");
-			
-			int udpPort = 12345;
-			_udpClient = new UdpClient(udpPort);
-
-			while (_canListenForStream)
-			{
-				UdpReceiveResult result = await _udpClient.ReceiveAsync();
-				byte[] frameData = result.Buffer;
-
-				if (frameData.Length == 0)
-				{
-					_logger.Log("Received empty frame data.");
-					Thread.Sleep(25);
-					continue;
-				}
-				
-				using (MemoryStream ms = new MemoryStream(frameData))
-				{
-					if (ms.Length > 0)
-					{
-						try
-						{
-							Bitmap? oldBitmap = _currentBitmap;
-
-							_currentBitmap = new Bitmap(ms);
-
-							Dispatcher.UIThread.Invoke(() =>
-							{
-								if (_currentBitmap != null && _currentBitmap.Size.Width > 0 &&
-								    _currentBitmap.Size.Height > 0)
-								{
-									if (_easyControlView != null)
-										_easyControlView.CameraViewBig.Source = _currentBitmap;
-									PreviewImage.Source = _currentBitmap;
-								}
-								else
-								{
-									if (_easyControlView != null)
-										_easyControlView.CameraViewBig.Source = _currentBitmap;
-									PreviewImage.Source = null;
-								}
-							});
-
-							if (oldBitmap != null && oldBitmap != _currentBitmap)
-							{
-								oldBitmap.Dispose();
-							}
-						}
-						catch (Exception ex)
-						{
-							_logger.Log($"Error creating bitmap: {ex.Message}");
-						}
-					}
-				}
-			}
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("Error while getting UDP stream:");
-			_logger.Log(ex.ToString());
-		}
-	}
-
 	private async void Initialize()
 	{
 		try
@@ -267,8 +204,7 @@ public partial class TrainControlView : UserControl
 			});
 			await Task.Delay(25);
 		
-			_canListenForStream = false;
-			await _trainInfo.PostStopStream();
+			_trainCameraService.DisconnectStreams();
 			_udpClient.Dispose();
 
 			_networkManager.ShutdownConnection();

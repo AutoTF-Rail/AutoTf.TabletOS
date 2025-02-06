@@ -4,6 +4,7 @@ namespace AutoTf.TabletOS.Models.Interfaces;
 
 public interface ITrainInformationService
 {
+	public Task<int?> GetCameraCount();
 	public Task<string?> GetEvuName();
 	public Task<string?> GetTrainId();
 	public Task<string?> GetTrainName();
@@ -13,8 +14,6 @@ public interface ITrainInformationService
 	public Task<bool> PostUpdate();
 	public Task<bool> PostShutdown();
 	public Task<bool> PostRestart();
-	public Task<bool> PostStartStream();
-	public Task<bool> PostStopStream();
 	public Task<string[]?> GetLogDates();
 	public Task<string[]?> GetLogs(string date);
 }

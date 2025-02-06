@@ -8,7 +8,30 @@ namespace AutoTf.TabletOS.Models;
 public class TrainInformationService : ITrainInformationService
 {
 	private readonly Logger _logger = Statics.Logger;
-	
+
+	public async Task<int?> GetCameraCount()
+	{
+		try
+		{
+			string url = "http://192.168.1.1/information/cameracount";
+
+			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
+			
+			HttpResponseMessage response = await client.GetAsync(url);
+			
+			response.EnsureSuccessStatusCode();
+
+			return int.Parse(await response.Content.ReadAsStringAsync());
+		}
+		catch (Exception ex)
+		{
+			_logger.Log("TIS: Could not get camera count:");
+			_logger.Log(ex.Message);
+			return null;
+		}
+	}
+
 	public async Task<string?> GetEvuName()
 	{
 		try
@@ -300,57 +323,5 @@ public class TrainInformationService : ITrainInformationService
 			_logger.Log(ex.Message);
 			return false;
 		}
-	}
-
-	public async Task<bool> PostStartStream()
-	{
-		try
-		{
-			string serverUrl = "http://192.168.1.1/camera/startStream";
-			
-			using (HttpClient client = new HttpClient())
-			{
-				client.Timeout = TimeSpan.FromSeconds(5);
-				HttpResponseMessage response = await client.PostAsync(serverUrl, null);
-
-				if(!response.IsSuccessStatusCode)
-					_logger.Log("TIS: Could not start stream: " + await response.Content.ReadAsStringAsync());
-			
-				return response.IsSuccessStatusCode;
-			}
-		}
-		catch (Exception e)
-		{
-			_logger.Log("Failed to start stream:");
-			_logger.Log(e.ToString());
-		}
-
-		return false;
-	}
-
-	public async Task<bool> PostStopStream()
-	{
-		try
-		{
-			string serverUrl = "http://192.168.1.1/camera/stopStream";
-			
-			using (HttpClient client = new HttpClient())
-			{
-				client.Timeout = TimeSpan.FromSeconds(5);
-				HttpResponseMessage response = await client.PostAsync(serverUrl, null);
-
-				if(!response.IsSuccessStatusCode)
-					_logger.Log("TIS: Could not stop stream: " + await response.Content.ReadAsStringAsync());
-			
-				return response.IsSuccessStatusCode;
-			}
-		}
-		catch (Exception e)
-		{
-			_logger.Log("Error while stopping stream:");
-			_logger.Log(e.ToString());
-		}
-
-		return false;
 	}
 }

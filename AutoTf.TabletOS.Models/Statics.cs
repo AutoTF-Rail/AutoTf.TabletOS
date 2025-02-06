@@ -13,6 +13,7 @@ public static class Statics
 	public static IProcessReader ProcessReader = null!;
 	public static ITrainInformationService TrainInformationService = null!;
 	public static ITrainControlService TrainControlService = null!;
+	public static ITrainCameraService TrainCameraService = null!;
 	
 	public static Logger Logger = new Logger(true);
 	
@@ -22,6 +23,7 @@ public static class Statics
 	public static string YubiCode { get; set; } = null!;
 	public static int YubiSerial { get; set; }
 	public static DateTime YubiTime { get; set; }
+
 	// TODO: Tablet gets a key from trains
 	
 	public static string GenerateRandomString()
