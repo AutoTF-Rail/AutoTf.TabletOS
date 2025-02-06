@@ -7,7 +7,7 @@ namespace AutoTf.TabletOS.Preview;
 
 public partial class MainWindowViewModel : ReactiveObject
 {
-	private object _activeView;
+	private object _activeView = null!;
 
 	public object ActiveView
 	{
