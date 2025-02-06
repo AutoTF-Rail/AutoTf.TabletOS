@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vlc="clr-namespace:LibVLCSharp.Avalonia;assembly=LibVLCSharp.Avalonia"
              x:Class="AutoTf.TabletOS.Avalonia.Views.TrainGalleryView">
     <Grid>
         <Image Source="../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
@@ -38,10 +37,9 @@
                 </Grid>
             </Grid>
             
-            <vlc:VideoView Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="MediaView"></vlc:VideoView>
-            <!-- <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" HorizontalAlignment="Center" ClipToBounds="True" CornerRadius="15" BorderThickness="1" Margin="10"> -->
-            <!--     <Image Name="CameraViewBig" Source="../Assets/LoadingCameraFeedImage.png" Margin="0"></Image> -->
-            <!-- </Border> -->
+            <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" HorizontalAlignment="Center" ClipToBounds="True" CornerRadius="15" BorderThickness="1" Margin="10">
+                <Image Name="CameraViewBig" Source="../Assets/LoadingCameraFeedImage.png" Margin="0"></Image>
+            </Border>
             
             <ListBox Grid.Row="2" Grid.Column="1" CornerRadius="15" Margin="15, 5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             
