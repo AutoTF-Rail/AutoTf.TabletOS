@@ -149,6 +149,8 @@ public partial class TrainControlView : UserControl
 			await LoadLastConnected();
 			await LoadTrainData();
 			await LoadControlData();
+		
+			await _trainCameraService.StartListeningForCameras();
 
 			await Dispatcher.UIThread.InvokeAsync(() => LoadingArea.IsVisible = false);
 		}

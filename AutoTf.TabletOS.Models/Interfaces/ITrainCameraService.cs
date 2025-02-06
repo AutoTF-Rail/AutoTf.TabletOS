@@ -6,4 +6,5 @@ public interface ITrainCameraService
 {
 	public Action<int, Bitmap>? NewFrameReceived { get; set; }
 	public void DisconnectStreams();
+	public Task StartListeningForCameras();
 }

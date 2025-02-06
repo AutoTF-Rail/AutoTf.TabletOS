@@ -31,11 +31,10 @@ public class TrainCameraService : ITrainCameraService
 	public TrainCameraService()
 	{
 		Statics.Shutdown += DisconnectStreams;
-		
-		StartListeningForCameras();
 	}
 
-	private async void StartListeningForCameras()
+	// TODO: "OnTrainConnected" event for things like this:
+	public async Task StartListeningForCameras()
 	{
 		try
 		{
