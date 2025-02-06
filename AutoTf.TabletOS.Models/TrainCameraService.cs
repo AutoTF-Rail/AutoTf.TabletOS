@@ -64,7 +64,6 @@ public class TrainCameraService : ITrainCameraService
 		
 		if (!await PostStartStream(udpPort, cameraIndex))
 		{
-			_logger.Log($"TCS: Could not start stream for camera {cameraIndex}");
 			return;
 			// TODO: Show error that it failed to start the stream
 		}
@@ -117,16 +116,20 @@ public class TrainCameraService : ITrainCameraService
 	{
 		try
 		{
+			_logger.Log($"TCS: Requesting stream start with port {port} and camera index {cameraIndex}.");
 			string serverUrl = $"http://192.168.1.1/camera/startStream?port={port}&cameraIndex={cameraIndex}";
-			
+
 			using (HttpClient client = new HttpClient())
 			{
 				client.Timeout = TimeSpan.FromSeconds(5);
 				HttpResponseMessage response = await client.PostAsync(serverUrl, null);
 
-				if(!response.IsSuccessStatusCode)
-					_logger.Log("TCS: Could not start stream: " + await response.Content.ReadAsStringAsync());
-			
+				if (!response.IsSuccessStatusCode)
+				{
+					_logger.Log($"TCS: {response.StatusCode}Could not start stream:");
+					_logger.Log(await response.Content.ReadAsStringAsync());
+				}
+
 				return response.IsSuccessStatusCode;
 			}
 		}
