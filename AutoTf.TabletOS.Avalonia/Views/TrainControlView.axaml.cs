@@ -325,8 +325,9 @@ public partial class TrainControlView : UserControl
 		_logger.Log("Exited easy control.");
 	}
 
-	private void GalleryButton_Click(object? sender, RoutedEventArgs e)
+	private void LogsButton_Click(object? sender, RoutedEventArgs e)
 	{
-		throw new NotImplementedException();
+		TrainLogsViewer logsView = new TrainLogsViewer(_trainInfo);
+		logsView.Show(RootGrid);
 	}
 }
