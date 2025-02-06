@@ -324,4 +324,9 @@ public partial class TrainControlView : UserControl
 		_easyControlView = null;
 		_logger.Log("Exited easy control.");
 	}
+
+	private void GalleryButton_Click(object? sender, RoutedEventArgs e)
+	{
+		throw new NotImplementedException();
+	}
 }

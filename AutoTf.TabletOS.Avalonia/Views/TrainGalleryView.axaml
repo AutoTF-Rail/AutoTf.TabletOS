@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vlc="clr-namespace:LibVLCSharp.Avalonia;assembly=LibVLCSharp.Avalonia"
+             x:Class="AutoTf.TabletOS.Avalonia.Views.TrainGalleryView">
+    <Grid>
+        <Image Source="../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="1000" />
+            </Grid.ColumnDefinitions> 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="560" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            
+            <Grid Grid.Row="1" Grid.Column="0" Margin="10" VerticalAlignment="Top">
+                <Border CornerRadius="15" Background="Black" Opacity=".4" BorderBrush="Black" BorderThickness="1"></Border>
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" FontSize="20" VerticalAlignment="Center">Date</TextBlock>
+                    <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" Margin="2"></ComboBox>
+                    
+                    <TextBlock Grid.Row="2" Grid.Column="0" FontSize="20" VerticalAlignment="Center">Time</TextBlock>
+                    <ComboBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" Margin="2"></ComboBox>
+                </Grid>
+            </Grid>
+            
+            <vlc:VideoView Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="MediaView"></vlc:VideoView>
+            <!-- <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" HorizontalAlignment="Center" ClipToBounds="True" CornerRadius="15" BorderThickness="1" Margin="10"> -->
+            <!--     <Image Name="CameraViewBig" Source="../Assets/LoadingCameraFeedImage.png" Margin="0"></Image> -->
+            <!-- </Border> -->
+            
+            <ListBox Grid.Row="2" Grid.Column="1" CornerRadius="15" Margin="15, 5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            
+            <Button Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="18" Click="BackButton_Click" Margin="20" Foreground="Black" BorderBrush="Black">Back</Button>
+
+        </Grid>
+    </Grid>
+</UserControl>

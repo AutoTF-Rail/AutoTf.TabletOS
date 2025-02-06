@@ -46,6 +46,8 @@
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
         <PackageReference Include="Iot.Device.Bindings" Version="3.2.0" />
+        <PackageReference Include="LibVLCSharp" Version="3.9.2" />
+        <PackageReference Include="LibVLCSharp.Avalonia" Version="3.9.2" />
         <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
         <PackageReference Include="Yubico.Core" Version="1.12.1" />
         <PackageReference Include="Yubico.DotNetPolyfills" Version="1.12.1" />
