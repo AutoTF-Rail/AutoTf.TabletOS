@@ -26,8 +26,6 @@ public partial class TrainControlView : UserControl
 	private readonly NetworkManager _networkManager = Statics.NetworkManager;
 	private readonly Logger _logger = Statics.Logger;
 
-	private UdpClient _udpClient = null!;
-	
 	private Timer? _saveTimer = new Timer(600);
 	
 	private double _combinedThrottlePosition;
@@ -41,8 +39,6 @@ public partial class TrainControlView : UserControl
 		try
 		{
 			InitializeComponent();
-
-			Statics.Shutdown += () => _udpClient.Dispose();
 			
 			_trainCameraService.NewFrameReceived += NewFrameReceived;
 
@@ -205,7 +201,6 @@ public partial class TrainControlView : UserControl
 			await Task.Delay(25);
 		
 			_trainCameraService.DisconnectStreams();
-			_udpClient.Dispose();
 
 			_networkManager.ShutdownConnection();
 

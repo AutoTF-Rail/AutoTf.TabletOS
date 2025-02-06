@@ -126,7 +126,7 @@ public class TrainCameraService : ITrainCameraService
 
 				if (!response.IsSuccessStatusCode)
 				{
-					_logger.Log($"TCS: {response.StatusCode}Could not start stream:");
+					_logger.Log($"TCS: {response.StatusCode}: Could not start stream:");
 					_logger.Log(await response.Content.ReadAsStringAsync());
 				}
 
