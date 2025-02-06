@@ -41,7 +41,12 @@ public class TrainCameraService : ITrainCameraService
 		{
 			int? cameraCount = await _trainInfo.GetCameraCount();
 			if (cameraCount == null)
+			{
+				_logger.Log("TCS: Camera count was null.");
 				return;
+			}
+
+			_logger.Log($"TCS: Found {cameraCount} cameras.");
 			// TODO: Report failure for count
 
 			for (int i = 0; i < cameraCount; i++)

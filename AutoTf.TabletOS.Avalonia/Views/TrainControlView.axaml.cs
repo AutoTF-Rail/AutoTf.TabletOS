@@ -236,7 +236,10 @@ public partial class TrainControlView : UserControl
 	
 	private async void RestartTrain_Click(object? sender, RoutedEventArgs e)
 	{
+		// TODO: Notify train system of shutdown (seperate from actual shutdown?)
+		// Prevent shutdown when train is still moving without assistant
 		await _trainInfo.PostRestart();
+		ChangeToSelectionScreen();
 	}
 
 	private async void UpdateTrain_Click(object? sender, RoutedEventArgs e)
