@@ -30,12 +30,8 @@ public partial class LogsViewer : UserControl
 
 	private void Initialize()
 	{
-		// DateBox.Items.Add(DateTime.Now.ToString("yyyy-MM-dd"));
-		
 		string[] files = Directory.GetFiles(_logDir).Order().ToArray();
 		DateBox.ItemsSource = files.Select(Path.GetFileNameWithoutExtension);
-		
-		
 		
 		DateBox.SelectedIndex = 0;
 	}
@@ -54,5 +50,10 @@ public partial class LogsViewer : UserControl
 	private void DateBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
 	{
 		LogViewerBox.ItemsSource = File.ReadAllLines(_logDir + (string)DateBox.SelectedItem! + ".txt").Reverse();
+	}
+
+	private void LogViewerBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+	{
+		LogViewerBox.SelectedItem = null;
 	}
 }

@@ -58,4 +58,26 @@ public class FakeTrainInfo : ITrainInformationService
 	{
 		return Task.FromResult(true);
 	}
+
+	public Task<string[]> GetLogDates()
+	{
+		return Task.FromResult(new[]
+		{
+			"22.02.2024",
+			"22.02.2024",
+			"22.02.2024",
+			"22.02.2024",
+		});
+	}
+
+	public Task<string[]> GetLogs(string date)
+	{
+		return Task.FromResult(new[]
+		{
+			"22.02.2024",
+			"22.02.2024",
+			"22.02.2024",
+			"22.02.2024",
+		});
+	}
 }

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Net.Http.Json;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Interfaces;
 
@@ -131,6 +133,58 @@ public class TrainInformationService : ITrainInformationService
 		catch (Exception ex)
 		{
 			_logger.Log("TIS: Could not get version:");
+			_logger.Log(ex.Message);
+			// TODO: Log
+			return null;
+		}
+	}
+
+	public async Task<string[]?> GetLogDates()
+	{
+		try
+		{
+			string url = "http://192.168.1.1/information/logdates";
+
+			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
+			
+			HttpResponseMessage response = await client.GetAsync(url);
+			
+			response.EnsureSuccessStatusCode();
+
+			string[]? dates = await response.Content.ReadFromJsonAsync<string[]>();
+
+			return dates;
+		}
+		catch (Exception ex)
+		{
+			_logger.Log("TIS: Could not get log dates:");
+			_logger.Log(ex.Message);
+			// TODO: Log
+			return null;
+		}
+	}
+
+	public async Task<string[]?> GetLogs(string date)
+	{
+		try
+		{
+			string url = "http://192.168.1.1/information/logs?date=" + date;
+
+			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
+			
+			HttpResponseMessage response = await client.GetAsync(url);
+			
+			response.EnsureSuccessStatusCode();
+
+			string[]? logs = await response.Content.ReadFromJsonAsync<string[]>();
+
+			return logs;
+		}
+		catch (Exception ex)
+		{
+			_logger.Log($"TIS: Could not get logs for {date}:");
 			_logger.Log(ex.Message);
 			// TODO: Log
 			return null;

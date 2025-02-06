@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Height="800"
+             Width="1280"
+             x:Class="AutoTf.TabletOS.Avalonia.Views.TrainLogsViewer">
+    <Grid>
+        <Image Source="../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="700" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            
+            <ComboBox SelectionChanged="DateBox_OnSelectionChanged" Name="DateBox" Grid.Row="1" HorizontalAlignment="Left" Margin="20, 10" Width="200" MaxDropDownHeight="300"></ComboBox>
+            
+            <ListBox SelectionMode="Single" SelectionChanged="LogViewerBox_OnSelectionChanged" Name="LogViewerBox" Grid.Row="1" CornerRadius="15" Margin="20, 50, 20, 10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            
+            <Button Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="18" Click="BackButton_Click" Margin="20" Foreground="Black" BorderBrush="Black">Back</Button>
+        </Grid>
+    </Grid>
+</UserControl>

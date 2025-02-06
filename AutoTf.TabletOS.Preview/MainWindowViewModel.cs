@@ -1,4 +1,5 @@
 ﻿using AutoTf.TabletOS.Avalonia.Views;
+using AutoTf.TabletOS.Models.Fakes;
 using Avalonia.Controls;
 using ReactiveUI;
 
@@ -16,6 +17,6 @@ public partial class MainWindowViewModel : ReactiveObject
 
 	public MainWindowViewModel()
 	{
-		ActiveView = new TrainGalleryView();
+		ActiveView = new TrainLogsViewer(new FakeTrainInfo());
 	}
 }

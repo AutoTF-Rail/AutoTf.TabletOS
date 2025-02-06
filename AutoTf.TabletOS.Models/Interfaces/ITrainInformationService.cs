@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace AutoTf.TabletOS.Models.Interfaces;
 
 public interface ITrainInformationService
@@ -13,4 +15,6 @@ public interface ITrainInformationService
 	public Task<bool> PostRestart();
 	public Task<bool> PostStartStream();
 	public Task<bool> PostStopStream();
+	public Task<string[]?> GetLogDates();
+	public Task<string[]?> GetLogs(string date);
 }
