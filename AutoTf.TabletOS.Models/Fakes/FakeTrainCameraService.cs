@@ -10,4 +10,9 @@ public class FakeTrainCameraService : ITrainCameraService
 	{
 		throw new NotImplementedException();
 	}
+
+	public Task StartListeningForCameras()
+	{
+		throw new NotImplementedException();
+	}
 }
