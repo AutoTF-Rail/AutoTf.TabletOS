@@ -57,17 +57,8 @@ public partial class MainView : UserControl
 	{
 		using OathSession session = new OathSession(device);
 
-		Credential? atfCred = null;
+		Credential? atfCred = session.GetCredentials().FirstOrDefault(c => c.Issuer == "AutoTF");
 		
-		foreach (Credential credential in session.GetCredentials())
-		{
-			if (credential.Issuer == "AutoTF")
-			{
-				atfCred = credential;
-				break;
-			}
-		}
-
 		if (atfCred is not null)
 		{
 			Statics.YubiCode = session.CalculateCredential(atfCred).Value!;
