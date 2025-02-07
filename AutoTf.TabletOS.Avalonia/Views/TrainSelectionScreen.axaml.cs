@@ -28,7 +28,8 @@ public partial class TrainSelectionScreen : UserControl
 		#if DEBUG
 		_nearbyTrains.Add(new TrainAd()
 		{
-			TrainName = "Meow"
+			TrainName = "ExampleTrain", 
+			TrainNum = "783-938"
 		});
 		NearbyLoadingArea.IsVisible = false;
 		LoadingArea.IsVisible = false;
@@ -53,14 +54,18 @@ public partial class TrainSelectionScreen : UserControl
 		return;
 		_logger.Log("Not running bluetooth scan due to not being in RELEASE");
 #endif
-		RunBridgeScan();
+		RunTrainScan();
 	}
 
 	private void LoadInternetTrains()
 	{
 		if (NetworkManager.IsInternetAvailable())
 		{
-			// Show text that trains aren't available due to no internet
+			Dispatcher.UIThread.Invoke(() => OtherTrainsLoadingText.Text = "No trains found.");
+		}
+		else
+		{
+			Dispatcher.UIThread.Invoke(() => OtherTrainsLoadingText.Text = "No Internet Connection.");
 		}
 	}
 
@@ -74,7 +79,7 @@ public partial class TrainSelectionScreen : UserControl
 		OtherTrains.SelectedItem = null;
 	}
 
-	private async Task RunBridgeScan()
+	private async Task RunTrainScan()
 	{
 		try
 		{
@@ -153,9 +158,10 @@ public partial class TrainSelectionScreen : UserControl
 			RescanButton.IsVisible = false;
 			NearbyLoadingArea.IsVisible = true;
 		});
+		
 		await Task.Delay(50);
 		
-		await RunBridgeScan();
+		await RunTrainScan();
 		
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{

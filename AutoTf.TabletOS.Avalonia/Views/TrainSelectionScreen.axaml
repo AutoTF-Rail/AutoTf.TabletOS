@@ -9,7 +9,7 @@
     <Grid>
         <TextBlock Margin="50, 40" Foreground="Red" FontSize="25" Name="ErrorBox" HorizontalAlignment="Stretch"></TextBlock>
         
-        <Grid Margin="40, 70, 40, 40">
+        <Grid Margin="40, 40, 40, 40">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition />
@@ -123,8 +123,8 @@
                         </ListBox>
                         <Border Grid.Row="1" Name="OtherLoadingArea">
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                <Border CornerRadius="0, 0, 0, 20" Background="Black" Opacity=".5" />
-                                <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center">Checking for Internet...</TextBlock>
+                                <Border CornerRadius="0, 0, 20, 0" Background="Black" Opacity=".5" />
+                                <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Name="OtherTrainsLoadingText">Checking for Internet...</TextBlock>
                             </Grid>
                         </Border>
                     </Grid>

@@ -17,6 +17,6 @@ public partial class MainWindowViewModel : ReactiveObject
 
 	public MainWindowViewModel()
 	{
-		ActiveView = new TrainLogsViewer(new FakeTrainInfo());
+		ActiveView = new TrainSelectionScreen();
 	}
 }

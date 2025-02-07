@@ -15,7 +15,7 @@ public partial class MainView : UserControl
 {
 	private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
 	private YubiKeyDeviceListener _listener;
-	private bool _isHandlingKey = false;
+	private bool _isHandlingKey;
 	
 	public MainView()
 	{
@@ -45,22 +45,16 @@ public partial class MainView : UserControl
 		_isHandlingKey = true;
 		Dispatcher.UIThread.Invoke(() =>
 		{
-			LoadingName.Text = "Detected key";
+			LoadingName.Text = "Detected key.";
 			LoadingArea.IsVisible = true;
 		});
-		Thread.Sleep(50);
-		Task.Run(GetKey, _cancelTokenSource.Token);
+		Thread.Sleep(25);
+		Task.Run(() => GetKey(e.Device), _cancelTokenSource.Token);
+		
 	}
 
-	private bool GetKey()
+	private bool GetKey(IYubiKeyDevice device)
 	{
-		IYubiKeyDevice? device = YubiKeyDevice.FindAll().FirstOrDefault();
-		if (device == null)
-		{
-			Dispatcher.UIThread.Invoke(() => LoadingArea.IsVisible = false);
-			return false;
-		}
-
 		using OathSession session = new OathSession(device);
 		
 		foreach (Credential credential in session.GetCredentials())
