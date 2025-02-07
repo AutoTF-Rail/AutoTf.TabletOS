@@ -53,27 +53,30 @@ public partial class MainView : UserControl
 		
 	}
 
-	private bool GetKey(IYubiKeyDevice device)
+	private void GetKey(IYubiKeyDevice device)
 	{
 		using OathSession session = new OathSession(device);
+
+		Credential? atfCred = null;
 		
 		foreach (Credential credential in session.GetCredentials())
 		{
-			if (credential.Issuer != "AutoTF")
+			if (credential.Issuer == "AutoTF")
 			{
-				Dispatcher.UIThread.Invoke(() => LoadingArea.IsVisible = false);
-				return false;
+				atfCred = credential;
+				break;
 			}
-			
-			Statics.YubiCode = session.CalculateCredential(credential).Value!;
+		}
+
+		if (atfCred is not null)
+		{
+			Statics.YubiCode = session.CalculateCredential(atfCred).Value!;
 			Statics.YubiSerial = device.SerialNumber!.Value;
 			Statics.YubiTime = DateTime.UtcNow;
 			ChangeScreen();
-			return true;
 		}
 
 		Dispatcher.UIThread.Invoke(() => LoadingArea.IsVisible = false);
-		return false;
 	}
 
 	private void ChangeScreen()

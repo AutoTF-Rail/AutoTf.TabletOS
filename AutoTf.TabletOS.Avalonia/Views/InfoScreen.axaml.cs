@@ -28,7 +28,7 @@ public partial class InfoScreen : UserControl
 	private void Initialize()
 	{
 		VersionBox.Text = "Version: " + Program.GetGitVersion();
-		UpdateButton.IsVisible = NetworkManager.IsInternetAvailable();
+		UpdateButton.IsEnabled = NetworkManager.IsInternetAvailable();
 	}
 
 	private void Button_OnClick(object? sender, RoutedEventArgs e)
