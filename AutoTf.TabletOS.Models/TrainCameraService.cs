@@ -75,7 +75,7 @@ public class TrainCameraService : ITrainCameraService
 		UdpClient udpClient = new UdpClient(udpPort);
         _udpClients.Add(udpClient);
 
-        while (_cancellationTokenSource.IsCancellationRequested)
+        while (!_cancellationTokenSource.IsCancellationRequested)
         {
 	        try
 	        {
@@ -120,7 +120,7 @@ public class TrainCameraService : ITrainCameraService
 	        }
         }
 		
-        _logger.Log("Stopping stream.");
+        _logger.Log("Stopping stream: Cancel requested: " + _cancellationTokenSource.IsCancellationRequested);
         _udpClients[cameraIndex].Dispose();
 	    await PostStopStream(cameraIndex);
 	}
