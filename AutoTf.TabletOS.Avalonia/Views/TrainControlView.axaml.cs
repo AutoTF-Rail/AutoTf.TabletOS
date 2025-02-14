@@ -200,6 +200,7 @@ public partial class TrainControlView : UserControl
 			// Stop streams
 			// Disconnect from wifi
 			// Change screen
+			_logger.Log("Chaning to train selection by request.");
 			await Dispatcher.UIThread.InvokeAsync(() =>
 			{
 				LoadingName.Text = "Disconnecting...";

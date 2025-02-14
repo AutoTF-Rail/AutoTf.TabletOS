@@ -42,7 +42,8 @@ public class NetworkManager
 	
 	public string? EstablishConnection(string name, bool isTrain)
 	{
-		_logger.Log("Establishing connection via connection ID: " + Statics.TrainConnectionId);
+		// TODO: Why doesn't this work? _logger is null
+		// _logger.Log("Establishing connection via connection ID: " + Statics.TrainConnectionId);
 		CommandExecuter.ExecuteSilent($"nmcli c add type wifi con-name CentralBridge-{Statics.TrainConnectionId} ifname wlan0 ssid {name}", true);
 		CommandExecuter.ExecuteSilent($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.key-mgmt wpa-psk", true);
 		CommandExecuter.ExecuteSilent($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.psk CentralBridgePW", true);

@@ -23,6 +23,7 @@ public class TrainCameraService : ITrainCameraService
 	
 	public async void DisconnectStreams()
 	{
+		_logger.Log("TCS: Stream disconnect was requested.");
 		await _cancellationTokenSource.CancelAsync();
 	}
 
@@ -76,41 +77,50 @@ public class TrainCameraService : ITrainCameraService
 
         while (_cancellationTokenSource.IsCancellationRequested)
         {
-            UdpReceiveResult result = await udpClient.ReceiveAsync();
-            byte[] frameData = result.Buffer;
+	        try
+	        {
+	            UdpReceiveResult result = await udpClient.ReceiveAsync();
+	            byte[] frameData = result.Buffer;
 
-            if (frameData.Length == 0)
-            {
-                _logger.Log($"TCS: Received empty frame data from camera {cameraIndex}.");
-                Thread.Sleep(25);
-                continue;
-            }
-            
-            using (MemoryStream ms = new MemoryStream(frameData))
-            {
-                if (ms.Length > 0)
-                {
-                    try
-                    {
-                        Bitmap? oldBitmap = _currentBitmaps[cameraIndex];
-                        
-                        _currentBitmaps[cameraIndex] = new Bitmap(ms);
-                        
-						NewFrameReceived?.Invoke(cameraIndex, _currentBitmaps[cameraIndex]!);
+	            if (frameData.Length == 0)
+	            {
+	                _logger.Log($"TCS: Received empty frame data from camera {cameraIndex}.");
+	                Thread.Sleep(25);
+	                continue;
+	            }
+	            
+	            using (MemoryStream ms = new MemoryStream(frameData))
+	            {
+	                if (ms.Length > 0)
+	                {
+	                    try
+	                    {
+	                        Bitmap? oldBitmap = _currentBitmaps[cameraIndex];
+	                        
+	                        _currentBitmaps[cameraIndex] = new Bitmap(ms);
+	                        
+							NewFrameReceived?.Invoke(cameraIndex, _currentBitmaps[cameraIndex]!);
 
-                        if (oldBitmap != null && oldBitmap != _currentBitmaps[cameraIndex])
-                        {
-                        	oldBitmap.Dispose();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Log($"TCS: Error creating bitmap: {ex.Message}");
-                    }
-                }
-            }
+	                        if (oldBitmap != null && oldBitmap != _currentBitmaps[cameraIndex])
+	                        {
+                        		oldBitmap.Dispose();
+	                        }
+	                    }
+	                    catch (Exception ex)
+	                    {
+	                        _logger.Log($"TCS: Error creating bitmap: {ex.Message}");
+	                    }
+	                }
+	            }
+	        }
+	        catch (Exception e)
+	        {
+		        _logger.Log($"TCS: Error during stream receival:");
+		        _logger.Log(e.ToString());
+	        }
         }
 		
+        _logger.Log("Stopping stream.");
         _udpClients[cameraIndex].Dispose();
 	    await PostStopStream(cameraIndex);
 	}
