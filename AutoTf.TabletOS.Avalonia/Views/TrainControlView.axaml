@@ -392,6 +392,7 @@
                                         <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="ShutdownTrain_Click">Shutdown</Button>
                                         <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="RestartTrain_Click">Restart</Button>
                                         <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="UpdateTrain_Click">Update</Button>
+                                        <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="SetDateButton_Click">Set Date</Button>
                                         <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="LogsButton_Click">Logs</Button>
                                     </DockPanel>
                                 </StackPanel>

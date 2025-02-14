@@ -289,6 +289,11 @@ public partial class TrainControlView : UserControl
 		TrainLogsViewer logsView = new TrainLogsViewer(_trainInfo);
 		logsView.Show(RootGrid);
 	}
-
+	
+	private void SetDateButton_Click(object? sender, RoutedEventArgs e)
+	{
+		TrainDateSetter dateSetter = new TrainDateSetter(_trainInfo);
+		dateSetter.Show(RootGrid);
+	}
 	#endregion
 }

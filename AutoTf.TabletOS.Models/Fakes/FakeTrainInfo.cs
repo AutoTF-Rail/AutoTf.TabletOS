@@ -90,4 +90,9 @@ public class FakeTrainInfo : ITrainInformationService
 			"22.02.2024",
 		})!;
 	}
+
+	public Task<bool> SetDate(DateTime date)
+	{
+		return Task.FromResult<bool>(true);
+	}
 }

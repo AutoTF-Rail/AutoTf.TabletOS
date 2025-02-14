@@ -16,4 +16,5 @@ public interface ITrainInformationService
 	public Task<bool> PostRestart();
 	public Task<string[]?> GetLogDates();
 	public Task<string[]?> GetLogs(string date);
+	public Task<bool> SetDate(DateTime date);
 }

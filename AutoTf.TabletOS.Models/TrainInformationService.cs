@@ -301,7 +301,7 @@ public class TrainInformationService : ITrainInformationService
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.Log("TIS:Could not send restart signal:");
+				_logger.Log("TIS: Could not send restart signal:");
 				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
 				return false;
 			}
@@ -310,7 +310,37 @@ public class TrainInformationService : ITrainInformationService
 		}
 		catch (Exception ex)
 		{
-			_logger.Log("TIS:Could not send restart signal:");
+			_logger.Log("TIS: Could not send restart signal:");
+			_logger.Log(ex.ToString());
+			return false;
+		}
+	}
+
+	public async Task<bool> SetDate(DateTime date)
+	{
+		try
+		{
+			string url = "http://192.168.1.1/system/setdate";
+
+			using HttpClient client = new HttpClient();
+			client.Timeout = TimeSpan.FromSeconds(5);
+			
+			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
+			
+			HttpResponseMessage response = await client.PostAsync(url, JsonContent.Create(date));;
+			
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.Log("TIS: Could not set date on train:");
+				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
+				return false;
+			}
+
+			return true;
+		}
+		catch (Exception ex)
+		{
+			_logger.Log("TIS: Could not set date on train:");
 			_logger.Log(ex.ToString());
 			return false;
 		}
