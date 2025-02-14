@@ -17,6 +17,6 @@ public partial class MainWindowViewModel : ReactiveObject
 
 	public MainWindowViewModel()
 	{
-		ActiveView = new TrainSelectionScreen();
+		ActiveView = new TopBar();
 	}
 }

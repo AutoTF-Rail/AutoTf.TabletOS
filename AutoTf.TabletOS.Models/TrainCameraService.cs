@@ -1,6 +1,7 @@
 using System.Net.Sockets;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Interfaces;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 
 namespace AutoTf.TabletOS.Models;
@@ -12,7 +13,6 @@ public class TrainCameraService : ITrainCameraService
 	private readonly ITrainInformationService _trainInfo = Statics.TrainInformationService;
 
 	private List<UdpClient> _udpClients = new List<UdpClient>();
-	private bool _canListenForStreams = true;
 
 	private List<Bitmap?> _currentBitmaps = new List<Bitmap?>();
 
@@ -39,12 +39,12 @@ public class TrainCameraService : ITrainCameraService
 			int? cameraCount = await _trainInfo.GetCameraCount();
 			if (cameraCount == null)
 			{
+				Statics.Notifications.Add(new Notification("Could not find any cameras.", Colors.Red));
 				_logger.Log("TCS: Camera count was null.");
 				return;
 			}
-
+			
 			_logger.Log($"TCS: Found {cameraCount} cameras.");
-			// TODO: Report failure for count
 
 			for (int i = 0; i < cameraCount; i++)
 			{
@@ -55,6 +55,7 @@ public class TrainCameraService : ITrainCameraService
 		}
 		catch (Exception ex)
 		{
+			Statics.Notifications.Add(new Notification("An error occured while starting up the camera connection.", Colors.Red));
 			_logger.Log("TCS: Error while getting UDP stream:");
 			_logger.Log(ex.ToString());
 		}
@@ -65,10 +66,7 @@ public class TrainCameraService : ITrainCameraService
 		int udpPort = 1234 + cameraIndex;
 		
 		if (!await PostStartStream(udpPort, cameraIndex))
-		{
 			return;
-			// TODO: Show error that it failed to start the stream
-		}
 		
 		_logger.Log($"TCS: Listening for images for camera {cameraIndex} on port {udpPort}");
 		_currentBitmaps.Add(null);
@@ -131,6 +129,7 @@ public class TrainCameraService : ITrainCameraService
 
 				if (!response.IsSuccessStatusCode)
 				{
+					Statics.Notifications.Add(new Notification($"Could not start the stream for camera {cameraIndex}.", Colors.Red));
 					_logger.Log($"TCS: {response.StatusCode}: Could not start stream:");
 					_logger.Log(await response.Content.ReadAsStringAsync());
 				}
@@ -140,6 +139,7 @@ public class TrainCameraService : ITrainCameraService
 		}
 		catch (Exception e)
 		{
+			Statics.Notifications.Add(new Notification($"Could not start the stream for camera {cameraIndex}.", Colors.Red));
 			_logger.Log("TCS: Failed to start stream:");
 			_logger.Log(e.ToString());
 		}
@@ -166,6 +166,7 @@ public class TrainCameraService : ITrainCameraService
 		}
 		catch (Exception e)
 		{
+			Statics.Notifications.Add(new Notification($"Could not stop the stream for camera {cameraIndex}.", Colors.Red));
 			_logger.Log("TCS: Error while stopping stream:");
 			_logger.Log(e.ToString());
 		}

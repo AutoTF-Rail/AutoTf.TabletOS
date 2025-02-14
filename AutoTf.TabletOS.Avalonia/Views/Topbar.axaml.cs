@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -28,7 +29,11 @@ public partial class TopBar : UserControl
 
 	public void Initialize()
 	{
+		NotificationsBox.ItemsSource = Statics.Notifications;
 		QuickMenuGrid.IsVisible = false;
+		Statics.Notifications.CollectionChanged +=
+			(_, _) => NotificationsNumber.Text = new string('•', Statics.Notifications.Count);
+		
 #if RELEASE
 		_brightness = int.Parse(File.ReadAllText("/sys/class/backlight/10-0045/brightness"));
 #endif
@@ -39,7 +44,7 @@ public partial class TopBar : UserControl
 		{
 			Interval = TimeSpan.FromSeconds(1) 
 		};
-		_timer.Tick += UpdateClock; 
+		_timer.Tick += UpdateClock;
 		_timer.Start();
 
 		UpdateClock(null, null);
@@ -49,8 +54,10 @@ public partial class TopBar : UserControl
 		Bluber.Text = DateTime.Now.ToString("dd.MM.yy HH:mm:ss");
 		if (QuickMenuGrid.IsVisible)
 		{
+			#if RELEASE
 			CpuUsage.Text = float.Round((await Statics.ProcessReader.GetCpuUsageAsync()), MidpointRounding.ToEven).ToString(CultureInfo.InvariantCulture) + "%";
 			RamUsage.Text = float.Round(Statics.ProcessReader.GetUsedMemory()) + "MB/" + float.Round(Statics.ProcessReader.GetTotalMemory()) + "MB";
+			#endif
 		}
 	}
 
@@ -112,5 +119,16 @@ public partial class TopBar : UserControl
 			viewModel.ActiveView = new InfoScreen(viewModel.ActiveView);
 		}
 		// else ErrorBox.Text = "No Context";
+	}
+
+	private void NotificationDiscard_Click(object? sender, RoutedEventArgs e)
+	{
+		Notification notification = (Notification)((Button)sender!).DataContext!;
+		Statics.Notifications.Remove(notification);
+	}
+
+	private void NotificationsBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+	{
+		NotificationsBox.SelectedItem = null;
 	}
 }

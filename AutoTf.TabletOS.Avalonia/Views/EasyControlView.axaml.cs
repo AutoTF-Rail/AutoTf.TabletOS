@@ -1,12 +1,8 @@
-using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using AutoTf.TabletOS.Models;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using TaskCompletionSource = System.Threading.Tasks.TaskCompletionSource;
 
@@ -14,8 +10,8 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class EasyControlView : UserControl
 {
-	private TaskCompletionSource _taskCompletionSource;
-	private Grid _parent;
+	private TaskCompletionSource _taskCompletionSource = null!;
+	private Grid _parent = null!;
 	
 	public EasyControlView()
 	{
@@ -45,7 +41,7 @@ public partial class EasyControlView : UserControl
 		
 		int row = (100 - int.Parse(SpeedSlider.Value.ToString(CultureInfo.InvariantCulture))) / 5;
 		
-		int visual = 100 - (row * 200 / 20);
+		int visual = 100 - row * 200 / 20;
 
 		if (row != 10)
 		{
@@ -76,8 +72,8 @@ public partial class EasyControlView : UserControl
 	
 	public (int red, int green, int blue) CalculateColorBasedOnVisual(int visual)
 	{
-		int red = 0;
-		int green = 0;
+		int red;
+		int green;
 
 		if (visual > 0)
 		{

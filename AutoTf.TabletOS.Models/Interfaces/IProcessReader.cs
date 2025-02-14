@@ -1,3 +1,5 @@
+using AutoTf.TabletOS.Models.TaskManager;
+
 namespace AutoTf.TabletOS.Models.Interfaces;
 
 public interface IProcessReader

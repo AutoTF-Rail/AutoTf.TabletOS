@@ -17,7 +17,7 @@ public class TrainControlService : ITrainControlService
 			string url = "http://192.168.1.1/control/levercount";
 
 			using HttpClient client = new HttpClient();
-			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
 			
 			HttpResponseMessage response = await client.GetAsync(url);
 			
@@ -27,7 +27,8 @@ public class TrainControlService : ITrainControlService
 		}
 		catch (Exception ex)
 		{
-			// TODO: Log
+			_logger.Log("TCS: Could not get lever count.");
+			_logger.Log(ex.ToString());
 			return -1;
 		}
 	}
@@ -39,7 +40,7 @@ public class TrainControlService : ITrainControlService
 			string url = "http://192.168.1.1/control/leverPosition";
 
 			using HttpClient client = new HttpClient();
-			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
 			
 			HttpResponseMessage response = await client.GetAsync(url);
 			
@@ -49,7 +50,8 @@ public class TrainControlService : ITrainControlService
 		}
 		catch (Exception ex)
 		{
-			// TODO: Log
+			_logger.Log($"TCS: Could not get lever type for lever position for lever {leverIndex}:");
+			_logger.Log(ex.ToString());
 			return -1;
 		}
 	}
@@ -61,7 +63,7 @@ public class TrainControlService : ITrainControlService
 			string url = "http://192.168.1.1/control/leverType";
 
 			using HttpClient client = new HttpClient();
-			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
 			
 			HttpResponseMessage response = await client.GetAsync(url);
 			
@@ -71,7 +73,8 @@ public class TrainControlService : ITrainControlService
 		}
 		catch (Exception ex)
 		{
-			// TODO: Log
+			_logger.Log($"TCS: Could not get lever type for lever {leverIndex}:");
+			_logger.Log(ex.ToString());
 			return LeverType.Unknown;
 		}
 	}
@@ -80,11 +83,12 @@ public class TrainControlService : ITrainControlService
 	{
 		try
 		{
+			// TODO: Reverse UI change if this fails/request the current state on the server to update the UI again
 			string url = "http://192.168.1.1/control/setLever";
 
 			using HttpClient client = new HttpClient();
 			
-			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
 
 			LeverSetModel leverModel = new LeverSetModel()
 			{
@@ -96,7 +100,7 @@ public class TrainControlService : ITrainControlService
 
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.Log("Could not set lever:");
+				_logger.Log("TCS: Could not set lever:");
 				_logger.Log(response.StatusCode + ": " + await response.Content.ReadAsStringAsync());
 
 				return false;
@@ -106,8 +110,8 @@ public class TrainControlService : ITrainControlService
 		}
 		catch (Exception ex)
 		{
-			_logger.Log("Error while sending lever set request:");
-			_logger.Log(ex.Message);
+			_logger.Log($"TCS: Error while sending lever set request for lever {leverIndex} at {leverPercentage}%:");
+			_logger.Log(ex.ToString());
 			return false;
 		}
 	}

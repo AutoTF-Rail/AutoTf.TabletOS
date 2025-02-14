@@ -11,6 +11,7 @@ using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Threading;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
@@ -125,8 +126,9 @@ public partial class TrainSelectionScreen : UserControl
 		}
 		catch (Exception e)
 		{
-			_logger.Log("------------------Scan error:");
+			_logger.Log("Train scan error:");
 			_logger.Log(e.Message);
+			Statics.Notifications.Add(new Notification("An error occured while scanning for trains nearby.", Colors.Red));
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				if (NearbyLoadingArea.IsVisible)
@@ -183,7 +185,6 @@ public partial class TrainSelectionScreen : UserControl
 
 		Statics.TrainConnectionId = Statics.GenerateRandomString();
 
-		// TODO: set this: export YUBICO_LOG_LEVEL=ERROR
 		string? connOutput = _networkManager.EstablishConnection(trainAd.TrainName, true);
 
 		if (connOutput != null)
@@ -192,9 +193,10 @@ public partial class TrainSelectionScreen : UserControl
 			_logger.Log(connOutput);
 			Dispatcher.UIThread.Invoke(() =>
 			{
-				ErrorBox.Text = "Could not connect to train. Please move closer and retry.";
+				// ErrorBox.Text = "Could not connect to train. Please move closer and retry.";
 				LoadingArea.IsVisible = false;
 			});
+			Statics.Notifications.Add(new Notification("Could not connect to train. Please try again.", Colors.Yellow));
 			return;
 		}
 
@@ -207,7 +209,7 @@ public partial class TrainSelectionScreen : UserControl
 		
 		try
 		{
-			string url = "http://192.168.1.1/information/login?macAddr=" + CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd() + "&serialNumber=" + Statics.YubiSerial + "&code=" + Statics.YubiCode + "&timestamp=" + Statics.YubiTime.ToString("yyyy-MM-ddTHH:mm:ss");
+			string url = "http://192.168.1.1/information/login?macAddr=" + Statics.MacAddress + "&serialNumber=" + Statics.YubiSerial + "&code=" + Statics.YubiCode + "&timestamp=" + Statics.YubiTime.ToString("yyyy-MM-ddTHH:mm:ss");
 
 			using HttpClient loginClient = new HttpClient();
 			
@@ -229,9 +231,10 @@ public partial class TrainSelectionScreen : UserControl
 			_networkManager.ShutdownConnection();
 			Dispatcher.UIThread.Invoke(() =>
 			{
-				ErrorBox.Text = "Could not login. " + ex.Message;
+				// ErrorBox.Text = "Could not login. " + ex.Message;
 				LoadingArea.IsVisible = false;
 			});
+			Statics.Notifications.Add(new Notification("Could not login to train. Please try again.", Colors.Red));
 		}
 	}
 }

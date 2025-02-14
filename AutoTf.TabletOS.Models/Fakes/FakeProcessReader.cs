@@ -1,4 +1,5 @@
 using AutoTf.TabletOS.Models.Interfaces;
+using AutoTf.TabletOS.Models.TaskManager;
 
 namespace AutoTf.TabletOS.Models.Fakes;
 

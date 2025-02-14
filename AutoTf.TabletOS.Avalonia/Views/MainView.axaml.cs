@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Threading;
 using Yubico.YubiKey;
 using Yubico.YubiKey.Oath;
@@ -66,6 +67,8 @@ public partial class MainView : UserControl
 			Statics.YubiTime = DateTime.UtcNow;
 			ChangeScreen();
 		}
+		else
+			Statics.Notifications.Add(new Notification("Could not find AutoTF Credential on yubikey.", Colors.Yellow));
 
 		Dispatcher.UIThread.Invoke(() => LoadingArea.IsVisible = false);
 	}

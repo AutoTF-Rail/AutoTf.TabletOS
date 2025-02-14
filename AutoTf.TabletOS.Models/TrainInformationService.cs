@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Net.Http.Json;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Interfaces;
@@ -27,7 +26,7 @@ public class TrainInformationService : ITrainInformationService
 		catch (Exception ex)
 		{
 			_logger.Log("TIS: Could not get camera count:");
-			_logger.Log(ex.Message);
+			_logger.Log(ex.ToString());
 			return null;
 		}
 	}
@@ -52,8 +51,7 @@ public class TrainInformationService : ITrainInformationService
 		catch (Exception ex)
 		{
 			_logger.Log("TIS: Could not get EVU Name:");
-			_logger.Log(ex.Message);
-			// TODO: Log
+			_logger.Log(ex.ToString());
 			return null;
 		}
 	}
@@ -78,8 +76,7 @@ public class TrainInformationService : ITrainInformationService
 		catch (Exception ex)
 		{
 			_logger.Log("TIS: Could not get train Id:");
-			_logger.Log(ex.Message);
-			// TODO: Log
+			_logger.Log(ex.ToString());
 			return null;
 		}
 	}
@@ -104,8 +101,7 @@ public class TrainInformationService : ITrainInformationService
 		catch (Exception ex)
 		{
 			_logger.Log("TIS: Could not get train name:");
-			_logger.Log(ex.Message);
-			// TODO: Log
+			_logger.Log(ex.ToString());
 			return null;
 		}
 	}
@@ -130,8 +126,7 @@ public class TrainInformationService : ITrainInformationService
 		catch (Exception ex)
 		{
 			_logger.Log("TIS: Could not get last sync try:");
-			_logger.Log(ex.Message);
-			// TODO: Log
+			_logger.Log(ex.ToString());
 			return null;
 		}
 	}
@@ -156,8 +151,7 @@ public class TrainInformationService : ITrainInformationService
 		catch (Exception ex)
 		{
 			_logger.Log("TIS: Could not get version:");
-			_logger.Log(ex.Message);
-			// TODO: Log
+			_logger.Log(ex.ToString());
 			return null;
 		}
 	}
@@ -182,8 +176,7 @@ public class TrainInformationService : ITrainInformationService
 		catch (Exception ex)
 		{
 			_logger.Log("TIS: Could not get log dates:");
-			_logger.Log(ex.Message);
-			// TODO: Log
+			_logger.Log(ex.ToString());
 			return null;
 		}
 	}
@@ -208,8 +201,7 @@ public class TrainInformationService : ITrainInformationService
 		catch (Exception ex)
 		{
 			_logger.Log($"TIS: Could not get logs for {date}:");
-			_logger.Log(ex.Message);
-			// TODO: Log
+			_logger.Log(ex.ToString());
 			return null;
 		}
 	}
@@ -232,8 +224,7 @@ public class TrainInformationService : ITrainInformationService
 		catch (Exception ex)
 		{
 			_logger.Log("TIS: Could not get next save date:");
-			_logger.Log(ex.Message);
-			// TODO: Log
+			_logger.Log(ex.ToString());
 			return null;
 		}
 	}
@@ -246,8 +237,8 @@ public class TrainInformationService : ITrainInformationService
 
 			using HttpClient client = new HttpClient();
 			client.Timeout = TimeSpan.FromSeconds(5);
-			// TODO: Cache mac address
-			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			
+			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
 
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
 			if (!response.IsSuccessStatusCode)
@@ -261,8 +252,8 @@ public class TrainInformationService : ITrainInformationService
 		}
 		catch (Exception ex)
 		{
-			_logger.Log("Could not send update signal:");
-			_logger.Log(ex.Message);
+			_logger.Log("TIS:Could not send update signal:");
+			_logger.Log(ex.ToString());
 			return false;
 		}
 	}
@@ -275,13 +266,13 @@ public class TrainInformationService : ITrainInformationService
 
 			using HttpClient client = new HttpClient();
 			client.Timeout = TimeSpan.FromSeconds(5);
-			// TODO: Cache mac address
-			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			
+			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
 
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.Log("Could not send shutdown signal:");
+				_logger.Log("TIS: Could not send shutdown signal:");
 				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
 				return false;
 			}
@@ -290,8 +281,8 @@ public class TrainInformationService : ITrainInformationService
 		}
 		catch (Exception ex)
 		{
-			_logger.Log("Could not send shutdown signal:");
-			_logger.Log(ex.Message);
+			_logger.Log("TIS:Could not send shutdown signal:");
+			_logger.Log(ex.ToString());
 			return false;
 		}
 	}
@@ -304,13 +295,13 @@ public class TrainInformationService : ITrainInformationService
 
 			using HttpClient client = new HttpClient();
 			client.Timeout = TimeSpan.FromSeconds(5);
-			// TODO: Cache mac address
-			client.DefaultRequestHeaders.Add("macAddr", CommandExecuter.ExecuteCommand("cat /sys/class/net/wlan0/address").TrimEnd());
+			
+			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
 
 			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
 			if (!response.IsSuccessStatusCode)
 			{
-				_logger.Log("Could not send restart signal:");
+				_logger.Log("TIS:Could not send restart signal:");
 				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
 				return false;
 			}
@@ -319,8 +310,8 @@ public class TrainInformationService : ITrainInformationService
 		}
 		catch (Exception ex)
 		{
-			_logger.Log("Could not send restart signal:");
-			_logger.Log(ex.Message);
+			_logger.Log("TIS:Could not send restart signal:");
+			_logger.Log(ex.ToString());
 			return false;
 		}
 	}

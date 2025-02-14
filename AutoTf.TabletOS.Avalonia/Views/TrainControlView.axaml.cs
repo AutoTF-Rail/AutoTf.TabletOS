@@ -13,6 +13,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
+using DynamicData;
 using Timer = System.Timers.Timer;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
@@ -60,6 +61,7 @@ public partial class TrainControlView : UserControl
 		{
 			if (_easyControlView != null)
 				_easyControlView.CameraViewBig.Source = bitmap;
+			
 			PreviewImage.Source = bitmap;
 		});
 	}
@@ -71,6 +73,7 @@ public partial class TrainControlView : UserControl
 			await Dispatcher.UIThread.InvokeAsync(() => ControlsUnavailableSection.IsVisible = false);
 			await Dispatcher.UIThread.InvokeAsync(() => EmergencyStopButton.IsEnabled = true);
 		}
+		// TODO: Doesnt this need to be in the upper if too?
 		_combinedThrottlePosition = await _trainControl.GetLeverPosition(0);
 		
 		await Dispatcher.UIThread.InvokeAsync(() => CombinedThrottlePercentage.Text = _combinedThrottlePosition.ToString(CultureInfo.InvariantCulture));
@@ -87,8 +90,8 @@ public partial class TrainControlView : UserControl
 		
 		if (evuName == null || trainId == null || trainName == null || lastTrainSync == null || trainVersion == null)
 		{
-			// TODO: Disconnect
-			// TODO: Log
+			Statics.Notifications.Add(new Notification("Could not get train information data. Please view the logs for more information.", Colors.Red));
+			ChangeToSelectionScreen();
 			return;
 		}
 
@@ -117,6 +120,7 @@ public partial class TrainControlView : UserControl
 		if (nextSave == null)
 		{
 			ChangeToSelectionScreen();
+			Statics.Notifications.Add(new Notification("Could not get next train save date.", Colors.Yellow));
 			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Unknown");
 			return;
 		}
@@ -158,6 +162,7 @@ public partial class TrainControlView : UserControl
 		{
 			_logger.Log("Error during control init.");
 			_logger.Log(e.Message);
+			Statics.Notifications.Add(new Notification("Disconnected: Could not initialize controls.", Colors.Red));
 			ChangeToSelectionScreen();
 		}
 	}
@@ -218,6 +223,7 @@ public partial class TrainControlView : UserControl
 		{
 			_logger.Log("Could not change to selection screen:");
 			_logger.Log(e.ToString());
+			Statics.Notifications.Add(new Notification("Could not change into train selection screen. Please restart the device.", Colors.Red));
 		}
 	}
 
