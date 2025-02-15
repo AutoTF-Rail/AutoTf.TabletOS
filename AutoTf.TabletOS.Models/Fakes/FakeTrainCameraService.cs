@@ -15,4 +15,9 @@ public class FakeTrainCameraService : ITrainCameraService
 	{
 		throw new NotImplementedException();
 	}
+
+	public void Dispose()
+	{
+		// TODO release managed resources here
+	}
 }

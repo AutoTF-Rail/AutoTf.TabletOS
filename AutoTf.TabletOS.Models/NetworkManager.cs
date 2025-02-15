@@ -44,12 +44,14 @@ public class NetworkManager
 	{
 		// TODO: Why doesn't this work? _logger is null
 		// _logger.Log("Establishing connection via connection ID: " + Statics.TrainConnectionId);
+		CommandExecuter.ExecuteSilent($"nmcli radio wifi off", true);
+		CommandExecuter.ExecuteSilent($"nmcli radio wifi on", true);
 		CommandExecuter.ExecuteSilent($"nmcli c add type wifi con-name CentralBridge-{Statics.TrainConnectionId} ifname wlan0 ssid {name}", true);
 		CommandExecuter.ExecuteSilent($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.key-mgmt wpa-psk", true);
 		CommandExecuter.ExecuteSilent($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.psk CentralBridgePW", true);
 		CommandExecuter.ExecuteSilent($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} connection.autoconnect no", true);
 		
-		string output = CommandExecuter.ExecuteCommand($"nmcli con up CentralBridge-{Statics.TrainConnectionId}");
+		string output = CommandExecuter.ExecuteCommand($"timeout 15s nmcli con up CentralBridge-{Statics.TrainConnectionId}");
 
 		if (output.Contains("Connection successfully activated"))
 		{

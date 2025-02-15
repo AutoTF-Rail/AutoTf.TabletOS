@@ -13,6 +13,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
+using DynamicData;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -174,33 +175,42 @@ public partial class TrainSelectionScreen : UserControl
 
 	private async void TrainNearby_Click(object? sender, RoutedEventArgs e)
 	{
-		await Dispatcher.UIThread.InvokeAsync(() =>
+		try
 		{
-			LoadingArea.IsVisible = true;
-			LoadingName.Text = "Trying to connect to train...";
-		});
-		await Task.Delay(250);
-		
-		TrainAd trainAd = (TrainAd)((Button)sender!).DataContext!;
-
-		Statics.TrainConnectionId = Statics.GenerateRandomString();
-
-		string? connOutput = _networkManager.EstablishConnection(trainAd.TrainName, true);
-
-		if (connOutput != null)
-		{
-			_logger.Log("Connection error:");
-			_logger.Log(connOutput);
-			Dispatcher.UIThread.Invoke(() =>
+			await Dispatcher.UIThread.InvokeAsync(() =>
 			{
-				// ErrorBox.Text = "Could not connect to train. Please move closer and retry.";
-				LoadingArea.IsVisible = false;
+				LoadingArea.IsVisible = true;
+				LoadingName.Text = "Trying to connect to train...";
 			});
-			Statics.Notifications.Add(new Notification("Could not connect to train. Please try again.", Colors.Yellow));
-			return;
-		}
+			await Task.Delay(250);
+		
+			TrainAd trainAd = (TrainAd)((Button)sender!).DataContext!;
 
-		await TryLogin();
+			Statics.TrainConnectionId = Statics.GenerateRandomString();
+
+			string? connOutput = _networkManager.EstablishConnection(trainAd.TrainName, true);
+
+			if (connOutput != null)
+			{
+				_logger.Log("Connection error:");
+				_logger.Log(connOutput);
+				Dispatcher.UIThread.Invoke(() =>
+				{
+					// ErrorBox.Text = "Could not connect to train. Please move closer and retry.";
+					LoadingArea.IsVisible = false;
+				});
+				Statics.Notifications.Add(new Notification("Could not connect to train. Please try again.", Colors.Yellow));
+				return;
+			}
+
+			await TryLogin();
+		}
+		catch (Exception exception)
+		{
+			_logger.Log("Could not connect to train:");
+			_logger.Log(exception.ToString());
+			Statics.Notifications.Add(new Notification("Could not connect to train.", Colors.Red));
+		}
 	}
 
 	private async Task TryLogin()

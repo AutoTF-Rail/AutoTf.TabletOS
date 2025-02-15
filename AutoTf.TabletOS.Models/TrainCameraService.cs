@@ -183,4 +183,9 @@ public class TrainCameraService : ITrainCameraService
 
 		return false;
 	}
+
+	public void Dispose()
+	{
+		Statics.Shutdown -= DisconnectStreams;
+	}
 }

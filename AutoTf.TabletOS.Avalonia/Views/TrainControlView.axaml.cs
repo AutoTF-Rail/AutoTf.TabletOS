@@ -196,11 +196,14 @@ public partial class TrainControlView : UserControl
 	{
 		try
 		{
+			_saveTimer?.Dispose();
+			_trainCameraService.Dispose();
+			
 			// TODO: Tell train that you disconnected (emergency break if connection is lost, or user proceeds)
 			// Stop streams
 			// Disconnect from wifi
 			// Change screen
-			_logger.Log("Chaning to train selection by request.");
+			_logger.Log("Changing to train selection by request.");
 			await Dispatcher.UIThread.InvokeAsync(() =>
 			{
 				LoadingName.Text = "Disconnecting...";
