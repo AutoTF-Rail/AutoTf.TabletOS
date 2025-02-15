@@ -6,6 +6,7 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Avalonia.Views;
+using AutoTf.TabletOS.Models;
 
 namespace AutoTf.TabletOS.Avalonia;
 
@@ -53,5 +54,11 @@ public partial class App : Application
 			singleView.MainView = new MainSingleView();
 
 		base.OnFrameworkInitializationCompleted();
+		
+		if (Current.ApplicationLifetime is IControlledApplicationLifetime controlledLifetime)
+		{
+			// Subscribe to the Exit event
+			controlledLifetime.Exit += (_, _) => Statics.Shutdown?.Invoke();
+		}
 	}
 }

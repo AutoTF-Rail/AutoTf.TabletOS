@@ -27,6 +27,31 @@ public partial class MainView : UserControl
 		_listener = YubiKeyDeviceListener.Instance;
 		_listener.Arrived += KeyPluggedIn;
 		_listener.Removed += KeyRemoved;
+
+		TryDetectAlreadyPluggedIn();
+	}
+
+	private void TryDetectAlreadyPluggedIn()
+	{
+		if (_isHandlingKey)
+			return;
+		_isHandlingKey = true;
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			LoadingName.Text = "Checking for key.";
+			LoadingArea.IsVisible = true;
+		});
+		Thread.Sleep(25);
+		IYubiKeyDevice? key = YubiKeyDevice.FindAll().FirstOrDefault();
+		if (key == null)
+		{
+			Dispatcher.UIThread.Invoke(() =>
+			{;
+				LoadingArea.IsVisible = false;
+			});
+			return;
+		}
+		Task.Run(() => GetKey(key), _cancelTokenSource.Token);
 	}
 
 	private void KeyRemoved(object? sender, YubiKeyDeviceEventArgs e)
@@ -51,7 +76,6 @@ public partial class MainView : UserControl
 		});
 		Thread.Sleep(25);
 		Task.Run(() => GetKey(e.Device), _cancelTokenSource.Token);
-		
 	}
 
 	private void GetKey(IYubiKeyDevice device)
