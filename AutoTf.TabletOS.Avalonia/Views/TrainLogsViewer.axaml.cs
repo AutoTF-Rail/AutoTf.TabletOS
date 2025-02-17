@@ -1,7 +1,4 @@
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -12,8 +9,8 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 public partial class TrainLogsViewer : UserControl
 {
 	private readonly ITrainInformationService _trainInformationService;
-	private TaskCompletionSource _taskCompletionSource;
-	private Grid _parent;
+	private TaskCompletionSource _taskCompletionSource = null!;
+	private Grid _parent = null!;
 	
 	public TrainLogsViewer(ITrainInformationService trainInformationService)
 	{

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
+using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;

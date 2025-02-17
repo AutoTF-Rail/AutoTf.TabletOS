@@ -1,10 +1,11 @@
 using System.Text;
 using System.Text.Json;
 using AutoTf.Logging;
+using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
 
-namespace AutoTf.TabletOS.Models;
+namespace AutoTf.TabletOS.Services;
 
 public class TrainControlService : ITrainControlService
 {

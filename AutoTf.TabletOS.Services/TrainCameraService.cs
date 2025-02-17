@@ -1,10 +1,11 @@
 using System.Net.Sockets;
 using AutoTf.Logging;
+using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 
-namespace AutoTf.TabletOS.Models;
+namespace AutoTf.TabletOS.Services;
 
 public class TrainCameraService : ITrainCameraService
 {

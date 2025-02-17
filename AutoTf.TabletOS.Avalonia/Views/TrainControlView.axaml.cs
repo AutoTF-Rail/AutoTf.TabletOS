@@ -1,19 +1,16 @@
 using System;
 using System.Globalization;
-using System.IO;
-using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
+using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using DynamicData;
 using Timer = System.Timers.Timer;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
@@ -24,7 +21,7 @@ public partial class TrainControlView : UserControl
 	private readonly ITrainInformationService _trainInfo = Statics.TrainInformationService;
 	private readonly ITrainControlService _trainControl = Statics.TrainControlService;
 	private readonly ITrainCameraService _trainCameraService = Statics.TrainCameraService;
-	private readonly NetworkManager _networkManager = Statics.NetworkManager;
+	private readonly NetworkService _networkService = Statics.NetworkService;
 	private readonly Logger _logger = Statics.Logger;
 
 	private Timer? _saveTimer = new Timer(600);
@@ -213,7 +210,7 @@ public partial class TrainControlView : UserControl
 		
 			_trainCameraService.DisconnectStreams();
 
-			_networkManager.ShutdownConnection();
+			_networkService.ShutdownConnection();
 
 			Dispatcher.UIThread.Invoke(() =>
 			{

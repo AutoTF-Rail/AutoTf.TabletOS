@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using AutoTf.TabletOS.Models;
+using AutoTf.TabletOS.Models.Enums;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
@@ -7,8 +7,8 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class Popup : UserControl
 {
-	private TaskCompletionSource<DialogResult> _taskCompletionSource;
-	private Grid _parent;
+	private TaskCompletionSource<DialogResult> _taskCompletionSource = null!;
+	private Grid _parent = null!;
 	
 	public Popup(string content, bool showCancel = false)
 	{

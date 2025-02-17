@@ -1,7 +1,7 @@
 using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Media.Imaging;
 
-namespace AutoTf.TabletOS.Models.Fakes;
+namespace AutoTf.TabletOS.Services.Fakes;
 
 public class FakeTrainCameraService : ITrainCameraService
 {

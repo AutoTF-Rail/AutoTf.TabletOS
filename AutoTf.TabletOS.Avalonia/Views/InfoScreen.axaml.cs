@@ -1,9 +1,8 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
-using AutoTf.TabletOS.Models;
+using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -13,7 +12,7 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 public partial class InfoScreen : UserControl
 {
 	private readonly object _previousControl;
-	private readonly NetworkManager _networkManager = Statics.NetworkManager;
+	private readonly NetworkService _networkService = Statics.NetworkService;
 	private readonly Logger _logger = Statics.Logger;
 
 	public InfoScreen(object previousControl)
@@ -28,7 +27,7 @@ public partial class InfoScreen : UserControl
 	private void Initialize()
 	{
 		VersionBox.Text = "Version: " + Program.GetGitVersion();
-		UpdateButton.IsEnabled = NetworkManager.IsInternetAvailable();
+		UpdateButton.IsEnabled = NetworkService.IsInternetAvailable();
 	}
 
 	private void Button_OnClick(object? sender, RoutedEventArgs e)
@@ -41,7 +40,7 @@ public partial class InfoScreen : UserControl
 
 	private async void Update_Click(object? sender, RoutedEventArgs e)
 	{
-		if (!NetworkManager.IsInternetAvailable())
+		if (!NetworkService.IsInternetAvailable())
 			return;
 
 		Dispatcher.UIThread.InvokeAsync(() => UpdateText.IsVisible = true);
@@ -114,7 +113,7 @@ public partial class InfoScreen : UserControl
 		string perms = CommandExecuter.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
 		_logger.Log(perms);
 		
-		_networkManager.ShutdownConnection();
+		_networkService.ShutdownConnection();
 		
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
@@ -130,7 +129,7 @@ public partial class InfoScreen : UserControl
 
 	private void RebootButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		_networkManager.ShutdownConnection();
+		_networkService.ShutdownConnection();
 		CommandExecuter.ExecuteSilent("reboot now", true);
 	}
 

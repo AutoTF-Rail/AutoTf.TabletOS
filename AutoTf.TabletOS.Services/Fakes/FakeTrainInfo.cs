@@ -1,6 +1,6 @@
 using AutoTf.TabletOS.Models.Interfaces;
 
-namespace AutoTf.TabletOS.Models.Fakes;
+namespace AutoTf.TabletOS.Services.Fakes;
 
 public class FakeTrainInfo : ITrainInformationService
 {

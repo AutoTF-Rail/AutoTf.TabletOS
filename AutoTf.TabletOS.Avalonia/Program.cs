@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using AutoTf.TabletOS.Avalonia.Views;
-using AutoTf.TabletOS.Models;
-using AutoTf.TabletOS.Models.Fakes;
-using AutoTf.TabletOS.Models.TaskManager;
+using AutoTf.TabletOS.Services.Fakes;
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
+using Statics = AutoTf.TabletOS.Services.Statics;
 
 namespace AutoTf.TabletOS.Avalonia;
 
@@ -59,7 +54,7 @@ sealed class Program
 	private static void Initialize()
 	{
 #if RELEASE
-		Statics.DataManager = new DataManager();
+		Statics.DataManager = new DataService();
 		Statics.ProcessReader = new ProcessReader();
 		Statics.TrainInformationService = new TrainInformationService();
 		Statics.TrainControlService = new TrainControlService();

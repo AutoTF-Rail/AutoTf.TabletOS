@@ -1,25 +1,22 @@
 using System;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Text;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
-using AutoTf.TabletOS.Models.Interfaces;
-using Avalonia;
+using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using DialogResult = AutoTf.TabletOS.Models.Enums.DialogResult;
+using Statics = AutoTf.TabletOS.Services.Statics;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class TopBar : UserControl
 {
-	private DispatcherTimer _timer;
+	private DispatcherTimer _timer = null!;
 	private int _brightness;
-	private readonly NetworkManager _networkManager = Statics.NetworkManager;
+	private readonly NetworkService _networkService = Statics.NetworkService;
 	
 	public TopBar()
 	{
@@ -47,7 +44,7 @@ public partial class TopBar : UserControl
 		_timer.Tick += UpdateClock;
 		_timer.Start();
 
-		UpdateClock(null, null);
+		UpdateClock(null, null!);
 	}
 	private async void UpdateClock(object? sender, EventArgs e)
 	{
@@ -73,7 +70,7 @@ public partial class TopBar : UserControl
 		if (await popup.Show(RootGrid) != DialogResult.Yes)
 			return;
 		
-		_networkManager.ShutdownConnection();
+		_networkService.ShutdownConnection();
 		
 		Process process = new Process
 		{

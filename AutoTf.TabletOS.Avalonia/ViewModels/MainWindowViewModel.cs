@@ -1,12 +1,11 @@
 ﻿using AutoTf.TabletOS.Avalonia.Views;
-using Avalonia.Controls;
 using ReactiveUI;
 
 namespace AutoTf.TabletOS.Avalonia.ViewModels;
 
 public partial class MainWindowViewModel : ReactiveObject
 {
-	private object _activeView;
+	private object _activeView = null!;
 
 	public object ActiveView
 	{

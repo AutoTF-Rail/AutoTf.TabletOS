@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
+using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
-using DynamicData;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class TrainSelectionScreen : UserControl
 {
 	private ObservableCollection<TrainAd> _nearbyTrains = new ObservableCollection<TrainAd>();
-	private readonly NetworkManager _networkManager = Statics.NetworkManager;
+	private readonly NetworkService _networkService = Statics.NetworkService;
 	private readonly Logger _logger = Statics.Logger;
 	
 	public TrainSelectionScreen()
@@ -61,7 +61,7 @@ public partial class TrainSelectionScreen : UserControl
 
 	private void LoadInternetTrains()
 	{
-		if (NetworkManager.IsInternetAvailable())
+		if (NetworkService.IsInternetAvailable())
 		{
 			Dispatcher.UIThread.Invoke(() => OtherTrainsLoadingText.Text = "No trains found.");
 		}
@@ -188,7 +188,7 @@ public partial class TrainSelectionScreen : UserControl
 
 			Statics.TrainConnectionId = Statics.GenerateRandomString();
 
-			string? connOutput = _networkManager.EstablishConnection(trainAd.TrainName, true);
+			string? connOutput = _networkService.EstablishConnection(trainAd.TrainName, true);
 
 			if (connOutput != null)
 			{
@@ -238,13 +238,15 @@ public partial class TrainSelectionScreen : UserControl
 		}
 		catch (Exception ex)
 		{
-			_networkManager.ShutdownConnection();
+			_networkService.ShutdownConnection();
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				// ErrorBox.Text = "Could not login. " + ex.Message;
 				LoadingArea.IsVisible = false;
 			});
 			Statics.Notifications.Add(new Notification("Could not login to train. Please try again.", Colors.Red));
+			_logger.Log("Could not login:");
+			_logger.Log(ex.ToString());
 		}
 	}
 }

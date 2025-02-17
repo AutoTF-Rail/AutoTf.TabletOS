@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace AutoTf.TabletOS.Models;
+namespace AutoTf.TabletOS.Services;
 
 public static class CommandExecuter
 {

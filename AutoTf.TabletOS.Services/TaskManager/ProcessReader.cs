@@ -1,7 +1,8 @@
 using AutoTf.Logging;
+using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 
-namespace AutoTf.TabletOS.Models.TaskManager;
+namespace AutoTf.TabletOS.Services.TaskManager;
 
 public class ProcessReader : IProcessReader
 {

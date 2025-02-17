@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace AutoTf.TabletOS.Models.Interfaces;
 
 public interface ITrainInformationService

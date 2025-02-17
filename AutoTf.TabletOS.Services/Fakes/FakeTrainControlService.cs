@@ -1,7 +1,7 @@
 using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
 
-namespace AutoTf.TabletOS.Models.Fakes;
+namespace AutoTf.TabletOS.Services.Fakes;
 
 public class FakeTrainControlService : ITrainControlService
 {

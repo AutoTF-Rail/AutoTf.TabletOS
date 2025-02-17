@@ -1,6 +1,6 @@
 using AutoTf.TabletOS.Models.Interfaces;
 
-namespace AutoTf.TabletOS.Models;
+namespace AutoTf.TabletOS.Services.Fakes;
 
 /// <summary>
 /// Fake datamanager that is automatically used when app is not run in release

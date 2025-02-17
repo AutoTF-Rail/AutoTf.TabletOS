@@ -27,5 +27,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AutoTf.TabletOS.Avalonia\AutoTf.TabletOS.Avalonia.csproj" />
+      <ProjectReference Include="..\AutoTf.TabletOS.Services\AutoTf.TabletOS.Services.csproj" />
     </ItemGroup>
 </Project>

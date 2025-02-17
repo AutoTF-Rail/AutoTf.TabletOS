@@ -1,4 +1,4 @@
-namespace AutoTf.TabletOS.Models;
+namespace AutoTf.TabletOS.Models.Enums;
 
 public enum DialogResult
 {

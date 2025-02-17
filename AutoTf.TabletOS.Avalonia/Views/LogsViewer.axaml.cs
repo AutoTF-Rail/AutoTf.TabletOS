@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,8 +8,8 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class LogsViewer : UserControl
 {
-	private TaskCompletionSource _taskCompletionSource;
-	private Grid _parent;
+	private TaskCompletionSource _taskCompletionSource = null!;
+	private Grid _parent = null!;
 	private readonly string _logDir = "/var/log/AutoTF/AutoTf.TabletOS.Avalonia/";
 	
 	public LogsViewer()

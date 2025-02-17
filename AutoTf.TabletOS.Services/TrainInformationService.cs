@@ -2,7 +2,7 @@ using System.Net.Http.Json;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Interfaces;
 
-namespace AutoTf.TabletOS.Models;
+namespace AutoTf.TabletOS.Services;
 
 public class TrainInformationService : ITrainInformationService
 {

@@ -1,7 +1,7 @@
+using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
-using AutoTf.TabletOS.Models.TaskManager;
 
-namespace AutoTf.TabletOS.Models.Fakes;
+namespace AutoTf.TabletOS.Services.Fakes;
 
 public class FakeProcessReader : IProcessReader
 {

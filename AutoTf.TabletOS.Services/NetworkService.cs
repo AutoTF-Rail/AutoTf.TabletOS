@@ -1,13 +1,14 @@
 using System.Net.NetworkInformation;
 using AutoTf.Logging;
+using AutoTf.TabletOS.Models.Enums;
 
-namespace AutoTf.TabletOS.Models;
+namespace AutoTf.TabletOS.Services;
 
-public class NetworkManager
+public class NetworkService
 {
 	private readonly Logger _logger = Statics.Logger;
 	
-	public NetworkManager()
+	public NetworkService()
 	{
 		Statics.Shutdown += ShutdownConnection;
 	}

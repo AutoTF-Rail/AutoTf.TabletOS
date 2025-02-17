@@ -1,4 +1,4 @@
-namespace AutoTf.TabletOS.Models.TaskManager;
+namespace AutoTf.TabletOS.Models;
 
 public class CpuStats
 {

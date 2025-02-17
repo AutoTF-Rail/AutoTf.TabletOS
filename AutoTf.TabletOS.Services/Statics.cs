@@ -1,9 +1,11 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using AutoTf.Logging;
+using AutoTf.TabletOS.Models;
+using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
 
-namespace AutoTf.TabletOS.Models;
+namespace AutoTf.TabletOS.Services;
 
 public static class Statics
 {
@@ -23,7 +25,7 @@ public static class Statics
 	public static IDataManager DataManager = null!;
 	public static IProcessReader ProcessReader = null!;
 
-	public static NetworkManager NetworkManager = new NetworkManager();
+	public static NetworkService NetworkService = new NetworkService();
 	public static Logger Logger = new Logger(true);
 	
 	public static string YubiCode { get; set; } = null!;

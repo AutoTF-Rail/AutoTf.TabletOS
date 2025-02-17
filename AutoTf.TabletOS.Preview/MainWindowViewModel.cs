@@ -1,6 +1,5 @@
 ﻿using AutoTf.TabletOS.Avalonia.Views;
-using AutoTf.TabletOS.Models.Fakes;
-using Avalonia.Controls;
+using AutoTf.TabletOS.Services.Fakes;
 using ReactiveUI;
 
 namespace AutoTf.TabletOS.Preview;
@@ -17,6 +16,9 @@ public partial class MainWindowViewModel : ReactiveObject
 
 	public MainWindowViewModel()
 	{
-		ActiveView = new TrainControlView();
+		ActiveView = new TrainDateSetter(new FakeTrainInfo());
+		// Statics.Notifications.Add(new Notification("Meow", Colors.Red));
+		// Statics.Notifications.Add(new Notification("grrr", Colors.Yellow));
+		// Statics.Notifications.Add(new Notification("buh", Colors.Green));
 	}
 }

@@ -1,12 +1,12 @@
 using AutoTf.TabletOS.Models.Interfaces;
 
-namespace AutoTf.TabletOS.Models;
+namespace AutoTf.TabletOS.Services;
 
-public class DataManager : IDataManager
+public class DataService : IDataManager
 {
 	private readonly string _directory = "/etc/AutoTf/TabletOS";
 	
-	public DataManager()
+	public DataService()
 	{
 		Directory.CreateDirectory(_directory);
 	}

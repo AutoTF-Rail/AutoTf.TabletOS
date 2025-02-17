@@ -67,6 +67,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AutoTf.TabletOS.Models\AutoTf.TabletOS.Models.csproj" />
+      <ProjectReference Include="..\AutoTf.TabletOS.Services\AutoTf.TabletOS.Services.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="AutoTf.TabletOS.Models">
+        <HintPath>..\AutoTf.TabletOS.Preview\bin\Debug\net8.0\AutoTf.TabletOS.Models.dll</HintPath>
+      </Reference>
     </ItemGroup>
 </Project>

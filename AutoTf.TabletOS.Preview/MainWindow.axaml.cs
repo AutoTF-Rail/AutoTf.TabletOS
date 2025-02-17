@@ -1,6 +1,5 @@
-using AutoTf.TabletOS.Avalonia.Views;
-using AutoTf.TabletOS.Models;
-using AutoTf.TabletOS.Models.Fakes;
+using AutoTf.TabletOS.Services;
+using AutoTf.TabletOS.Services.Fakes;
 using Avalonia.Controls;
 
 namespace AutoTf.TabletOS.Preview;
