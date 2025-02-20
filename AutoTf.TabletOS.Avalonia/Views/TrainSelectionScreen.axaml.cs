@@ -191,7 +191,7 @@ public partial class TrainSelectionScreen : UserControl
 
 			string? connOutput = _networkService.EstablishConnection(trainAd.TrainName, true);
 
-			if(Statics.Connection != ConnectionType.None)
+			if(Statics.Connection == ConnectionType.None)
 			{
 				_logger.Log("Connection error:");
 				_logger.Log(connOutput!);
