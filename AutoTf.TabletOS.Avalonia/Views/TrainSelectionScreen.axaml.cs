@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
+using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -190,10 +191,10 @@ public partial class TrainSelectionScreen : UserControl
 
 			string? connOutput = _networkService.EstablishConnection(trainAd.TrainName, true);
 
-			if (!string.IsNullOrEmpty(connOutput))
+			if(Statics.Connection != ConnectionType.None)
 			{
 				_logger.Log("Connection error:");
-				_logger.Log(connOutput);
+				_logger.Log(connOutput!);
 				Dispatcher.UIThread.Invoke(() =>
 				{
 					// ErrorBox.Text = "Could not connect to train. Please move closer and retry.";
