@@ -189,11 +189,12 @@ public partial class TrainSelectionScreen : UserControl
 
 			Statics.TrainConnectionId = Statics.GenerateRandomString();
 
+			_logger.Log($"Trying to connect to train with SSID: {trainAd.TrainName}.");
 			string? connOutput = _networkService.EstablishConnection(trainAd.TrainName, true);
 
 			if(Statics.Connection == ConnectionType.None)
 			{
-				_logger.Log("Connection error:");
+				_logger.Log($"Connection: {Statics.Connection}.");
 				_logger.Log(connOutput!);
 				Dispatcher.UIThread.Invoke(() =>
 				{
