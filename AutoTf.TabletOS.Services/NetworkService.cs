@@ -52,7 +52,7 @@ public class NetworkService
 		CommandExecuter.ExecuteSilent($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.psk CentralBridgePW", true);
 		CommandExecuter.ExecuteSilent($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} connection.autoconnect no", true);
 		
-		string output = CommandExecuter.ExecuteCommand($"timeout 20s nmcli con up CentralBridge-{Statics.TrainConnectionId}");
+		string output = CommandExecuter.ExecuteCommand($"timeout 40s nmcli con up CentralBridge-{Statics.TrainConnectionId}");
 
 		if (output.Contains("Connection successfully activated"))
 		{
