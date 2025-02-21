@@ -88,7 +88,6 @@ public partial class TrainControlView : UserControl
 		if (evuName == null || trainId == null || trainName == null || lastTrainSync == null || trainVersion == null)
 		{
 			Statics.Notifications.Add(new Notification("Could not get train information data. Please view the logs for more information.", Colors.Red));
-			ChangeToSelectionScreen();
 			return;
 		}
 
@@ -116,7 +115,6 @@ public partial class TrainControlView : UserControl
 		DateTime? nextSave = await _trainInfo.GetNextSave();
 		if (nextSave == null)
 		{
-			ChangeToSelectionScreen();
 			Statics.Notifications.Add(new Notification("Could not get next train save date.", Colors.Yellow));
 			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Unknown");
 			return;
@@ -160,7 +158,7 @@ public partial class TrainControlView : UserControl
 			_logger.Log("Error during control init.");
 			_logger.Log(e.Message);
 			Statics.Notifications.Add(new Notification("Disconnected: Could not initialize controls.", Colors.Red));
-			ChangeToSelectionScreen();
+			// TODO: Make controls unavailable?
 		}
 	}
 
