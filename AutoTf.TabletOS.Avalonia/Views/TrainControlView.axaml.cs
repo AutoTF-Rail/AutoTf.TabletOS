@@ -191,6 +191,13 @@ public partial class TrainControlView : UserControl
 	{
 		try
 		{
+			_logger.Log("Changing to train selection by request.");
+			await Dispatcher.UIThread.InvokeAsync(() =>
+			{
+				LoadingName.Text = "Disconnecting...";
+				LoadingArea.IsVisible = true;
+			});
+			await Task.Delay(25);
 			_saveTimer?.Dispose();
 			_trainCameraService.DisconnectStreams();
 			_trainCameraService.Dispose();
@@ -199,13 +206,6 @@ public partial class TrainControlView : UserControl
 			// Stop streams
 			// Disconnect from wifi
 			// Change screen
-			_logger.Log("Changing to train selection by request.");
-			await Dispatcher.UIThread.InvokeAsync(() =>
-			{
-				LoadingName.Text = "Disconnecting...";
-				LoadingArea.IsVisible = true;
-			});
-			await Task.Delay(25);
 		
 			_trainCameraService.DisconnectStreams();
 
@@ -231,6 +231,12 @@ public partial class TrainControlView : UserControl
 
 	private async void ShutdownTrain_Click(object? sender, RoutedEventArgs e)
 	{
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			LoadingName.Text = "Shutting down train...";
+			LoadingArea.IsVisible = true;
+		});
+		await Task.Delay(25);
 		// TODO: Notify train system of shutdown (seperate from actual shutdown?)
 		await _trainInfo.PostShutdown();
 		// Prevent shutdown when train is still moving without assistant
@@ -244,6 +250,12 @@ public partial class TrainControlView : UserControl
 	
 	private async void RestartTrain_Click(object? sender, RoutedEventArgs e)
 	{
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			LoadingName.Text = "Restarting down train...";
+			LoadingArea.IsVisible = true;
+		});
+		await Task.Delay(25);
 		// TODO: Notify train system of shutdown (seperate from actual shutdown?)
 		// Prevent shutdown when train is still moving without assistant
 		await _trainInfo.PostRestart();
@@ -253,6 +265,7 @@ public partial class TrainControlView : UserControl
 	private async void UpdateTrain_Click(object? sender, RoutedEventArgs e)
 	{
 		await _trainInfo.PostUpdate();
+		Statics.Notifications.Add(new Notification("A update has been triggered on the train. Please view the train logs to know when it has finished.", Colors.Yellow));
 	}
 
 	private async void CombinedThrottleUp_Click(object? sender, RoutedEventArgs e)
