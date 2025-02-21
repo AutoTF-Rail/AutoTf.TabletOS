@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using AutoTf.TabletOS.Services;
-using AutoTf.TabletOS.Services.Fakes;
-using AutoTf.TabletOS.Services.TaskManager;
 using Avalonia;
 using Statics = AutoTf.TabletOS.Services.Statics;
 
@@ -57,13 +55,11 @@ sealed class Program
 	{
 #if RELEASE
 		Statics.DataManager = new DataService();
-		Statics.ProcessReader = new ProcessReader();
 		Statics.TrainInformationService = new TrainInformationService();
 		Statics.TrainControlService = new TrainControlService();
 		Statics.TrainCameraService = new TrainCameraService();
 #else
 		Statics.DataManager = new FakeDataManager();
-		Statics.ProcessReader = new FakeProcessReader();
 		Statics.TrainInformationService = new FakeTrainInfo();
 		Statics.TrainControlService = new FakeTrainControlService();
 		Statics.TrainCameraService = new FakeTrainCameraService();

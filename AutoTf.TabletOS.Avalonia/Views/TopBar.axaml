@@ -16,8 +16,6 @@
             <DockPanel Height="15" VerticalAlignment="Top" LastChildFill="False" HorizontalAlignment="Stretch">
                 <TextBlock DockPanel.Dock="Left" Name="Bluber" FontFamily="Roboto"></TextBlock>
                 <TextBlock DockPanel.Dock="Left" Margin="5, 0" Name="NotificationsNumber" FontFamily="Roboto" FontSize="20" VerticalAlignment="Center"></TextBlock>
-                <Image DockPanel.Dock="Right" Source="../Assets/NoWifiSign.png" />
-                <Image DockPanel.Dock="Right" Source="../Assets/FullSignalSign.png" Height="10" Margin="2" />
             </DockPanel>
         </Grid>
         <Grid Name="QuickMenuGrid">
@@ -60,35 +58,27 @@
                     <Border Height="300" Width="300" CornerRadius="10" Background="Gray" Opacity=".95" />
                     <StackPanel Margin="30">
                         <DockPanel LastChildFill="False">
-                            <Button Padding="0" Width="135" Height="50" Background="Transparent">
+                            <Button Padding="0" Width="135" Height="50" Background="Transparent" Click="RestartButton_Click">
                                 <Grid>
                                     <Border Background="LightBlue" CornerRadius="10" />
                                     <DockPanel Margin="5">
                                         <Grid Width="38" Height="38">
-                                            <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
-                                            <Image Source="../Assets/NoWifiSign.png" Height="25" />
+                                            <Border Background="White" CornerRadius="35" BorderBrush="Black" Opacity="1" />
+                                            <Image Source="../Assets/ShutoffIcon.png" Height="25" />
                                         </Grid>
-                                        <TextBlock FontSize="11" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
-                                            <Run Text="WiFi" />
-                                            <LineBreak />
-                                            <Run Text="Connection" />
-                                        </TextBlock>
+                                        <TextBlock FontSize="15" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">Restart</TextBlock>
                                     </DockPanel>
                                 </Grid>
                             </Button>
-                            <Button Padding="0" Width="135" Height="50" Background="Transparent">
+                            <Button Padding="0" Width="135" Height="50" Background="Transparent" Click="Shutdown_Click">
                                 <Grid>
                                     <Border Background="LightBlue" CornerRadius="10" />
                                     <DockPanel Margin="5">
                                         <Grid Width="38" Height="38">
-                                            <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
-                                            <Image Source="../Assets/FullSignalSign.png" Height="15" />
+                                            <Border Background="White" CornerRadius="35" BorderBrush="Black" Opacity="1" />
+                                            <Image Source="../Assets/ShutoffIcon.png" Height="25" />
                                         </Grid>
-                                        <TextBlock FontSize="11" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
-                                            <Run Text="Mesh" />
-                                            <LineBreak />
-                                            <Run Text="Strength" />
-                                        </TextBlock>
+                                        <TextBlock FontSize="15" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">Shutdown</TextBlock>
                                     </DockPanel>
                                 </Grid>
                             </Button>
@@ -117,57 +107,9 @@
                                     </DockPanel>
                                 </Grid>
                             </Button>
-                            <Button Padding="0" Width="135" Height="50" Background="Transparent" Click="Shutdown_Click">
-                                <Grid>
-                                    <Border Background="LightBlue" CornerRadius="10" />
-                                    <DockPanel Margin="5">
-                                        <Grid Width="38" Height="38">
-                                            <Border Background="White" CornerRadius="35" BorderBrush="Black" Opacity="1" />
-                                            <Image Source="../Assets/ShutoffIcon.png" Height="25" />
-                                        </Grid>
-                                        <TextBlock FontSize="15" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">Shutdown</TextBlock>
-                                    </DockPanel>
-                                </Grid>
-                            </Button>
                         </DockPanel>
                     </StackPanel>
                     <StackPanel VerticalAlignment="Bottom" Margin="27">
-                        <TextBlock Name="RfidStatus">RFID Present: False</TextBlock>
-                        <DockPanel LastChildFill="False" Margin="0,0,0,10">
-                            <Button Padding="0" Width="135" Height="50" Background="Transparent" IsEnabled="False">
-                                <Grid>
-                                    <Border Background="LightBlue" CornerRadius="10" />
-                                    <DockPanel Margin="5">
-                                        <Grid Width="38" Height="38">
-                                            <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
-                                            <Image Source="../Assets/CpuIcon.png" Height="30" />
-                                        </Grid>
-                                        <TextBlock FontSize="11" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
-                                            <Run Text="CPU Usage" />
-                                            <LineBreak />
-                                            <Run Name="CpuUsage" Text="-1" />
-                                        </TextBlock>
-                                    </DockPanel>
-                                </Grid>
-                            </Button>
-                            <Button Padding="0" Width="135" Height="50" Background="Transparent" IsEnabled="False">
-                                <Grid>
-                                    <Border Background="LightBlue" CornerRadius="10" />
-                                    <DockPanel Margin="5">
-                                        <Grid Width="38" Height="38">
-                                            <Border Background="Aqua" CornerRadius="35" BorderBrush="Black" Opacity=".4" />
-                                            <Image Source="../Assets/RamIcon.png" Height="30" />
-                                        </Grid>
-                                        <TextBlock FontSize="11" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">
-                                            <Run Text="RAM Usage" />
-                                            <LineBreak />
-                                            <Run Name="RamUsage" FontSize="9" Text="-1" />
-                                        </TextBlock>
-                                    </DockPanel>
-                                </Grid>
-                            </Button>
-                        </DockPanel>
-                        <!-- <TextBlock Name="LastSynced">Last Synced: Unknown</TextBlock> -->
                         <DockPanel>
                             <Border Background="LightBlue" CornerRadius="10" />
                             <Button Padding="0" Width="200" Margin="2,0,0,0" Height="30" Background="Transparent" Click="InfoButton_OnClick">
@@ -180,10 +122,8 @@
                                 </Grid>
                             </Button>
                         </DockPanel>
+                        <Button Margin="5">Connect to wifi</Button>
                         <Button Margin="5">Authenticate A New Key</Button>
-                        <!-- <TextBlock>TabletOS by AutoTF (https://autotf.de)</TextBlock> -->
-                        <!-- <TextBlock>Served under the Apache 2.0 License</TextBlock> -->
-                        <!-- <TextBlock Name="ErrorBox">Error</TextBlock> -->
                     </StackPanel>
                 </Grid>
             </Grid>

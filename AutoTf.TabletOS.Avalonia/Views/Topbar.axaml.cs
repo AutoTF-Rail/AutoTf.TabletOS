@@ -51,13 +51,6 @@ public partial class TopBar : UserControl
 	private async void UpdateClock(object? sender, EventArgs e)
 	{
 		Bluber.Text = DateTime.Now.ToString("dd.MM.yy HH:mm:ss");
-		if (QuickMenuGrid.IsVisible)
-		{
-			#if RELEASE
-			CpuUsage.Text = float.Round((await Statics.ProcessReader.GetCpuUsageAsync()), MidpointRounding.ToEven).ToString(CultureInfo.InvariantCulture) + "%";
-			RamUsage.Text = float.Round(Statics.ProcessReader.GetUsedMemory()) + "MB/" + float.Round(Statics.ProcessReader.GetTotalMemory()) + "MB";
-			#endif
-		}
 	}
 
 	private void ToggleQuickMenu(object? sender, PointerReleasedEventArgs e)
@@ -72,6 +65,7 @@ public partial class TopBar : UserControl
 		if (await popup.Show(RootGrid) != DialogResult.Yes)
 			return;
 		
+		Statics.Shutdown?.Invoke();
 		_networkService.ShutdownConnection();
 		
 		Process process = new Process
@@ -79,6 +73,31 @@ public partial class TopBar : UserControl
 			StartInfo = new ProcessStartInfo
 			{
 				FileName = "shutdown",
+				Arguments = "now",
+				CreateNoWindow = true,
+				UseShellExecute = false
+			}
+		};
+		
+		process.Start();
+		Environment.Exit(0);
+	}
+
+	private async void RestartButton_Click(object? sender, RoutedEventArgs e)
+	{
+		Popup popup = new Popup("Are you sure you want to restart?");
+		
+		if (await popup.Show(RootGrid) != DialogResult.Yes)
+			return;
+		
+		Statics.Shutdown?.Invoke();
+		_networkService.ShutdownConnection();
+		
+		Process process = new Process
+		{
+			StartInfo = new ProcessStartInfo
+			{
+				FileName = "restart",
 				Arguments = "now",
 				CreateNoWindow = true,
 				UseShellExecute = false

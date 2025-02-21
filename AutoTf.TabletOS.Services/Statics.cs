@@ -23,7 +23,6 @@ public static class Statics
 	public static ITrainControlService TrainControlService = null!;
 	public static ITrainCameraService TrainCameraService = null!;
 	public static IDataManager DataManager = null!;
-	public static IProcessReader ProcessReader = null!;
 
 	public static NetworkService NetworkService = new NetworkService();
 	public static Logger Logger = new Logger(true);
