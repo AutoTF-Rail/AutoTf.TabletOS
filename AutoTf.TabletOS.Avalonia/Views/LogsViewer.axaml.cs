@@ -1,8 +1,10 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.VisualTree;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -31,8 +33,7 @@ public partial class LogsViewer : UserControl
 	{
 		string[] files = Directory.GetFiles(_logDir).Order().ToArray();
 		DateBox.ItemsSource = files.Select(Path.GetFileNameWithoutExtension);
-		
-		DateBox.SelectedIndex = 0;
+		DateBox.SelectedIndex = DateBox.ItemCount - 1;
 	}
 
 	private void Close()
@@ -48,7 +49,9 @@ public partial class LogsViewer : UserControl
 
 	private void DateBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
 	{
-		LogViewerBox.ItemsSource = File.ReadAllLines(_logDir + (string)DateBox.SelectedItem! + ".txt").Reverse();
+		LogViewerBox.ItemsSource = File.ReadAllLines(_logDir + (string)DateBox.SelectedItem! + ".txt");
+		ScrollViewer? scrollViewer = LogViewerBox.GetVisualDescendants().OfType<ScrollViewer>().FirstOrDefault();
+		scrollViewer?.ScrollToEnd();
 	}
 
 	private void LogViewerBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)

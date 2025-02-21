@@ -1,8 +1,10 @@
+using System.Linq;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -27,12 +29,15 @@ public partial class TrainLogsViewer : UserControl
 		
 		DateBox.ItemsSource = dates;
 		
-		DateBox.SelectedIndex = 0;
+		DateBox.SelectedIndex = DateBox.ItemCount - 1;
 	}
 
 	private async void DateBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
 	{
 		await Dispatcher.UIThread.Invoke(async () => LogViewerBox.ItemsSource = await _trainInformationService.GetLogs((string)DateBox.SelectedItem!));
+		
+		ScrollViewer? scrollViewer = LogViewerBox.GetVisualDescendants().OfType<ScrollViewer>().FirstOrDefault();
+		scrollViewer?.ScrollToEnd();
 	}
 
 	public Task Show(Grid parent)
