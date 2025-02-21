@@ -26,11 +26,10 @@ public class TrainCameraService : ITrainCameraService
 	{
 		_logger.Log("TCS: Stream disconnect was requested.");
 		await _cancellationTokenSource.CancelAsync();
-	}
-
-	public TrainCameraService()
-	{
-		Statics.Shutdown += DisconnectStreams;
+		for (int i = 0; i < _udpClients.Count; i++)
+		{
+			await PostStopStream(i);
+		}
 	}
 
 	// TODO: "OnTrainConnected" event for things like this:
@@ -123,7 +122,6 @@ public class TrainCameraService : ITrainCameraService
 		
         _logger.Log("Stopping stream: Cancel requested: " + _cancellationTokenSource.IsCancellationRequested);
         _udpClients[cameraIndex].Dispose();
-	    await PostStopStream(cameraIndex);
 	}
 	
 	private async Task<bool> PostStartStream(int port, int cameraIndex)
@@ -172,6 +170,7 @@ public class TrainCameraService : ITrainCameraService
 				if(!response.IsSuccessStatusCode)
 					_logger.Log("TCS: Could not stop stream: " + await response.Content.ReadAsStringAsync());
 			
+				_logger.Log($"TCS: Disposed camera {cameraIndex}'s stream.");
 				return response.IsSuccessStatusCode;
 			}
 		}
