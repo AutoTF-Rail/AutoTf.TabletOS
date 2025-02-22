@@ -21,7 +21,7 @@ public class FakeTrainInfo : ITrainInformationService
 
 	public Task<string?> GetTrainName()
 	{
-		return Task.FromResult("Desiro Meow")!;
+		return Task.FromResult("Desiro HC")!;
 	}
 
 	public Task<string?> GetLastSync()

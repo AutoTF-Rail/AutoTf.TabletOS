@@ -11,6 +11,7 @@ public partial class MainWindow : Window
 		Statics.DataManager = new FakeDataManager();
 		Statics.TrainInformationService = new FakeTrainInfo();
 		Statics.TrainControlService = new FakeTrainControlService();
+		Statics.TrainCameraService = new FakeTrainCameraService();
 		DataContext = new MainWindowViewModel();
 		InitializeComponent();
 	}

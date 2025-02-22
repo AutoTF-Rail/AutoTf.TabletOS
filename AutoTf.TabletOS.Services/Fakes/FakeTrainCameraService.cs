@@ -8,12 +8,11 @@ public class FakeTrainCameraService : ITrainCameraService
 	public Action<int, Bitmap>? NewFrameReceived { get; set; }
 	public void DisconnectStreams()
 	{
-		throw new NotImplementedException();
 	}
 
 	public Task StartListeningForCameras()
 	{
-		throw new NotImplementedException();
+		return Task.CompletedTask;
 	}
 
 	public void Dispose()

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using AutoTf.TabletOS.Services;
+using AutoTf.TabletOS.Services.Fakes;
 using Avalonia;
 using Statics = AutoTf.TabletOS.Services.Statics;
 

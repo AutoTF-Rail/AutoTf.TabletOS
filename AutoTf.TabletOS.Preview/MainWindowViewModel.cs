@@ -16,7 +16,7 @@ public partial class MainWindowViewModel : ReactiveObject
 
 	public MainWindowViewModel()
 	{
-		ActiveView = new TrainDateSetter(new FakeTrainInfo());
+		ActiveView = new TrainControlView();
 		// Statics.Notifications.Add(new Notification("Meow", Colors.Red));
 		// Statics.Notifications.Add(new Notification("grrr", Colors.Yellow));
 		// Statics.Notifications.Add(new Notification("buh", Colors.Green));
