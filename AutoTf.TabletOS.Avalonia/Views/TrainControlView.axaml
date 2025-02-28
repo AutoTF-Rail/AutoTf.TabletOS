@@ -90,9 +90,28 @@
                             </Grid>
                         </Border>
                         
-                        <Border Margin="15, 10, 5, 20" Grid.Row="1" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
+                        <Border Grid.Column="0" Margin="15, 10, 5, 20" Grid.Row="1" BorderBrush="Black" CornerRadius="10" BorderThickness="2">
                             <Grid>
                                 <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
+                                <StackPanel HorizontalAlignment="Stretch">
+                                    <Button HorizontalAlignment="Stretch" Padding="0" Background="Transparent" BorderBrush="Black" BorderThickness="0, 0, 0, 2">
+                                        <Grid>
+                                            <Border Background="Gray" Opacity="0.2" />
+                                            <DockPanel>
+                                                <Image DockPanel.Dock="Right" Source="../Assets/Arrow_Right.png" Height="20" Margin="10" />
+                                                <TextBlock FontSize="25" Margin="10, 5">AI Driver</TextBlock>
+                                            </DockPanel>
+                                        </Grid>
+                                    </Button>
+                                    <DockPanel Margin="10, 5">
+                                        <Image Source="../Assets/AIDriverIcon.png" Height="95"></Image>
+                                        <Button DockPanel.Dock="Right" FontSize="28" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="80" Width="80">Stop</Button>
+                                        <StackPanel Margin="5" VerticalAlignment="Center">
+                                            <TextBlock FontSize="25" Foreground="Green" FontWeight="Bold">Enabled</TextBlock>
+                                            <TextBlock FontSize="23" Foreground="Gray" FontWeight="Bold">Next stop: The moon</TextBlock>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </StackPanel>
                             </Grid>
                         </Border>
                     </Grid>
@@ -392,6 +411,7 @@
                                         <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="ShutdownTrain_Click">Shutdown</Button>
                                         <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="RestartTrain_Click">Restart</Button>
                                         <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="UpdateTrain_Click">Update</Button>
+                                        <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="ChainButton_Click">Chain</Button>
                                         <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="SetDateButton_Click">Set Date</Button>
                                         <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="LogsButton_Click">Logs</Button>
                                     </DockPanel>
