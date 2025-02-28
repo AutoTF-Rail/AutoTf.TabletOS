@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:AutoTf.TabletOS.Models;assembly=AutoTf.TabletOS.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Height="800"
+             Width="1280"
+             x:Class="AutoTf.TabletOS.Avalonia.Views.TrainChainView">
+    <Grid Name="RootGrid">
+        <Image Source="../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
+        <DockPanel Margin="20" LastChildFill="False" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Button Margin="5, 5, 5, 5" CornerRadius="40" Width="45" Height="45" FontSize="26" Foreground="Black" BorderBrush="Black" BorderThickness="2" HorizontalContentAlignment="Center">+</Button>
+            <Button Click="TrainRemove_Click" Margin="5, 0" CornerRadius="15" BorderBrush="Black" BorderThickness="2" Padding="0" Background="Transparent">
+                <Grid>
+                    <Border Background="Gray" Opacity=".3" CornerRadius="15"></Border>
+                    <StackPanel Height="170">
+                        <DockPanel LastChildFill="False" HorizontalAlignment="Center">
+                            <Image Source="../Assets/TrainIconFlipped.png" Height="140"></Image>
+                            <Image Source="../Assets/TrainIcon.png" Height="140"></Image>
+                        </DockPanel>
+                        <TextBlock HorizontalAlignment="Center" FontSize="25" Foreground="Black" FontWeight="Heavy">394-763</TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+            <Button Click="TrainRemove_Click" Margin="5, 0" CornerRadius="15" BorderBrush="Black" BorderThickness="2" Padding="0" Background="Transparent">
+                <Grid>
+                    <Border Background="Gray" Opacity=".3" CornerRadius="15"></Border>
+                    <StackPanel Height="170">
+                        <DockPanel LastChildFill="False" HorizontalAlignment="Center">
+                            <Image Source="../Assets/TrainIconFlipped.png" Height="140"></Image>
+                            <Image Source="../Assets/TrainIcon.png" Height="140"></Image>
+                        </DockPanel>
+                        <TextBlock HorizontalAlignment="Center" FontSize="25" Foreground="Black" FontWeight="Heavy">394-539</TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Button>
+            <Button Margin="5, 5, 5, 5" CornerRadius="40" Width="45" Height="45" FontSize="26" Foreground="Black" BorderBrush="Black" BorderThickness="2" HorizontalContentAlignment="Center">+</Button>
+        </DockPanel>
+        
+        <ListBox SelectionChanged="OtherTrains_OnSelectionChanged" HorizontalAlignment="Stretch" SelectionMode="Single" Margin="100, 220, 100, 60" Name="TrainsNearBox" Background="Transparent"  VerticalAlignment="Stretch" Padding="0">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="2"/>
+                    <Setter Property="Margin" Value="2"/>
+                </Style>
+            </ListBox.Styles>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="models:TrainAd">
+                    <Button Background="Transparent" Margin="0" CornerRadius="50" Padding="0" HorizontalAlignment="Stretch" Height="55">
+                        <Grid Margin="0">
+                            <Border Margin="0" CornerRadius="50" BorderBrush="Black" BorderThickness="2" />
+                            <Border Margin="0" CornerRadius="50" Opacity=".15">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0%, 0%" EndPoint="100%, 0%">
+                                        <GradientStop Color="GreenYellow" Offset="0" />
+                                        <GradientStop Color="Blue" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                            <DockPanel VerticalAlignment="Stretch">
+                                <Image DockPanel.Dock="Left" Source="../Assets/RoundTrainIcon.png" VerticalAlignment="Center" Height="52" />
+                                <Image DockPanel.Dock="Right" Source="../Assets/Arrow_Right.png" Margin="10" Height="35" VerticalAlignment="Center" />
+                                <TextBlock FontSize="25" Margin="10" VerticalAlignment="Center">
+                                    <Run Text="{Binding TrainName}" />
+                                    <Run>-</Run>
+                                    <Run Text="{Binding TrainNum}" />
+                                </TextBlock>
+                            </DockPanel>
+                        </Grid>
+                    </Button>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <Button HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="18" Click="BackButton_Click" Margin="20" Foreground="Black" BorderBrush="Black">Back</Button>
+    </Grid>
+</UserControl>
