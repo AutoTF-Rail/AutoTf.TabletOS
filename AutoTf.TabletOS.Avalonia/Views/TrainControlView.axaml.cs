@@ -24,7 +24,6 @@ public partial class TrainControlView : UserControl
 	private readonly NetworkService _networkService = Statics.NetworkService;
 	private readonly Logger _logger = Statics.Logger;
 
-	private Timer? _saveTimer = new Timer(600);
 	
 	private double _combinedThrottlePosition;
 
@@ -73,7 +72,7 @@ public partial class TrainControlView : UserControl
 		// TODO: Doesnt this need to be in the upper if too?
 		_combinedThrottlePosition = await _trainControl.GetLeverPosition(0);
 		
-		await Dispatcher.UIThread.InvokeAsync(() => CombinedThrottlePercentage.Text = _combinedThrottlePosition.ToString(CultureInfo.InvariantCulture));
+		// await Dispatcher.UIThread.InvokeAsync(() => CombinedThrottlePercentage.Text = _combinedThrottlePosition.ToString(CultureInfo.InvariantCulture));
 	}
 
 	private async Task LoadTrainData()
@@ -81,58 +80,17 @@ public partial class TrainControlView : UserControl
 		string? evuName = await _trainInfo.GetEvuName();
 		string? trainId = await _trainInfo.GetTrainId();
 		string? trainName = await _trainInfo.GetTrainName();
-		string? lastTrainSync = await _trainInfo.GetLastSync();
 		string? trainVersion = await _trainInfo.GetVersion();
-		await UpdateSaveTimer();
 		
-		if (evuName == null || trainId == null || trainName == null || lastTrainSync == null || trainVersion == null)
+		if (evuName == null || trainId == null || trainName == null || trainVersion == null)
 		{
 			Statics.Notifications.Add(new Notification("Could not get train information data. Please view the logs for more information.", Colors.Red));
 			return;
 		}
-
-		int dayDiff = (DateTime.Parse(lastTrainSync) - DateTime.Now).Days * -1;
-
-		IImmutableSolidColorBrush brush = ConvertDayIntoBrush(dayDiff);
-		await Dispatcher.UIThread.InvokeAsync(() => NextTrainConnectionDay.Foreground = brush);
-
-		if (dayDiff >= 30)
-			await Dispatcher.UIThread.InvokeAsync(() =>
-				NextTrainConnectionDay.Text = $"Long due.");
-		else
-			await Dispatcher.UIThread.InvokeAsync(() =>
-				NextTrainConnectionDay.Text = (30 - dayDiff) + " Days");
-		
 		await Dispatcher.UIThread.InvokeAsync(() => EvuNameBox.Text = evuName);
 		await Dispatcher.UIThread.InvokeAsync(() => TrainIdBox.Text = trainId);
 		await Dispatcher.UIThread.InvokeAsync(() => TrainNameBox.Text = trainName);
 		await Dispatcher.UIThread.InvokeAsync(() => TrainVersion.Text = trainVersion);
-	}
-
-	private async Task UpdateSaveTimer()
-	{
-		_saveTimer?.Dispose();
-		DateTime? nextSave = await _trainInfo.GetNextSave();
-		if (nextSave == null)
-		{
-			Statics.Notifications.Add(new Notification("Could not get next train save date.", Colors.Yellow));
-			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Unknown");
-			return;
-		}
-		int nextSaveInMs = (nextSave.Value.Add(TimeSpan.FromSeconds(2)) - DateTime.Now).Milliseconds;
-		if (nextSaveInMs <= 0)
-		{
-			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Past Due");
-			return;
-		}
-		_saveTimer = new Timer(nextSaveInMs);
-		_saveTimer.Elapsed += (_, _) => _ = UpdateSaveTimer();
-		
-		_saveTimer.Start();
-		
-
-		string date = nextSave.Value.ToString("HH:mm:ss");
-		await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = date);
 	}
 	
 	private async void Initialize()
@@ -145,7 +103,6 @@ public partial class TrainControlView : UserControl
 				LoadingArea.IsVisible = true;
 			});
 
-			await LoadLastConnected();
 			await LoadTrainData();
 			await LoadControlData();
 		
@@ -161,31 +118,6 @@ public partial class TrainControlView : UserControl
 			// TODO: Make controls unavailable?
 		}
 	}
-
-	private async Task LoadLastConnected()
-	{
-		int dayDiff = (_dataManager.GetLastSynced() - DateTime.Now).Days * -1;
-		
-		IImmutableSolidColorBrush brush = ConvertDayIntoBrush(dayDiff);
-		await Dispatcher.UIThread.InvokeAsync(() => NextConnectionDay.Foreground = brush);
-
-		if (dayDiff >= 30)
-			await Dispatcher.UIThread.InvokeAsync(() =>
-				NextConnectionDay.Text = $"Please connect to the internet as soon as possible.");
-		else
-			await Dispatcher.UIThread.InvokeAsync(() =>
-				NextConnectionDay.Text = $"Please connect to the internet in {30 - dayDiff} days.");
-	}
-
-	private IImmutableSolidColorBrush ConvertDayIntoBrush(int dayDif)
-	{
-		return dayDif switch
-		{
-			< 10 => Brushes.Green,
-			< 20 => Brushes.Yellow,
-			_ => Brushes.Red
-		};
-	}
 	
 	private async void ChangeToSelectionScreen()
 	{
@@ -198,7 +130,6 @@ public partial class TrainControlView : UserControl
 				LoadingArea.IsVisible = true;
 			});
 			await Task.Delay(25);
-			_saveTimer?.Dispose();
 			_trainCameraService.DisconnectStreams();
 			_trainCameraService.Dispose();
 			
@@ -229,66 +160,12 @@ public partial class TrainControlView : UserControl
 
 	#region UI_Events
 
-	private async void ShutdownTrain_Click(object? sender, RoutedEventArgs e)
-	{
-		await Dispatcher.UIThread.InvokeAsync(() =>
-		{
-			LoadingName.Text = "Shutting down train...";
-			LoadingArea.IsVisible = true;
-		});
-		await Task.Delay(25);
-		// TODO: Notify train system of shutdown (seperate from actual shutdown?)
-		await _trainInfo.PostShutdown();
-		// Prevent shutdown when train is still moving without assistant
-		ChangeToSelectionScreen();
-	}
-
 	private void ChangeTrain_Click(object? sender, RoutedEventArgs e)
 	{
 		ChangeToSelectionScreen();
 	}
-	
-	private async void RestartTrain_Click(object? sender, RoutedEventArgs e)
-	{
-		await Dispatcher.UIThread.InvokeAsync(() =>
-		{
-			LoadingName.Text = "Restarting down train...";
-			LoadingArea.IsVisible = true;
-		});
-		await Task.Delay(25);
-		// TODO: Notify train system of shutdown (seperate from actual shutdown?)
-		// Prevent shutdown when train is still moving without assistant
-		await _trainInfo.PostRestart();
-		ChangeToSelectionScreen();
-	}
 
-	private async void UpdateTrain_Click(object? sender, RoutedEventArgs e)
-	{
-		await _trainInfo.PostUpdate();
-		Statics.Notifications.Add(new Notification("A update has been triggered on the train. Please view the train logs to know when it has finished.", Colors.Yellow));
-	}
-
-	private async void CombinedThrottleUp_Click(object? sender, RoutedEventArgs e)
-	{
-		if (_combinedThrottlePosition >= 100)
-			return;
-
-		_combinedThrottlePosition += 10;
-		await _trainControl.SetLever(0, _combinedThrottlePosition);
-		await Dispatcher.UIThread.InvokeAsync(() => CombinedThrottlePercentage.Text = _combinedThrottlePosition.ToString(CultureInfo.InvariantCulture));
-	}
-
-	private async void CombinedThrottleDown_Click(object? sender, RoutedEventArgs e)
-	{
-		if (_combinedThrottlePosition <= -100)
-			return;
-
-		_combinedThrottlePosition -= 10;
-		await _trainControl.SetLever(0, _combinedThrottlePosition);
-		await Dispatcher.UIThread.InvokeAsync(() => CombinedThrottlePercentage.Text = _combinedThrottlePosition.ToString(CultureInfo.InvariantCulture));
-	}
-
-	private async void EasyControl_Click(object? sender, RoutedEventArgs e)
+	private async void Control_Click(object? sender, RoutedEventArgs e)
 	{
 		_logger.Log("Starting easy control.");
 		_easyControlView = new EasyControlView();
@@ -296,17 +173,12 @@ public partial class TrainControlView : UserControl
 		_easyControlView = null;
 		_logger.Log("Exited easy control.");
 	}
-	
-	private void LogsButton_Click(object? sender, RoutedEventArgs e)
-	{
-		TrainLogsViewer logsView = new TrainLogsViewer(_trainInfo);
-		logsView.Show(RootGrid);
-	}
-	
-	private void SetDateButton_Click(object? sender, RoutedEventArgs e)
-	{
-		TrainDateSetter dateSetter = new TrainDateSetter(_trainInfo);
-		dateSetter.Show(RootGrid);
-	}
 	#endregion
+
+	private async void TrainInfo_Click(object? sender, RoutedEventArgs e)
+	{
+		TrainInfoView infoView = new TrainInfoView(_trainInfo);
+		if(await infoView.Show(RootGrid) == 1)
+			ChangeToSelectionScreen();
+	}
 }

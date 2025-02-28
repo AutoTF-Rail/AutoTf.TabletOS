@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Height="800"
+             Width="1280"
+             x:Class="AutoTf.TabletOS.Avalonia.Views.TrainInfoView">
+    <Grid Name="RootGrid">
+        <Image Source="../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
+        
+        <StackPanel Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock FontSize="25">
+                <Run>EVU: </Run>
+                <Run Name="EvuNameBox" FontWeight="Black">Meow</Run>
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>Train ID: </Run>
+                <Run Name="TrainIdBox" FontWeight="Black">Meow</Run>
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>Train Name: </Run>
+                <Run Name="TrainNameBox" FontWeight="Black">Meow</Run>
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>SW-Version: </Run>
+                <Run Name="TrainVersion" FontWeight="Black">Meow</Run>
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>Next Connection Day: </Run>
+                <Run Foreground="Red" Name="NextTrainConnectionDay" FontWeight="Black">Meow</Run>
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>Next Data Save: </Run>
+                <Run Foreground="Gray" Name="NextTrainSave" FontWeight="Black">Meow</Run>
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>Version: </Run>
+                <Run Foreground="Gray" Name="VersionBox" FontWeight="Black">Meow</Run>
+            </TextBlock>
+        </StackPanel>
+        
+        <DockPanel Margin="70" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="ShutdownTrain_Click">Shutdown</Button>
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="RestartTrain_Click">Restart</Button>
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="UpdateTrain_Click">Update</Button>
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="ChainButton_Click">Chain</Button>
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="SetDateButton_Click">Set Date</Button>
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Click="LogsButton_Click">Logs</Button>
+        </DockPanel>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="18" Click="BackButton_Click" Margin="20" Foreground="Black" BorderBrush="Black">Back</Button>
+        
+                
+        <Grid IsVisible="False" Name="LoadingArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid Background="Black" Opacity=".72" />
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Loading...</TextBlock>
+                <TextBlock Name="LoadingName" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Getting Data</TextBlock>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
