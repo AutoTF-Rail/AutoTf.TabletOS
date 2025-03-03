@@ -187,6 +187,18 @@ public partial class TrainSelectionScreen : UserControl
 		
 			TrainAd trainAd = (TrainAd)((Button)sender!).DataContext!;
 
+			if (trainAd.TrainName == "ExampleTrain" && trainAd.TrainNum == "783-938")
+			{
+				Dispatcher.UIThread.Invoke(() =>
+				{
+					LoadingName.Text = "Loading panel...";
+					if (DataContext is MainWindowViewModel viewModel)
+					{
+						viewModel.ActiveView = new TrainControlView();
+					}
+				});
+			}
+
 			Statics.TrainConnectionId = Statics.GenerateRandomString();
 
 			_logger.Log($"Trying to connect to train with SSID: {trainAd.TrainName}.");

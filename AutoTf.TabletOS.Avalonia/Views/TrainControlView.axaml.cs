@@ -1,5 +1,7 @@
 using System;
 using System.Globalization;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
@@ -29,6 +31,8 @@ public partial class TrainControlView : UserControl
 
 	private EasyControlView? _easyControlView;
 
+	// TODO: Sync with train on startup
+	private int _currentDirection = 0;
 	private int _currentCamera = 0;
 	
 	public TrainControlView()
@@ -101,6 +105,19 @@ public partial class TrainControlView : UserControl
 			{
 				LoadingName.Text = "Loading data...";
 				LoadingArea.IsVisible = true;
+				// TODO: Sync direction
+				PreviousCamButton.IsVisible = false;
+				CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]";
+
+				// TODO: Sync
+				AiDriverStatus.Text = "Disabled";
+				AiDriverStatus.Foreground = Brushes.Yellow;
+
+				string[] splashes = File.ReadAllLines("CopiedAssets/AiSplash");
+				
+				AiNextStop.Text = splashes[new Random().Next(splashes.Length)];
+
+				AiDriverStartStopButton.Content = "Start";
 			});
 
 			await LoadTrainData();
@@ -180,5 +197,82 @@ public partial class TrainControlView : UserControl
 		TrainInfoView infoView = new TrainInfoView(_trainInfo);
 		if(await infoView.Show(RootGrid) == 1)
 			ChangeToSelectionScreen();
+	}
+
+	private async void ChangeDirection_Click(object? sender, RoutedEventArgs e)
+	{
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			LoadingName.Text = "Changing direction.";
+			LoadingArea.IsVisible = true;
+		});
+		
+		// TODO: Can't change direction if train is actively moving. In the future just disable the button.
+		if (false /*trainIsMoving*/)
+		{
+			Statics.Notifications.Add(new Notification("Cannot change direction while train is moving.",
+				Colors.Yellow));
+			return;
+		}
+		
+		await Task.Delay(750);
+
+		if (_currentDirection == 0)
+			_currentDirection = 1;
+		else
+			_currentDirection = 0;
+		
+		// If new direction is back, and current cam is front: Do nothin
+		// If new direction is front, and current cam is front: Do nothing
+		int currCam = _currentCamera;
+		
+		// If new direction is back, and current cam is front: Change cam
+		if (_currentDirection == 1 && _currentCamera == 0)
+		{
+			PreviousCamButton.IsVisible = true;
+			NextCamButton.IsVisible = false;
+			_currentCamera = 1;
+		}
+		// If new direction is front, and current cam is back: Change cam
+		else if (_currentDirection == 0 && _currentCamera == 1)
+		{
+			// TODO: Put this into a seperate method called "Change cam direction" or so
+			PreviousCamButton.IsVisible = false;
+			NextCamButton.IsVisible = true;
+			_currentCamera = 0;
+		}
+		
+#if DEBUG
+		if(currCam != _currentCamera)
+			await _trainCameraService.StartListeningForCameras();
+#endif
+		
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]";
+			LoadingArea.IsVisible = false;
+		});
+	}
+
+	private void NextCamera_Click(object? sender, RoutedEventArgs e)
+	{
+		_currentCamera = 1;
+		PreviousCamButton.IsVisible = true;
+		NextCamButton.IsVisible = false;
+		CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]";
+	#if DEBUG
+		_trainCameraService.StartListeningForCameras();
+	#endif
+	}
+
+	private void PreviousCamera_Click(object? sender, RoutedEventArgs e)
+	{
+		_currentCamera = 0;
+		PreviousCamButton.IsVisible = false;
+		NextCamButton.IsVisible = true;
+		CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]";
+#if DEBUG
+		_trainCameraService.StartListeningForCameras();
+#endif
 	}
 }

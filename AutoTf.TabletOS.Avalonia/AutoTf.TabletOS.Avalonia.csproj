@@ -32,6 +32,9 @@
 <!--          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>-->
 <!--        </AvaloniaResource>-->
         <AvaloniaResource Include="Assets\Fonts\*" />
+        <None Update="CopiedAssets\AiSplash">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.2.3" />
@@ -75,4 +78,16 @@
         <HintPath>..\AutoTf.TabletOS.Preview\bin\Debug\net8.0\AutoTf.TabletOS.Models.dll</HintPath>
       </Reference>
     </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="CopiedAssets\ExampleImage1.png" />
+      <Content Include="CopiedAssets\ExampleImage1.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="CopiedAssets\ExampleImage2.png" />
+      <Content Include="CopiedAssets\ExampleImage2.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

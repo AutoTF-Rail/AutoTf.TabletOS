@@ -10,11 +10,11 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
-                    <RowDefinition Height="125" />
+                    <RowDefinition Height="115" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 
-                <Grid Grid.Row="1" Margin="10">
+                <Grid Grid.Row="1" Margin="0, 5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition />
@@ -52,10 +52,15 @@
                                 <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
                                 <DockPanel>
                                     <Image Source="../Assets/AIDriverIcon.png" VerticalAlignment="Stretch" Margin="10"/>
-                                    <Button DockPanel.Dock="Right" FontSize="28" Margin="5" BorderBrush="Black" BorderThickness="2" CornerRadius="10" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="80" Width="80">Stop</Button>
+                                    <Button DockPanel.Dock="Right" Name="AiDriverStartStopButton" FontSize="26" Margin="5" BorderBrush="Black" BorderThickness="2" CornerRadius="10" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="80" Width="80">Stop</Button>
                                     <StackPanel Margin="5" VerticalAlignment="Center">
-                                        <TextBlock FontSize="25" Foreground="Green" FontWeight="Bold">Enabled</TextBlock>
-                                        <TextBlock FontSize="23" Foreground="Gray" FontWeight="Bold">Next stop: The moon</TextBlock>
+                                        <TextBlock FontSize="25">
+                                            <Run>AI Driver: </Run>
+                                            <Run Name="AiDriverStatus" Foreground="Green" FontWeight="Bold">Enabled</Run>
+                                        </TextBlock>
+                                        <Viewbox>
+                                            <TextBlock Foreground="Gray" Name="AiNextStop" FontWeight="Bold">Next stop: Somewhere… Hopefully.</TextBlock>
+                                        </Viewbox>
                                     </StackPanel>
                                 </DockPanel>
                             </Grid>
@@ -72,16 +77,16 @@
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
-                        <ColumnDefinition Width="220" />
+                        <ColumnDefinition Width="215" />
                     </Grid.ColumnDefinitions>
                     
-                    <Grid Grid.Column="0" Margin="5">
+                    <Grid Grid.Column="0" Margin="0, 5">
                         <!-- <Grid.RowDefinitions> -->
                         <!--     <RowDefinition Height="1.6*" /> -->
                         <!--     <RowDefinition /> -->
                         <!-- </Grid.RowDefinitions> -->
                         <!-- -->
-                        <Border Margin="10, 5, 5, 0" BorderBrush="Black" CornerRadius="10" ClipToBounds="True" BorderThickness="2">
+                        <Border Margin="5, 5, 2, 0" BorderBrush="Black" CornerRadius="10" ClipToBounds="True" BorderThickness="2">
                             <Grid>
                                 <Border CornerRadius="10, 10, 0, 0" Background="Gray" Opacity=".2"/>
                                 <StackPanel HorizontalAlignment="Stretch">
@@ -90,11 +95,16 @@
                                             <Border Background="Gray" Opacity="0.2" />
                                             <DockPanel>
                                                 <Image DockPanel.Dock="Right" Source="../Assets/Arrow_Right.png" Height="20" Margin="10" />
-                                                <TextBlock FontSize="25" Margin="10, 5">Controls</TextBlock>
+                                                <TextBlock DockPanel.Dock="Left" Name="CamDirectionText" FontSize="25" Margin="10, 5"/>
+                                                <TextBlock FontSize="25" HorizontalAlignment="Right" VerticalAlignment="Center">Controls</TextBlock>
                                             </DockPanel>
                                         </Grid>
                                     </Button>
-                                    <Image ClipToBounds="True" Name="PreviewImage" Source="../Assets/LoadingCameraFeedImage.png"></Image>
+                                    <Grid ClipToBounds="True">
+                                        <Image ClipToBounds="True" Name="PreviewImage" Source="../Assets/LoadingCameraFeedImage.png"></Image>
+                                        <Button Name="NextCamButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="25" Click="NextCamera_Click">&gt;</Button>
+                                        <Button Name="PreviousCamButton" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="25" Click="PreviousCamera_Click">&lt;</Button>
+                                    </Grid>
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -140,19 +150,20 @@
                                                 </Grid>
                                             </Button>
                                         </DockPanel>
-                                        <Button HorizontalAlignment="Center" Margin="5" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center">100%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center">100%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="3" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center">75%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="3" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center">50%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="3" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center">25%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center">75%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center">50%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center">25%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="5" Height="40" FontSize="25" Width="100" HorizontalContentAlignment="Center">0%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="100" HorizontalContentAlignment="Center">0%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="3" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center">-25%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="3" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center">-50%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="3" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center">-75%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center">-25%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center">-50%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center">-75%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="5" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center">-100%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center">-100%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontWeight="Bold" Foreground="Black" FontSize="18" Width="175" HorizontalContentAlignment="Center" Click="ChangeDirection_Click">Change direction</Button>
                                     </StackPanel>
                                 </Grid>
                                 
@@ -172,7 +183,7 @@
                     </Grid>
                 </Grid>
                 
-                <Grid Grid.Row="0" Grid.RowSpan="3" IsVisible="False" Name="LoadingArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid Grid.Row="0" Grid.RowSpan="3" IsVisible="True" Name="LoadingArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <Grid Background="Black" Opacity=".72" />
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Loading...</TextBlock>

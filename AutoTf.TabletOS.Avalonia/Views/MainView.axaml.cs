@@ -6,6 +6,7 @@ using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Yubico.YubiKey;
@@ -30,6 +31,10 @@ public partial class MainView : UserControl
 		_listener.Removed += KeyRemoved;
 
 		TryDetectAlreadyPluggedIn();
+		
+#if RELEASE
+		SkipButton.IsVisible = false;
+#endif
 	}
 
 	private void TryDetectAlreadyPluggedIn()
@@ -108,5 +113,15 @@ public partial class MainView : UserControl
 			}
 			_listener.Dispose();
 		});
+	}
+
+	private void SkipButton_Click(object? sender, RoutedEventArgs e)
+	{
+	#if DEBUG
+		Statics.YubiCode = "123";
+		Statics.YubiSerial = 1;
+		Statics.YubiTime = DateTime.UtcNow;
+		ChangeScreen();
+	#endif
 	}
 }
