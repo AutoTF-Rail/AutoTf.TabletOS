@@ -37,17 +37,10 @@ public class TrainCameraService : ITrainCameraService
 	{
 		try
 		{
-			int? cameraCount = await _trainInfo.GetCameraCount();
-			if (cameraCount == null)
-			{
-				Statics.Notifications.Add(new Notification("Could not find any cameras.", Colors.Red));
-				_logger.Log("TCS: Camera count was null.");
+			if (!await PostStartStream(1234))
 				return;
-			}
-			
-			_logger.Log($"TCS: Found {cameraCount} cameras.");
 
-			for (int i = 0; i < cameraCount; i++)
+			for (int i = 0; i < 2; i++)
 			{
 				_logger.Log($"TCS: Starting stream for camera {i}.");
 
@@ -65,9 +58,6 @@ public class TrainCameraService : ITrainCameraService
 	private async void ListenForStream(int cameraIndex)
 	{
 		int udpPort = 1234 + cameraIndex;
-		
-		if (!await PostStartStream(udpPort, cameraIndex))
-			return;
 		
 		_logger.Log($"TCS: Listening for images for camera {cameraIndex} on port {udpPort}");
 		_currentBitmaps.Add(null);
@@ -124,12 +114,12 @@ public class TrainCameraService : ITrainCameraService
         _udpClients[cameraIndex].Dispose();
 	}
 	
-	private async Task<bool> PostStartStream(int port, int cameraIndex)
+	private async Task<bool> PostStartStream(int port)
 	{
 		try
 		{
-			_logger.Log($"TCS: Requesting stream start with port {port} and camera index {cameraIndex}.");
-			string serverUrl = $"http://192.168.1.1/camera/startStream?port={port}&cameraIndex={cameraIndex}";
+			_logger.Log($"TCS: Requesting stream start with port {port}.");
+			string serverUrl = $"http://192.168.1.1/camera/startStream?port={port}";
 
 			using (HttpClient client = new HttpClient())
 			{
@@ -138,7 +128,7 @@ public class TrainCameraService : ITrainCameraService
 
 				if (!response.IsSuccessStatusCode)
 				{
-					Statics.Notifications.Add(new Notification($"Could not start the stream for camera {cameraIndex}.", Colors.Red));
+					Statics.Notifications.Add(new Notification($"Could not start the stream.", Colors.Red));
 					_logger.Log($"TCS: {response.StatusCode}: Could not start stream:");
 					_logger.Log(await response.Content.ReadAsStringAsync());
 				}
@@ -148,7 +138,7 @@ public class TrainCameraService : ITrainCameraService
 		}
 		catch (Exception e)
 		{
-			Statics.Notifications.Add(new Notification($"Could not start the stream for camera {cameraIndex}.", Colors.Red));
+			Statics.Notifications.Add(new Notification($"Could not start the stream.", Colors.Red));
 			_logger.Log("TCS: Failed to start stream:");
 			_logger.Log(e.ToString());
 		}

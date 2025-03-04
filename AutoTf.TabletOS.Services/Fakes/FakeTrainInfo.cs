@@ -4,11 +4,6 @@ namespace AutoTf.TabletOS.Services.Fakes;
 
 public class FakeTrainInfo : ITrainInformationService
 {
-	public Task<int?> GetCameraCount()
-	{
-		return Task.FromResult<int?>(null);
-	}
-
 	public Task<string?> GetEvuName()
 	{
 		return Task.FromResult("ExampleEvu2")!;

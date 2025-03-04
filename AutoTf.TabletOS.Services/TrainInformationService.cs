@@ -8,29 +8,6 @@ public class TrainInformationService : ITrainInformationService
 {
 	private readonly Logger _logger = Statics.Logger;
 
-	public async Task<int?> GetCameraCount()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/information/cameracount";
-
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			HttpResponseMessage response = await client.GetAsync(url);
-			
-			response.EnsureSuccessStatusCode();
-
-			return int.Parse(await response.Content.ReadAsStringAsync());
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS: Could not get camera count:");
-			_logger.Log(ex.ToString());
-			return null;
-		}
-	}
-
 	public async Task<string?> GetEvuName()
 	{
 		try
