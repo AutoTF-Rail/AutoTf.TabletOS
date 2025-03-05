@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using AutoTf.Logging;
@@ -119,8 +120,11 @@ public partial class InfoScreen : UserControl
 		{
 			InfoOutput.Text = perms;
 		
-			InfoStatus.Text = "Reboot";
-			CommandExecuter.ExecuteSilent("reboot now", true);
+			InfoStatus.Text = "Soft reboot";
+			
+			// TODO: Test
+			Environment.Exit(1);
+			// CommandExecuter.ExecuteSilent("reboot now", true);
 		});
 		await Task.Delay(50);
 		
