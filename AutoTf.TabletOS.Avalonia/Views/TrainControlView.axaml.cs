@@ -13,6 +13,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
+using DynamicData;
 using Timer = System.Timers.Timer;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
@@ -88,7 +89,7 @@ public partial class TrainControlView : UserControl
 		
 		if (evuName == null || trainId == null || trainName == null || trainVersion == null)
 		{
-			Statics.Notifications.Add(new Notification("Could not get train information data. Please view the logs for more information.", Colors.Red));
+			AddNotification("Could not get train information data. Please view the logs for more information.", Colors.Red);
 			return;
 		}
 		await Dispatcher.UIThread.InvokeAsync(() => EvuNameBox.Text = evuName);
@@ -131,7 +132,7 @@ public partial class TrainControlView : UserControl
 		{
 			_logger.Log("Error during control init.");
 			_logger.Log(e.Message);
-			Statics.Notifications.Add(new Notification("Disconnected: Could not initialize controls.", Colors.Red));
+			AddNotification("Disconnected: Could not initialize controls.", Colors.Red);
 			// TODO: Make controls unavailable?
 		}
 	}
@@ -171,7 +172,7 @@ public partial class TrainControlView : UserControl
 		{
 			_logger.Log("Could not change to selection screen:");
 			_logger.Log(e.ToString());
-			Statics.Notifications.Add(new Notification("Could not change into train selection screen. Please restart the device.", Colors.Red));
+			AddNotification("Could not change into train selection screen. Please restart the device.", Colors.Red);
 		}
 	}
 
@@ -210,8 +211,8 @@ public partial class TrainControlView : UserControl
 		// TODO: Can't change direction if train is actively moving. In the future just disable the button.
 		if (false /*trainIsMoving*/)
 		{
-			Statics.Notifications.Add(new Notification("Cannot change direction while train is moving.",
-				Colors.Yellow));
+			AddNotification("Cannot change direction while train is moving.",
+				Colors.Yellow);
 			return;
 		}
 		
@@ -274,5 +275,10 @@ public partial class TrainControlView : UserControl
 #if DEBUG
 		_trainCameraService.StartListeningForCameras();
 #endif
+	}
+
+	private void AddNotification(string text, Color color)
+	{
+		Dispatcher.UIThread.Invoke(() => Statics.Notifications.Add(new Notification(text, color)));
 	}
 }
