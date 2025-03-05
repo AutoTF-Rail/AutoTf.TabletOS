@@ -131,7 +131,7 @@ public partial class TrainControlView : UserControl
 		catch (Exception e)
 		{
 			_logger.Log("Error during control init.");
-			_logger.Log(e.Message);
+			_logger.Log(e.ToString());
 			AddNotification("Disconnected: Could not initialize controls.", Colors.Red);
 			// TODO: Make controls unavailable?
 		}
