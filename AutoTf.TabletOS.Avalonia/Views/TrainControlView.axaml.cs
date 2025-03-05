@@ -149,7 +149,6 @@ public partial class TrainControlView : UserControl
 			});
 			await Task.Delay(25);
 			_trainCameraService.DisconnectStreams();
-			_trainCameraService.Dispose();
 			
 			// TODO: Tell train that you disconnected (emergency break if connection is lost, or user proceeds)
 			// Stop streams

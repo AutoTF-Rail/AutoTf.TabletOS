@@ -16,16 +16,15 @@ public class TrainCameraService : ITrainCameraService
 	private List<UdpClient> _udpClients = new List<UdpClient>();
 
 	private List<Bitmap?> _currentBitmaps = new List<Bitmap?>();
-
-	// TODO: Make global cancellation token too for shutdown?
-	private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+	
+	private bool _canStream = true;
 
 	public Action<int, Bitmap>? NewFrameReceived { get; set; }
 	
 	public async void DisconnectStreams()
 	{
 		_logger.Log("TCS: Stream disconnect was requested.");
-		await _cancellationTokenSource.CancelAsync();
+		_canStream = false;
 		for (int i = 0; i < _udpClients.Count; i++)
 		{
 			await PostStopStream(i);
@@ -65,7 +64,7 @@ public class TrainCameraService : ITrainCameraService
 		UdpClient udpClient = new UdpClient(udpPort);
         _udpClients.Add(udpClient);
 
-        while (!_cancellationTokenSource.IsCancellationRequested)
+        while (_canStream)
         {
 	        try
 	        {
@@ -110,7 +109,7 @@ public class TrainCameraService : ITrainCameraService
 	        }
         }
 		
-        _logger.Log("Stopping stream: Cancel requested: " + _cancellationTokenSource.IsCancellationRequested);
+        _logger.Log("Stopping stream: Can stream: " + _canStream);
         _udpClients[cameraIndex].Dispose();
 	}
 	
@@ -172,10 +171,5 @@ public class TrainCameraService : ITrainCameraService
 		}
 
 		return false;
-	}
-
-	public void Dispose()
-	{
-		Statics.Shutdown -= DisconnectStreams;
 	}
 }
