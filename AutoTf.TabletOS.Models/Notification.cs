@@ -7,12 +7,9 @@ public class Notification
 {
 	public Notification(string text, Color color)
 	{
-		Dispatcher.UIThread.Invoke(() =>
-		{
-			Text = text;
-			Time = DateTime.Now.ToString("HH:mm:ss");
-			Color = new SolidColorBrush(color);
-		});
+		Text = text;
+		Time = DateTime.Now.ToString("HH:mm:ss");
+		Color = new SolidColorBrush(color);
 	}
 	
 	public string Text { get; set; }

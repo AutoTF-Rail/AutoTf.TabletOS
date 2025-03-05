@@ -128,7 +128,7 @@ public class TrainCameraService : ITrainCameraService
 
 				if (!response.IsSuccessStatusCode)
 				{
-					Statics.Notifications.Add(new Notification($"Could not start the stream.", Colors.Red));
+					// Statics.Notifications.Add(new Notification($"Could not start the stream.", Colors.Red));
 					_logger.Log($"TCS: {response.StatusCode}: Could not start stream:");
 					_logger.Log(await response.Content.ReadAsStringAsync());
 				}
@@ -138,7 +138,7 @@ public class TrainCameraService : ITrainCameraService
 		}
 		catch (Exception e)
 		{
-			Statics.Notifications.Add(new Notification($"Could not start the stream.", Colors.Red));
+			// Statics.Notifications.Add(new Notification($"Could not start the stream.", Colors.Red));
 			_logger.Log("TCS: Failed to start stream:");
 			_logger.Log(e.ToString());
 		}

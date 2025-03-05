@@ -132,7 +132,7 @@ public partial class TrainControlView : UserControl
 		{
 			_logger.Log("Error during control init.");
 			_logger.Log(e.ToString());
-			AddNotification("Disconnected: Could not initialize controls.", Colors.Red);
+			// AddNotification("Disconnected: Could not initialize controls.", Colors.Red);
 			// TODO: Make controls unavailable?
 		}
 	}
