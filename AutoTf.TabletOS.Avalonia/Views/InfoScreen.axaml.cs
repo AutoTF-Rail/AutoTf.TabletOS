@@ -122,9 +122,7 @@ public partial class InfoScreen : UserControl
 		
 			InfoStatus.Text = "Soft reboot";
 			
-			// TODO: Test
-			Environment.Exit(1);
-			// CommandExecuter.ExecuteSilent("reboot now", true);
+			CommandExecuter.ExecuteSilent("reboot now", true);
 		});
 		await Task.Delay(50);
 		
