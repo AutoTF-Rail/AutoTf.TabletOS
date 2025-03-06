@@ -116,4 +116,35 @@ public class TrainControlService : ITrainControlService
 			return false;
 		}
 	}
+
+	public async Task<bool> EasyControl(int power)
+	{
+		try
+		{
+			// TODO: Reverse UI change if this fails/request the current state on the server to update the UI again
+			string url = "http://192.168.1.1/control/easyControl";
+
+			using HttpClient client = new HttpClient();
+			
+			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
+			
+			HttpResponseMessage response = await client.PostAsync(url, new StringContent(JsonSerializer.Serialize(power), Encoding.UTF8, "application/json"));
+
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.Log("TCS: Could not transmit easy control power:");
+				_logger.Log(response.StatusCode + ": " + await response.Content.ReadAsStringAsync());
+
+				return false;
+			}
+
+			return true;
+		}
+		catch (Exception ex)
+		{
+			_logger.Log($"TCS: Error while sending easy control request for power {power}%:");
+			_logger.Log(ex.ToString());
+			return false;
+		}
+	}
 }

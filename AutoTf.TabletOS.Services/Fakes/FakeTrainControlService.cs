@@ -34,4 +34,9 @@ public class FakeTrainControlService : ITrainControlService
 		_leverPositions[leverIndex] = leverPercentage;
 		return Task.FromResult(true);
 	}
+
+	public Task<bool> EasyControl(int power)
+	{
+		return Task.FromResult(true);
+	}
 }

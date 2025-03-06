@@ -150,19 +150,19 @@
                                                 </Grid>
                                             </Button>
                                         </DockPanel>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center">100%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center" Click="EasyControl_Click_100">100%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center">75%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center">50%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center">25%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center" Click="EasyControl_Click_75">75%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center" Click="EasyControl_Click_50">50%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center" Click="EasyControl_Click_25">25%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="100" HorizontalContentAlignment="Center">0%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="100" HorizontalContentAlignment="Center" Click="EasyControl_Click_0">0%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center">-25%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center">-50%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center">-75%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center" Click="EasyControl_Click_M_25">-25%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center" Click="EasyControl_Click_M_50">-50%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center" Click="EasyControl_Click_M_75">-75%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center">-100%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center" Click="EasyControl_Click_M_100">-100%</Button>
                                         <Button HorizontalAlignment="Center" Margin="2" Height="40" FontWeight="Bold" Foreground="Black" FontSize="18" Width="175" HorizontalContentAlignment="Center" Click="ChangeDirection_Click">Change direction</Button>
                                     </StackPanel>
                                 </Grid>

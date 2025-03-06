@@ -280,4 +280,24 @@ public partial class TrainControlView : UserControl
 	{
 		Dispatcher.UIThread.Invoke(() => Statics.Notifications.Add(new Notification(text, color)));
 	}
+
+	#region EasyControl
+	private void EasyControl_Click_100(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(100);
+
+	private void EasyControl_Click_75(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(75);
+
+	private void EasyControl_Click_50(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(50);
+
+	private void EasyControl_Click_25(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(25);
+
+	private void EasyControl_Click_0(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(0);
+
+	private void EasyControl_Click_M_25(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(-25);
+
+	private void EasyControl_Click_M_50(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(-50);
+
+	private void EasyControl_Click_M_75(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(-75);
+
+	private void EasyControl_Click_M_100(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(-100);
+	#endregion
 }
