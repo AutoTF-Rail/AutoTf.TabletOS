@@ -110,7 +110,8 @@ public class TrainCameraService : ITrainCameraService
         }
 		
         _logger.Log("Stopping stream: Can stream: " + _canStream);
-        _udpClients[cameraIndex].Dispose();
+        udpClient.Close();
+        udpClient.Dispose();
 	}
 	
 	private async Task<bool> PostStartStream(int port)
