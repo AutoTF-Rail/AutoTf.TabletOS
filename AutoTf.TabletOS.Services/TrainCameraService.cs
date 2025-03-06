@@ -29,6 +29,13 @@ public class TrainCameraService : ITrainCameraService
 		{
 			await PostStopStream(i);
 		}
+		
+		foreach (var udpClient in _udpClients)
+		{
+			udpClient.Close();  // Close the socket
+			udpClient.Dispose(); // Ensure it's fully released
+		}
+		_udpClients.Clear();
 	}
 
 	// TODO: "OnTrainConnected" event for things like this:
@@ -60,8 +67,11 @@ public class TrainCameraService : ITrainCameraService
 		
 		_logger.Log($"TCS: Listening for images for camera {cameraIndex} on port {udpPort}");
 		_currentBitmaps.Add(null);
-		
-		UdpClient udpClient = new UdpClient(udpPort);
+
+		UdpClient udpClient = new UdpClient(udpPort)
+		{
+			ExclusiveAddressUse = false
+		};
         _udpClients.Add(udpClient);
 
         while (_canStream)
@@ -110,8 +120,6 @@ public class TrainCameraService : ITrainCameraService
         }
 		
         _logger.Log("Stopping stream: Can stream: " + _canStream);
-        udpClient.Close();
-        udpClient.Dispose();
 	}
 	
 	private async Task<bool> PostStartStream(int port)

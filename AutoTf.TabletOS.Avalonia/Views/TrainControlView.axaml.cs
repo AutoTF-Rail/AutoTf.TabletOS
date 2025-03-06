@@ -154,8 +154,6 @@ public partial class TrainControlView : UserControl
 			// Stop streams
 			// Disconnect from wifi
 			// Change screen
-		
-			_trainCameraService.DisconnectStreams();
 
 			_networkService.ShutdownConnection();
 
