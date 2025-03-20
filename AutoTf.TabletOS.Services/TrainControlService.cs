@@ -147,4 +147,35 @@ public class TrainControlService : ITrainControlService
 			return false;
 		}
 	}
+
+	public async Task<bool> EmergencyBrake()
+	{
+		try
+		{
+			// TODO: Retry if it fails?
+			string url = "http://192.168.1.1/control/emergencybrake";
+
+			using HttpClient client = new HttpClient();
+			
+			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
+			
+			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
+
+			if (!response.IsSuccessStatusCode)
+			{
+				_logger.Log("TCS: Could not transmit emergency brake request:");
+				_logger.Log(response.StatusCode + ": " + await response.Content.ReadAsStringAsync());
+
+				return false;
+			}
+
+			return true;
+		}
+		catch (Exception ex)
+		{
+			_logger.Log($"TCS: Error while sending emergency brake request:");
+			_logger.Log(ex.ToString());
+			return false;
+		}
+	}
 }

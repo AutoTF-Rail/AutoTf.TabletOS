@@ -39,4 +39,9 @@ public class FakeTrainControlService : ITrainControlService
 	{
 		return Task.FromResult(true);
 	}
+
+	public Task<bool> EmergencyBrake()
+	{
+		return Task.FromResult(true);
+	}
 }

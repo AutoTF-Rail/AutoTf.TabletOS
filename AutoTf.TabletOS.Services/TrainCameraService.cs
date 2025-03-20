@@ -69,11 +69,7 @@ public class TrainCameraService : ITrainCameraService
 		_logger.Log($"TCS: Listening for images for camera {cameraIndex} on port {udpPort}");
 		_currentBitmaps.Add(null);
 		
-		Socket udpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-		udpSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-		udpSocket.Bind(new IPEndPoint(IPAddress.Any, udpPort));
-
-		UdpClient udpClient = new UdpClient { Client = udpSocket };
+		UdpClient udpClient = new UdpClient(udpPort);
 		_udpClients.Add(udpClient);
 
         while (_canStream)

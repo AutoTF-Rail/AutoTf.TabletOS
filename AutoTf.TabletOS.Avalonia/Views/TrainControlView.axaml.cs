@@ -1,11 +1,10 @@
 using System;
-using System.Globalization;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
+using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
 using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
@@ -13,8 +12,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using DynamicData;
-using Timer = System.Timers.Timer;
+// ReSharper disable UnusedParameter.Local
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -27,14 +25,14 @@ public partial class TrainControlView : UserControl
 	private readonly NetworkService _networkService = Statics.NetworkService;
 	private readonly Logger _logger = Statics.Logger;
 
-	
-	private double _combinedThrottlePosition;
+	private SolidColorBrush _nonePressedEcBtnBackground = new SolidColorBrush(Color.FromArgb(51, 255, 255, 255));
+	private Button? _ecCurrentlyPressed;
 
 	private EasyControlView? _easyControlView;
 
 	// TODO: Sync with train on startup
-	private int _currentDirection = 0;
-	private int _currentCamera = 0;
+	private Side _currentDirection = Side.Front;
+	private Side _currentCamera = Side.Front;
 	
 	public TrainControlView()
 	{
@@ -55,7 +53,7 @@ public partial class TrainControlView : UserControl
 
 	private void NewFrameReceived(int cameraIndex, Bitmap bitmap)
 	{
-		if (cameraIndex != _currentCamera)
+		if (cameraIndex != (int)_currentCamera)
 			return;
 		
 		Dispatcher.UIThread.Invoke(() =>
@@ -69,15 +67,12 @@ public partial class TrainControlView : UserControl
 
 	private async Task LoadControlData()
 	{
+		// TODO: Convert this to an actual endpoint that tells you if controls are available
 		if (await _trainControl.GetLeverCount() != 0)
 		{
 			await Dispatcher.UIThread.InvokeAsync(() => ControlsUnavailableSection.IsVisible = false);
 			await Dispatcher.UIThread.InvokeAsync(() => EmergencyStopButton.IsEnabled = true);
 		}
-		// TODO: Doesnt this need to be in the upper if too?
-		_combinedThrottlePosition = await _trainControl.GetLeverPosition(0);
-		
-		// await Dispatcher.UIThread.InvokeAsync(() => CombinedThrottlePercentage.Text = _combinedThrottlePosition.ToString(CultureInfo.InvariantCulture));
 	}
 
 	private async Task LoadTrainData()
@@ -215,29 +210,29 @@ public partial class TrainControlView : UserControl
 		
 		await Task.Delay(750);
 
-		if (_currentDirection == 0)
-			_currentDirection = 1;
+		if (_currentDirection == Side.Front)
+			_currentDirection = Side.Back;
 		else
-			_currentDirection = 0;
+			_currentDirection = Side.Front;
 		
-		// If new direction is back, and current cam is front: Do nothin
-		// If new direction is front, and current cam is front: Do nothing
-		int currCam = _currentCamera;
+		// If new direction is back, and current cam is front: Do nothing
+		// If new direction is front, and current cam is front: Do nothing/Change direction to view front
+		Side currCam = _currentCamera;
 		
 		// If new direction is back, and current cam is front: Change cam
-		if (_currentDirection == 1 && _currentCamera == 0)
+		if (_currentDirection == Side.Back && _currentCamera == Side.Front)
 		{
 			PreviousCamButton.IsVisible = true;
 			NextCamButton.IsVisible = false;
-			_currentCamera = 1;
+			_currentCamera = Side.Back;
 		}
 		// If new direction is front, and current cam is back: Change cam
-		else if (_currentDirection == 0 && _currentCamera == 1)
+		else if (_currentDirection == Side.Front && _currentCamera == Side.Back)
 		{
 			// TODO: Put this into a seperate method called "Change cam direction" or so
 			PreviousCamButton.IsVisible = false;
 			NextCamButton.IsVisible = true;
-			_currentCamera = 0;
+			_currentCamera = Side.Front;
 		}
 		
 #if DEBUG
@@ -254,7 +249,7 @@ public partial class TrainControlView : UserControl
 
 	private void NextCamera_Click(object? sender, RoutedEventArgs e)
 	{
-		_currentCamera = 1;
+		_currentCamera = Side.Back;
 		PreviousCamButton.IsVisible = true;
 		NextCamButton.IsVisible = false;
 		CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]";
@@ -280,22 +275,107 @@ public partial class TrainControlView : UserControl
 	}
 
 	#region EasyControl
-	private void EasyControl_Click_100(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(100);
 
-	private void EasyControl_Click_75(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(75);
+	private void EasyControl_Click_100(object? sender, RoutedEventArgs e)
+	{
+		if(_ecCurrentlyPressed != null)
+			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
+		
+		Ec100Btn.Background = Brushes.Gray;
+		_ecCurrentlyPressed = Ec100Btn;
+		_trainControl.EasyControl(100);
+	}
 
-	private void EasyControl_Click_50(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(50);
+	private void EasyControl_Click_75(object? sender, RoutedEventArgs e)
+	{
+		if(_ecCurrentlyPressed != null)
+			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
+		
+		Ec75Btn.Background = Brushes.Gray;
+		_ecCurrentlyPressed = Ec75Btn;
+		_trainControl.EasyControl(75);
+	}
 
-	private void EasyControl_Click_25(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(25);
+	private void EasyControl_Click_50(object? sender, RoutedEventArgs e)
+	{
+		if(_ecCurrentlyPressed != null)
+			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
+		
+		Ec50Btn.Background = Brushes.Gray;
+		_ecCurrentlyPressed = Ec50Btn;
+		_trainControl.EasyControl(50);
+	}
 
-	private void EasyControl_Click_0(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(0);
+	private void EasyControl_Click_25(object? sender, RoutedEventArgs e)
+	{
+		if(_ecCurrentlyPressed != null)
+			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
+		
+		Ec25Btn.Background = Brushes.Gray;
+		_ecCurrentlyPressed = Ec25Btn;
+		_trainControl.EasyControl(25);
+	}
 
-	private void EasyControl_Click_M_25(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(-25);
+	private void EasyControl_Click_0(object? sender, RoutedEventArgs e)
+	{
+		if(_ecCurrentlyPressed != null)
+			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
+		
+		Ec0Btn.Background = Brushes.Gray;
+		_ecCurrentlyPressed = Ec0Btn;
+		_trainControl.EasyControl(0);
+	}
 
-	private void EasyControl_Click_M_50(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(-50);
+	private void EasyControl_Click_M_25(object? sender, RoutedEventArgs e)
+	{
+		if(_ecCurrentlyPressed != null)
+			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
+		
+		EcM25Btn.Background = Brushes.Gray;
+		_ecCurrentlyPressed = EcM25Btn;
+		_trainControl.EasyControl(-25);
+	}
 
-	private void EasyControl_Click_M_75(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(-75);
+	private void EasyControl_Click_M_50(object? sender, RoutedEventArgs e)
+	{
+		if(_ecCurrentlyPressed != null)
+			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
+		
+		EcM50Btn.Background = Brushes.Gray;
+		_ecCurrentlyPressed = EcM50Btn;
+		_trainControl.EasyControl(-50);
+	}
 
-	private void EasyControl_Click_M_100(object? sender, RoutedEventArgs e) => _trainControl.EasyControl(-100);
+	private void EasyControl_Click_M_75(object? sender, RoutedEventArgs e)
+	{
+		if(_ecCurrentlyPressed != null)
+			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
+		
+		EcM75Btn.Background = Brushes.Gray;
+		_ecCurrentlyPressed = EcM75Btn;
+		_trainControl.EasyControl(-75);
+	}
+
+	private void EasyControl_Click_M_100(object? sender, RoutedEventArgs e)
+	{
+		if(_ecCurrentlyPressed != null)
+			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
+		
+		EcM100Btn.Background = Brushes.Gray;
+		_ecCurrentlyPressed = EcM100Btn;
+		_trainControl.EasyControl(-100);
+	}
+
 	#endregion
+
+	private void EmergencyStopButton_OnClick(object? sender, RoutedEventArgs e)
+	{
+		_logger.Log("Emergency brake has been invoked.");
+		_trainControl.EmergencyBrake();
+	}
+
+	private void SpeedLimit_Click(object? sender, RoutedEventArgs e)
+	{
+		// TODO: Artificial speed limiter that is done by software too?
+	}
 }

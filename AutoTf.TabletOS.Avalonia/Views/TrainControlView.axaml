@@ -119,13 +119,13 @@
                                 </Grid.RowDefinitions>
                                 
                                 <DockPanel Grid.Row="0" LastChildFill="False">
-                                    <Button Padding="0" Width="95" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5, 0">
+                                    <Button Padding="0" Width="95" Background="Transparent" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5, 0">
                                         <Grid HorizontalAlignment="Center">
                                             <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
                                             <Image Source="../Assets/PromileAnzeigeWhite.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="16"/>
                                         </Grid>
                                     </Button>
-                                    <Button Padding="0" Width="95" Height="95" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5, 0">
+                                    <Button Padding="0" Width="95" Height="95" Background="Transparent" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5, 0">
                                         <Grid HorizontalAlignment="Center">
                                             <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
                                             <Image Source="../Assets/SpeedIndicator.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="20"/>
@@ -137,32 +137,32 @@
                                     <Border Background="Gray" Opacity=".4" BorderBrush="Black" CornerRadius="15" BorderThickness="1" ClipToBounds="True"></Border>
                                     <StackPanel>
                                         <DockPanel VerticalAlignment="Stretch" LastChildFill="False">
-                                            <Button Padding="0" Width="95" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
+                                            <Button Padding="0" Width="95" Background="Transparent" Click="SpeedLimit_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
                                                 <Grid HorizontalAlignment="Center">
                                                     <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
                                                     <Image Source="../Assets/SpeedSign.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="12"/>
                                                 </Grid>
                                             </Button>
-                                            <Button Name="EmergencyStopButton" IsEnabled="False" Padding="0" Width="95" Height="95" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="DarkRed" BorderThickness="2" Margin="5">
+                                            <Button Name="EmergencyStopButton" IsEnabled="False" Padding="0" Width="95" Height="95" Background="Transparent" Click="EmergencyStopButton_OnClick" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="DarkRed" BorderThickness="2" Margin="5">
                                                 <Grid HorizontalAlignment="Stretch">
                                                     <Border CornerRadius="10" Background="Red" Opacity=".4"/>
                                                     <TextBlock HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold">Emergency <LineBreak /> Break</TextBlock>
                                                 </Grid>
                                             </Button>
                                         </DockPanel>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center" Click="EasyControl_Click_100">100%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center" Name="Ec100Btn" Click="EasyControl_Click_100">100%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center" Click="EasyControl_Click_75">75%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center" Click="EasyControl_Click_50">50%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center" Click="EasyControl_Click_25">25%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center" Name="Ec75Btn" Click="EasyControl_Click_75">75%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center" Name="Ec50Btn" Click="EasyControl_Click_50">50%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center" Name="Ec25Btn" Click="EasyControl_Click_25">25%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="100" HorizontalContentAlignment="Center" Click="EasyControl_Click_0">0%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="100" HorizontalContentAlignment="Center" Name="Ec0Btn" Click="EasyControl_Click_0">0%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center" Click="EasyControl_Click_M_25">-25%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center" Click="EasyControl_Click_M_50">-50%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center" Click="EasyControl_Click_M_75">-75%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center" Name="EcM25Btn" Click="EasyControl_Click_M_25">-25%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center" Name="EcM50Btn" Click="EasyControl_Click_M_50">-50%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center" Name="EcM75Btn" Click="EasyControl_Click_M_75">-75%</Button>
                                         
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center" Click="EasyControl_Click_M_100">-100%</Button>
+                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center" Name="EcM100Btn" Click="EasyControl_Click_M_100">-100%</Button>
                                         <Button HorizontalAlignment="Center" Margin="2" Height="40" FontWeight="Bold" Foreground="Black" FontSize="18" Width="175" HorizontalContentAlignment="Center" Click="ChangeDirection_Click">Change direction</Button>
                                     </StackPanel>
                                 </Grid>
