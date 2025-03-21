@@ -18,7 +18,6 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class TrainControlView : UserControl
 {
-	private readonly IDataManager _dataManager = Statics.DataManager;
 	private readonly ITrainInformationService _trainInfo = Statics.TrainInformationService;
 	private readonly ITrainControlService _trainControl = Statics.TrainControlService;
 	private readonly ITrainCameraService _trainCameraService = Statics.TrainCameraService;
@@ -65,16 +64,6 @@ public partial class TrainControlView : UserControl
 		});
 	}
 
-	private async Task LoadControlData()
-	{
-		// TODO: Convert this to an actual endpoint that tells you if controls are available
-		if (await _trainControl.GetLeverCount() != 0)
-		{
-			await Dispatcher.UIThread.InvokeAsync(() => ControlsUnavailableSection.IsVisible = false);
-			await Dispatcher.UIThread.InvokeAsync(() => EmergencyStopButton.IsEnabled = true);
-		}
-	}
-
 	private async Task LoadTrainData()
 	{
 		string? evuName = await _trainInfo.GetEvuName();
@@ -87,10 +76,18 @@ public partial class TrainControlView : UserControl
 			AddNotification("Could not get train information data. Please view the logs for more information.", Colors.Red);
 			return;
 		}
+		
 		await Dispatcher.UIThread.InvokeAsync(() => EvuNameBox.Text = evuName);
 		await Dispatcher.UIThread.InvokeAsync(() => TrainIdBox.Text = trainId);
 		await Dispatcher.UIThread.InvokeAsync(() => TrainNameBox.Text = trainName);
 		await Dispatcher.UIThread.InvokeAsync(() => TrainVersion.Text = trainVersion);
+		
+		// TODO: Convert this to an actual endpoint that tells you if controls are available
+		if (await _trainControl.GetLeverCount() != 0)
+		{
+			await Dispatcher.UIThread.InvokeAsync(() => ControlsUnavailableSection.IsVisible = false);
+			await Dispatcher.UIThread.InvokeAsync(() => EmergencyStopButton.IsEnabled = true);
+		}
 	}
 	
 	private async void Initialize()
@@ -117,7 +114,6 @@ public partial class TrainControlView : UserControl
 			});
 
 			await LoadTrainData();
-			await LoadControlData();
 		
 			await _trainCameraService.StartListeningForCameras();
 
@@ -168,31 +164,7 @@ public partial class TrainControlView : UserControl
 		}
 	}
 
-	#region UI_Events
-
-	private void ChangeTrain_Click(object? sender, RoutedEventArgs e)
-	{
-		ChangeToSelectionScreen();
-	}
-
-	private async void Control_Click(object? sender, RoutedEventArgs e)
-	{
-		_logger.Log("Starting easy control.");
-		_easyControlView = new EasyControlView();
-		await _easyControlView.Show(RootGrid);
-		_easyControlView = null;
-		_logger.Log("Exited easy control.");
-	}
-	#endregion
-
-	private async void TrainInfo_Click(object? sender, RoutedEventArgs e)
-	{
-		TrainInfoView infoView = new TrainInfoView(_trainInfo);
-		if(await infoView.Show(RootGrid) == 1)
-			ChangeToSelectionScreen();
-	}
-
-	private async void ChangeDirection_Click(object? sender, RoutedEventArgs e)
+	private async Task ChangeDirection()
 	{
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
@@ -208,72 +180,107 @@ public partial class TrainControlView : UserControl
 			return;
 		}
 		
+#if DEBUG
 		await Task.Delay(750);
-
+#endif
+		// TODO: Notify train of side change and wait for completion
+		
 		if (_currentDirection == Side.Front)
 			_currentDirection = Side.Back;
 		else
 			_currentDirection = Side.Front;
-		
-		// If new direction is back, and current cam is front: Do nothing
-		// If new direction is front, and current cam is front: Do nothing/Change direction to view front
-		Side currCam = _currentCamera;
-		
-		// If new direction is back, and current cam is front: Change cam
-		if (_currentDirection == Side.Back && _currentCamera == Side.Front)
+
+		switch (_currentDirection)
 		{
-			PreviousCamButton.IsVisible = true;
-			NextCamButton.IsVisible = false;
-			_currentCamera = Side.Back;
-		}
-		// If new direction is front, and current cam is back: Change cam
-		else if (_currentDirection == Side.Front && _currentCamera == Side.Back)
-		{
-			// TODO: Put this into a seperate method called "Change cam direction" or so
-			PreviousCamButton.IsVisible = false;
-			NextCamButton.IsVisible = true;
-			_currentCamera = Side.Front;
+			// If new direction is back, and current cam is front: Change cam
+			case Side.Back when _currentCamera == Side.Front:
+			// If new direction is front, and current cam is back: Change cam
+			case Side.Front when _currentCamera == Side.Back:
+				ChangeCamera();
+				break;
 		}
 		
-#if DEBUG
-		if(currCam != _currentCamera)
-			await _trainCameraService.StartListeningForCameras();
-#endif
+		Dispatcher.UIThread.Invoke(() => LoadingArea.IsVisible = false);
+	}
+
+	private void ChangeCamera()
+	{
+		_currentCamera = _currentCamera == Side.Front ? Side.Back : Side.Front;
+
+		bool canShowPreviousBtn = _currentCamera == Side.Back;
+		bool canShowNextBtn = _currentCamera == Side.Front;
 		
-		Dispatcher.UIThread.Invoke(() =>
-		{
-			CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]";
-			LoadingArea.IsVisible = false;
-		});
-	}
-
-	private void NextCamera_Click(object? sender, RoutedEventArgs e)
-	{
-		_currentCamera = Side.Back;
-		PreviousCamButton.IsVisible = true;
-		NextCamButton.IsVisible = false;
-		CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]";
-	#if DEBUG
-		_trainCameraService.StartListeningForCameras();
-	#endif
-	}
-
-	private void PreviousCamera_Click(object? sender, RoutedEventArgs e)
-	{
-		_currentCamera = 0;
-		PreviousCamButton.IsVisible = false;
-		NextCamButton.IsVisible = true;
-		CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]";
+		PreviousCamButton.IsVisible = canShowPreviousBtn;
+		NextCamButton.IsVisible = canShowNextBtn;
+		
 #if DEBUG
 		_trainCameraService.StartListeningForCameras();
 #endif
+		
+		Dispatcher.UIThread.Invoke(() => CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]");
 	}
+
 
 	private void AddNotification(string text, Color color)
 	{
 		Dispatcher.UIThread.Invoke(() => Statics.Notifications.Add(new Notification(text, color)));
 	}
+	
+	#region UI_Events
 
+
+	private void ChangeTrain_Click(object? sender, RoutedEventArgs e)
+	{
+		ChangeToSelectionScreen();
+	}
+
+	private async void Control_Click(object? sender, RoutedEventArgs e)
+	{
+		_logger.Log("Starting easy control.");
+		_easyControlView = new EasyControlView();
+		await _easyControlView.Show(RootGrid);
+		_easyControlView = null;
+		_logger.Log("Exited easy control.");
+	}
+	
+	private async void TrainInfo_Click(object? sender, RoutedEventArgs e)
+	{
+		TrainInfoView infoView = new TrainInfoView(_trainInfo);
+		if(await infoView.Show(RootGrid) == 1)
+			ChangeToSelectionScreen();
+	}
+	
+	private async void ChangeDirection_Click(object? sender, RoutedEventArgs e)
+	{
+		try
+		{
+			await ChangeDirection();
+		}
+		catch (Exception ex)
+		{
+			_logger.Log("An exception occured while changing the direction:");
+			_logger.Log(ex.ToString());
+		}
+	}
+	
+	private void EmergencyStopButton_OnClick(object? sender, RoutedEventArgs e)
+	{
+		_logger.Log("Emergency brake has been invoked.");
+		_trainControl.EmergencyBrake();
+	}
+
+	private void SpeedLimit_Click(object? sender, RoutedEventArgs e)
+	{
+		// TODO: Artificial speed limiter that is done by software too?
+	}
+	
+	private void ChangeCamera_Click(object? sender, RoutedEventArgs e)
+	{
+		ChangeCamera();
+	}
+	
+	#endregion
+	
 	#region EasyControl
 
 	private void EasyControl_Click_100(object? sender, RoutedEventArgs e)
@@ -367,15 +374,4 @@ public partial class TrainControlView : UserControl
 	}
 
 	#endregion
-
-	private void EmergencyStopButton_OnClick(object? sender, RoutedEventArgs e)
-	{
-		_logger.Log("Emergency brake has been invoked.");
-		_trainControl.EmergencyBrake();
-	}
-
-	private void SpeedLimit_Click(object? sender, RoutedEventArgs e)
-	{
-		// TODO: Artificial speed limiter that is done by software too?
-	}
 }

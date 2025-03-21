@@ -102,8 +102,8 @@
                                     </Button>
                                     <Grid ClipToBounds="True">
                                         <Image ClipToBounds="True" Name="PreviewImage" Source="../Assets/LoadingCameraFeedImage.png"></Image>
-                                        <Button Name="NextCamButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="25" Click="NextCamera_Click">&gt;</Button>
-                                        <Button Name="PreviousCamButton" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="25" Click="PreviousCamera_Click">&lt;</Button>
+                                        <Button Name="NextCamButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="25" Click="ChangeCamera_Click">&gt;</Button>
+                                        <Button Name="PreviousCamButton" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="25" Click="ChangeCamera_Click">&lt;</Button>
                                     </Grid>
                                 </StackPanel>
                             </Grid>
