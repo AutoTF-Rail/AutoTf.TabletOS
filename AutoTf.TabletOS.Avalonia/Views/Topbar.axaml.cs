@@ -133,7 +133,7 @@ public partial class TopBar : UserControl
 
 	private void InfoButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		Statics.ChangeViewModel.Invoke(new InfoScreen(this));
+		Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new InfoScreen(this)));
 	}
 
 	private void NotificationDiscard_Click(object? sender, RoutedEventArgs e)
