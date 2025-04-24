@@ -17,12 +17,14 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class TopBar : UserControl
 {
+	private readonly UserControl _previousControl;
 	private DispatcherTimer _timer = null!;
 	private int _brightness;
 	private readonly INetworkService _networkService = Statics.NetworkService;
 	
-	public TopBar()
+	public TopBar(UserControl previousControl)
 	{
+		_previousControl = previousControl;
 		InitializeComponent();
 		Initialize();
 	}
@@ -133,7 +135,7 @@ public partial class TopBar : UserControl
 
 	private void InfoButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new InfoScreen(this)));
+		Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new InfoScreen(_previousControl)));
 	}
 
 	private void NotificationDiscard_Click(object? sender, RoutedEventArgs e)
