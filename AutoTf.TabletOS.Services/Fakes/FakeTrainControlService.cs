@@ -1,3 +1,4 @@
+using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
 
@@ -29,9 +30,9 @@ public class FakeTrainControlService : ITrainControlService
 			return Task.FromResult(LeverType.MainBrake);
 	}
 
-	public Task<bool> SetLever(int leverIndex, double leverPercentage)
+	public Task<bool> SetLever(LeverSetModel leverModel)
 	{
-		_leverPositions[leverIndex] = leverPercentage;
+		_leverPositions[leverModel.LeverIndex] = leverModel.Percentage;
 		return Task.FromResult(true);
 	}
 

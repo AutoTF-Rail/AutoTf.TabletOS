@@ -13,6 +13,7 @@ public static class HttpHelper
         {
             using HttpClient client = new HttpClient();
             client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
+            client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
 			
             HttpResponseMessage response = await client.GetAsync(endpoint);
             response.EnsureSuccessStatusCode();
@@ -28,11 +29,12 @@ public static class HttpHelper
         }
     }
 
-    public static async Task SendPost(string endpoint, HttpContent content, bool reThrow = true)
+    public static async Task SendPost(string endpoint, HttpContent content, bool reThrow)
     {
         try
         {
             using HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
 			
             HttpResponseMessage response = await client.PostAsync(endpoint, content);
             response.EnsureSuccessStatusCode();
@@ -41,6 +43,23 @@ public static class HttpHelper
         {
             if(reThrow)
                 throw;
+        }
+    }
+
+    public static async Task<bool> SendPost(string endpoint, HttpContent content)
+    {
+        try
+        {
+            using HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
+			
+            HttpResponseMessage response = await client.PostAsync(endpoint, content);
+            
+            return response.IsSuccessStatusCode;
+        }
+        catch
+        {
+            return false;
         }
     }
 }
