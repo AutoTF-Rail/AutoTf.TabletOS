@@ -193,8 +193,8 @@ public partial class TrainSelectionScreen : UserControl
 				Dispatcher.UIThread.Invoke(() =>
 				{
 					LoadingName.Text = "Loading panel...";
+					Statics.ChangeViewModel.Invoke(new TrainControlView());
 				});
-				Statics.ChangeViewModel.Invoke(new TrainControlView());
 			}
 
 			Statics.TrainConnectionId = Statics.GenerateRandomString();
@@ -242,8 +242,8 @@ public partial class TrainSelectionScreen : UserControl
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				LoadingName.Text = "Loading panel...";
+				Statics.ChangeViewModel.Invoke(new TrainControlView());
 			});
-			Statics.ChangeViewModel.Invoke(new TrainControlView());
 		}
 		catch (Exception ex)
 		{

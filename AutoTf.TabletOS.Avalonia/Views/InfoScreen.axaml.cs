@@ -35,7 +35,7 @@ public partial class InfoScreen : UserControl
 
 	private void Button_OnClick(object? sender, RoutedEventArgs e)
 	{
-		Statics.ChangeViewModel.Invoke(_previousControl);
+		Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(_previousControl));
 	}
 
 	private async void Update_Click(object? sender, RoutedEventArgs e)

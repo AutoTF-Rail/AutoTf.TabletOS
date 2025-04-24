@@ -140,7 +140,7 @@ public partial class TrainControlView : UserControl
 			// TODO: Tell train that you disconnected (emergency break if connection is lost, or user proceeds)
 			_networkService.ShutdownConnection();
 
-			Statics.ChangeViewModel.Invoke(new TrainSelectionScreen());
+			Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new TrainSelectionScreen()));
 		}
 		catch (Exception e)
 		{

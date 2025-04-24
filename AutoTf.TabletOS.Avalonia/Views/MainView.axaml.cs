@@ -105,7 +105,7 @@ public partial class MainView : UserControl
 
 	private void ChangeScreen()
 	{
-		Statics.ChangeViewModel.Invoke(new TrainSelectionScreen());
+		Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new TrainSelectionScreen()));
 		_listener.Dispose();
 	}
 

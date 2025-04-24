@@ -36,6 +36,9 @@ public static class Statics
 	
 	public static ObservableCollection<Notification> Notifications { get; set; } = new ObservableCollection<Notification>();
 	
+	/// <summary>
+	/// This needs to be invoked on the dispatcher thread. Don't ask why...
+	/// </summary>
 	public static Action<UserControl> ChangeViewModel = null!;
 	
 	public static string MacAddress
