@@ -4,13 +4,14 @@ using System.Globalization;
 using System.IO;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
+using AutoTf.TabletOS.Models.Interfaces;
 using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using DialogResult = AutoTf.TabletOS.Models.Enums.DialogResult;
-using Statics = AutoTf.TabletOS.Services.Statics;
+using Statics = AutoTf.TabletOS.Models.Statics;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
@@ -18,7 +19,7 @@ public partial class TopBar : UserControl
 {
 	private DispatcherTimer _timer = null!;
 	private int _brightness;
-	private readonly NetworkService _networkService = Statics.NetworkService;
+	private readonly INetworkService _networkService = Statics.NetworkService;
 	
 	public TopBar()
 	{
@@ -132,11 +133,7 @@ public partial class TopBar : UserControl
 
 	private void InfoButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		if (DataContext is MainWindowViewModel viewModel)
-		{
-			viewModel.ActiveView = new InfoScreen(viewModel.ActiveView);
-		}
-		// else ErrorBox.Text = "No Context";
+		Statics.ChangeViewModel.Invoke(new InfoScreen(this));
 	}
 
 	private void NotificationDiscard_Click(object? sender, RoutedEventArgs e)

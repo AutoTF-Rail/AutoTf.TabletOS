@@ -52,7 +52,6 @@
                                 <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
                                 <DockPanel>
                                     <Image Source="../Assets/AIDriverIcon.png" VerticalAlignment="Stretch" Margin="10"/>
-                                    <Button DockPanel.Dock="Right" Name="AiDriverStartStopButton" FontSize="26" Margin="5" BorderBrush="Black" BorderThickness="2" CornerRadius="10" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="80" Width="80">Stop</Button>
                                     <StackPanel Margin="5" VerticalAlignment="Center">
                                         <TextBlock FontSize="25">
                                             <Run>AI Driver: </Run>

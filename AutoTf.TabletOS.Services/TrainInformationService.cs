@@ -1,325 +1,37 @@
-using System.Net.Http.Json;
-using AutoTf.Logging;
+using System.Text;
+using System.Text.Json;
+using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 
 namespace AutoTf.TabletOS.Services;
 
 public class TrainInformationService : ITrainInformationService
 {
-	private readonly Logger _logger = Statics.Logger;
+	private readonly string _infoBaseUrl = "http://192.168.1.1/information";
+	private readonly string _camBaseUrl = "http://192.168.1.1/camera";
+	private readonly string _sysBaseUrl = "http://192.168.1.1/system";
 
-	public async Task<string?> GetEvuName()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/information/evuname";
+	public async Task<string?> GetEvuName() => await HttpHelper.SendGet<string?>(_infoBaseUrl + "/evuname", false);
 
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			HttpResponseMessage response = await client.GetAsync(url);
-			
-			response.EnsureSuccessStatusCode();
+	public async Task<string?> GetTrainId() => await HttpHelper.SendGet<string?>(_infoBaseUrl + "/trainId", false);
 
-			string content = await response.Content.ReadAsStringAsync();
-			
-			return content;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS: Could not get EVU Name:");
-			_logger.Log(ex.ToString());
-			return null;
-		}
-	}
+	public async Task<string?> GetTrainName() => await HttpHelper.SendGet<string?>(_infoBaseUrl + "/trainName", false);
 
-	public async Task<string?> GetTrainId()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/information/trainId";
+	public async Task<string?> GetLastSync() => await HttpHelper.SendGet<string?>(_infoBaseUrl + "/lastsynced", false);
 
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			HttpResponseMessage response = await client.GetAsync(url);
-			
-			response.EnsureSuccessStatusCode();
+	public async Task<string?> GetVersion() => await HttpHelper.SendGet<string?>(_infoBaseUrl + "/version", false);
 
-			string content = await response.Content.ReadAsStringAsync();
-			
-			return content;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS: Could not get train Id:");
-			_logger.Log(ex.ToString());
-			return null;
-		}
-	}
+	public async Task<string[]?> GetLogDates() => await HttpHelper.SendGet<string[]?>(_infoBaseUrl + "/logdates", false);
 
-	public async Task<string?> GetTrainName()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/information/trainName";
+	public async Task<string[]?> GetLogs(string date) => await HttpHelper.SendGet<string[]?>(_infoBaseUrl + "/logs?date=" + date, false);
 
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			HttpResponseMessage response = await client.GetAsync(url);
-			
-			response.EnsureSuccessStatusCode();
+	public async Task<DateTime?> GetNextSave() => await HttpHelper.SendGet<DateTime?>(_camBaseUrl + "/nextSave", false);
 
-			string content = await response.Content.ReadAsStringAsync();
-			
-			return content;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS: Could not get train name:");
-			_logger.Log(ex.ToString());
-			return null;
-		}
-	}
+	public async Task<bool> PostUpdate() => await HttpHelper.SendPost(_sysBaseUrl + "/update", new StringContent(""));
 
-	public async Task<string?> GetLastSync()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/information/lastsynced";
+	public async Task<bool> PostShutdown() => await HttpHelper.SendPost(_sysBaseUrl + "/shutdown", new StringContent(""));
 
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			HttpResponseMessage response = await client.GetAsync(url);
-			
-			response.EnsureSuccessStatusCode();
+	public async Task<bool> PostRestart() => await HttpHelper.SendPost(_sysBaseUrl + "/restart", new StringContent(""));
 
-			string content = await response.Content.ReadAsStringAsync();
-			
-			return content;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS: Could not get last sync try:");
-			_logger.Log(ex.ToString());
-			return null;
-		}
-	}
-
-	public async Task<string?> GetVersion()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/information/version";
-
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			HttpResponseMessage response = await client.GetAsync(url);
-			
-			response.EnsureSuccessStatusCode();
-
-			string content = await response.Content.ReadAsStringAsync();
-			
-			return content;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS: Could not get version:");
-			_logger.Log(ex.ToString());
-			return null;
-		}
-	}
-
-	public async Task<string[]?> GetLogDates()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/information/logdates";
-
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			HttpResponseMessage response = await client.GetAsync(url);
-			
-			response.EnsureSuccessStatusCode();
-
-			string[]? dates = await response.Content.ReadFromJsonAsync<string[]>();
-
-			return dates;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS: Could not get log dates:");
-			_logger.Log(ex.ToString());
-			return null;
-		}
-	}
-
-	public async Task<string[]?> GetLogs(string date)
-	{
-		try
-		{
-			string url = "http://192.168.1.1/information/logs?date=" + date;
-
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			HttpResponseMessage response = await client.GetAsync(url);
-			
-			response.EnsureSuccessStatusCode();
-
-			string[]? logs = await response.Content.ReadFromJsonAsync<string[]>();
-
-			return logs;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log($"TIS: Could not get logs for {date}:");
-			_logger.Log(ex.ToString());
-			return null;
-		}
-	}
-
-	public async Task<DateTime?> GetNextSave()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/camera/nextSave";
-
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			HttpResponseMessage response = await client.GetAsync(url);
-			
-			response.EnsureSuccessStatusCode();
-
-			return DateTime.Parse(await response.Content.ReadAsStringAsync());
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS: Could not get next save date:");
-			_logger.Log(ex.ToString());
-			return null;
-		}
-	}
-
-	public async Task<bool> PostUpdate()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/system/update";
-
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
-
-			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
-			if (!response.IsSuccessStatusCode)
-			{
-				_logger.Log("Could not send update signal:");
-				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
-				return false;
-			}
-
-			return true;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS:Could not send update signal:");
-			_logger.Log(ex.ToString());
-			return false;
-		}
-	}
-
-	public async Task<bool> PostShutdown()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/system/shutdown";
-
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
-
-			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
-			if (!response.IsSuccessStatusCode)
-			{
-				_logger.Log("TIS: Could not send shutdown signal:");
-				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
-				return false;
-			}
-
-			return true;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS:Could not send shutdown signal:");
-			_logger.Log(ex.ToString());
-			return false;
-		}
-	}
-
-	public async Task<bool> PostRestart()
-	{
-		try
-		{
-			string url = "http://192.168.1.1/system/restart";
-
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
-
-			HttpResponseMessage response = await client.PostAsync(url, new StringContent(""));
-			if (!response.IsSuccessStatusCode)
-			{
-				_logger.Log("TIS: Could not send restart signal:");
-				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
-				return false;
-			}
-
-			return true;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS: Could not send restart signal:");
-			_logger.Log(ex.ToString());
-			return false;
-		}
-	}
-
-	public async Task<bool> SetDate(DateTime date)
-	{
-		try
-		{
-			string url = "http://192.168.1.1/system/setdate";
-
-			using HttpClient client = new HttpClient();
-			client.Timeout = TimeSpan.FromSeconds(5);
-			
-			client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
-			
-			HttpResponseMessage response = await client.PostAsync(url, JsonContent.Create(date));;
-			
-			if (!response.IsSuccessStatusCode)
-			{
-				_logger.Log("TIS: Could not set date on train:");
-				_logger.Log(response.StatusCode + ":" + await response.Content.ReadAsStringAsync());
-				return false;
-			}
-
-			return true;
-		}
-		catch (Exception ex)
-		{
-			_logger.Log("TIS: Could not set date on train:");
-			_logger.Log(ex.ToString());
-			return false;
-		}
-	}
+	public async Task<bool> SetDate(DateTime date) => await HttpHelper.SendPost(_sysBaseUrl + "/setdate", new StringContent(JsonSerializer.Serialize(date), Encoding.UTF8, "application/json"));
 }

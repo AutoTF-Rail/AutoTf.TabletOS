@@ -10,6 +10,7 @@ using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
+using AutoTf.TabletOS.Models.Interfaces;
 using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -21,7 +22,7 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 public partial class TrainSelectionScreen : UserControl
 {
 	private ObservableCollection<TrainAd> _nearbyTrains = new ObservableCollection<TrainAd>();
-	private readonly NetworkService _networkService = Statics.NetworkService;
+	private readonly INetworkService _networkService = Statics.NetworkService;
 	private readonly Logger _logger = Statics.Logger;
 	
 	public TrainSelectionScreen()
@@ -192,11 +193,8 @@ public partial class TrainSelectionScreen : UserControl
 				Dispatcher.UIThread.Invoke(() =>
 				{
 					LoadingName.Text = "Loading panel...";
-					if (DataContext is MainWindowViewModel viewModel)
-					{
-						viewModel.ActiveView = new TrainControlView();
-					}
 				});
+				Statics.ChangeViewModel.Invoke(new TrainControlView());
 			}
 
 			Statics.TrainConnectionId = Statics.GenerateRandomString();
@@ -244,11 +242,8 @@ public partial class TrainSelectionScreen : UserControl
 			Dispatcher.UIThread.Invoke(() =>
 			{
 				LoadingName.Text = "Loading panel...";
-				if (DataContext is MainWindowViewModel viewModel)
-				{
-					viewModel.ActiveView = new TrainControlView();
-				}
 			});
+			Statics.ChangeViewModel.Invoke(new TrainControlView());
 		}
 		catch (Exception ex)
 		{

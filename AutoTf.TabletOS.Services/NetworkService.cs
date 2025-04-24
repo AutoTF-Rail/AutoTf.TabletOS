@@ -1,10 +1,12 @@
 using System.Net.NetworkInformation;
 using AutoTf.Logging;
+using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
+using AutoTf.TabletOS.Models.Interfaces;
 
 namespace AutoTf.TabletOS.Services;
 
-public class NetworkService
+public class NetworkService : INetworkService
 {
 	private readonly Logger _logger = Statics.Logger;
 	

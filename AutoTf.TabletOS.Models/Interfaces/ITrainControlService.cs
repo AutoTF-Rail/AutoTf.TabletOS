@@ -7,7 +7,8 @@ public interface ITrainControlService
 	public Task<int> GetLeverCount();
 	public Task<double> GetLeverPosition(int leverIndex);
 	public Task<LeverType> GetLeverType(int leverIndex);
-	public Task<bool> SetLever(int leverIndex, double leverPercentage);
+	public Task<bool> SetLever(LeverSetModel leverModel);
+	public Task<bool> IsEasyControlAvailable();
 	public Task<bool> EasyControl(int power);
 	public Task<bool> EmergencyBrake();
 }

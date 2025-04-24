@@ -1,11 +1,11 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using AutoTf.Logging;
-using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
+using Avalonia.Controls;
 
-namespace AutoTf.TabletOS.Services;
+namespace AutoTf.TabletOS.Models;
 
 public static class Statics
 {
@@ -23,8 +23,9 @@ public static class Statics
 	public static ITrainControlService TrainControlService = null!;
 	public static ITrainCameraService TrainCameraService = null!;
 	public static IDataManager DataManager = null!;
+	public static IAicService AicService = null!;
+	public static INetworkService NetworkService = null!;
 
-	public static NetworkService NetworkService = new NetworkService();
 	public static Logger Logger = new Logger(true);
 	
 	public static string YubiCode { get; set; } = null!;
@@ -34,6 +35,8 @@ public static class Statics
 	public static string? TrainConnectionId;
 	
 	public static ObservableCollection<Notification> Notifications { get; set; } = new ObservableCollection<Notification>();
+	
+	public static Action<UserControl> ChangeViewModel = null!;
 	
 	public static string MacAddress
 	{

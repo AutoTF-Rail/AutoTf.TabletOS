@@ -5,7 +5,7 @@ using System.Threading;
 using AutoTf.TabletOS.Services;
 using AutoTf.TabletOS.Services.Fakes;
 using Avalonia;
-using Statics = AutoTf.TabletOS.Services.Statics;
+using Statics = AutoTf.TabletOS.Models.Statics;
 
 namespace AutoTf.TabletOS.Avalonia;
 
@@ -65,6 +65,9 @@ sealed class Program
 		Statics.TrainControlService = new FakeTrainControlService();
 		Statics.TrainCameraService = new FakeTrainCameraService();
 #endif
+		
+		Statics.AicService = new AicService();
+		Statics.NetworkService = new NetworkService();
 	}
 
 	private static void SilenceConsole()
