@@ -2,11 +2,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using AutoTf.Logging;
-using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
-using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -18,15 +16,15 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class TrainControlView : UserControl
 {
+	private readonly SolidColorBrush _nonePressedEcBtnBackground = new SolidColorBrush(Color.FromArgb(51, 255, 255, 255));
+	private Button? _ecCurrentlyPressed;
+	
 	private readonly ITrainInformationService _trainInfo = Statics.TrainInformationService;
 	private readonly ITrainControlService _trainControl = Statics.TrainControlService;
 	private readonly ITrainCameraService _trainCameraService = Statics.TrainCameraService;
-	private readonly NetworkService _networkService = Statics.NetworkService;
+	private readonly INetworkService _networkService = Statics.NetworkService;
 	private readonly Logger _logger = Statics.Logger;
-
-	private SolidColorBrush _nonePressedEcBtnBackground = new SolidColorBrush(Color.FromArgb(51, 255, 255, 255));
-	private Button? _ecCurrentlyPressed;
-
+	
 	private EasyControlView? _easyControlView;
 
 	// TODO: Sync with train on startup
@@ -38,17 +36,83 @@ public partial class TrainControlView : UserControl
 		try
 		{
 			InitializeComponent();
-			
-			_trainCameraService.NewFrameReceived += NewFrameReceived;
 
-			Task.Run(Initialize);
+			_ = Task.Run(async () => await Initialize());
 		}
 		catch (Exception e)
 		{
 			_logger.Log("Error while initializing view:");
-			_logger.Log(e.Message);
+			_logger.Log(e.ToString());
 		}
 	}
+
+	#region Initialization
+	private async Task Initialize()
+	{
+		try
+		{
+			await InvokeLoadingScreen(true);
+
+			_trainCameraService.NewFrameReceived += NewFrameReceived;
+			
+			Task aicTask = LoadAicData();
+			Task trainDataTask = LoadTrainData();
+			Task trainCamTask = _trainCameraService.StartListeningForCameras();
+
+			await Task.WhenAll(aicTask, trainDataTask, trainCamTask);
+		}
+		catch (Exception e)
+		{
+			_logger.Log("Error during control init.");
+			_logger.Log(e.ToString());
+		}
+		finally
+		{
+			await InvokeLoadingScreen(false);
+			await UpdateCameraTitle();
+		}
+	}
+
+	private async Task LoadAicData()
+	{
+		AicInformation aicInfo = new AicInformation();
+		string[] splashes = await File.ReadAllLinesAsync("CopiedAssets/AiSplash");
+		await aicInfo.UpdateState();
+		
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			// TODO: Sync direction
+			PreviousCamButton.IsVisible = false;
+
+			AiDriverStatus.Text = aicInfo.State;
+			AiDriverStatus.Foreground = aicInfo.Color;
+
+			AiNextStop.Text = splashes[new Random().Next(splashes.Length)];
+		});
+	}
+	
+	private async Task LoadTrainData()
+	{
+		TrainInformation info = new TrainInformation();
+		
+		if (!info.InitializedSuccessfully)
+		{
+			await AddNotification("Could not get train all information data. To resolve this, maybe reconnect..", Colors.Yellow);
+		}
+		
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			EvuNameBox.Text = info.EvuName;
+			TrainIdBox.Text = info.TrainId;
+			TrainNameBox.Text = info.TrainName;
+			TrainVersion.Text = info.TrainVersion;
+		});
+		
+		bool ecAvailable = await _trainControl.IsEasyControlAvailable();
+		await InvokeControlsAvailability(ecAvailable);
+	}
+	
+	#endregion
 
 	private void NewFrameReceived(int cameraIndex, Bitmap bitmap)
 	{
@@ -63,114 +127,32 @@ public partial class TrainControlView : UserControl
 			PreviewImage.Source = bitmap;
 		});
 	}
-
-	private async Task LoadTrainData()
-	{
-		string? evuName = await _trainInfo.GetEvuName();
-		string? trainId = await _trainInfo.GetTrainId();
-		string? trainName = await _trainInfo.GetTrainName();
-		string? trainVersion = await _trainInfo.GetVersion();
-		
-		if (evuName == null || trainId == null || trainName == null || trainVersion == null)
-		{
-			AddNotification("Could not get train information data. Please view the logs for more information.", Colors.Red);
-			return;
-		}
-		
-		await Dispatcher.UIThread.InvokeAsync(() => EvuNameBox.Text = evuName);
-		await Dispatcher.UIThread.InvokeAsync(() => TrainIdBox.Text = trainId);
-		await Dispatcher.UIThread.InvokeAsync(() => TrainNameBox.Text = trainName);
-		await Dispatcher.UIThread.InvokeAsync(() => TrainVersion.Text = trainVersion);
-		
-		// TODO: Convert this to an actual endpoint that tells you if controls are available
-		if (await _trainControl.GetLeverCount() != 0)
-		{
-			await Dispatcher.UIThread.InvokeAsync(() => ControlsUnavailableSection.IsVisible = false);
-			await Dispatcher.UIThread.InvokeAsync(() => EmergencyStopButton.IsEnabled = true);
-		}
-	}
-	
-	private async void Initialize()
-	{
-		try
-		{
-			await Dispatcher.UIThread.InvokeAsync(() =>
-			{
-				LoadingName.Text = "Loading data...";
-				LoadingArea.IsVisible = true;
-				// TODO: Sync direction
-				PreviousCamButton.IsVisible = false;
-				CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]";
-
-				// TODO: Sync
-				AiDriverStatus.Text = "Disabled";
-				AiDriverStatus.Foreground = Brushes.Yellow;
-
-				string[] splashes = File.ReadAllLines("CopiedAssets/AiSplash");
-				
-				AiNextStop.Text = splashes[new Random().Next(splashes.Length)];
-
-				AiDriverStartStopButton.Content = "Start";
-			});
-
-			await LoadTrainData();
-		
-			await _trainCameraService.StartListeningForCameras();
-
-			await Dispatcher.UIThread.InvokeAsync(() => LoadingArea.IsVisible = false);
-		}
-		catch (Exception e)
-		{
-			_logger.Log("Error during control init.");
-			_logger.Log(e.ToString());
-			// AddNotification("Disconnected: Could not initialize controls.", Colors.Red);
-			// TODO: Make controls unavailable?
-		}
-	}
 	
 	private async void ChangeToSelectionScreen()
 	{
 		try
 		{
 			_logger.Log("Changing to train selection by request.");
-			await Dispatcher.UIThread.InvokeAsync(() =>
-			{
-				LoadingName.Text = "Disconnecting...";
-				LoadingArea.IsVisible = true;
-			});
-			await Task.Delay(25);
+			await InvokeLoadingScreen(true, "Disconnecting...");
+			
 			_trainCameraService.DisconnectStreams();
 			
 			// TODO: Tell train that you disconnected (emergency break if connection is lost, or user proceeds)
-			// Stop streams
-			// Disconnect from wifi
-			// Change screen
-
 			_networkService.ShutdownConnection();
 
-			Dispatcher.UIThread.Invoke(() =>
-			{
-				if (DataContext is MainWindowViewModel viewModel)
-				{
-					viewModel.ActiveView = new TrainSelectionScreen();
-				}
-			});
+			Statics.ChangeViewModel.Invoke(new TrainSelectionScreen());
 		}
 		catch (Exception e)
 		{
 			_logger.Log("Could not change to selection screen:");
 			_logger.Log(e.ToString());
-			AddNotification("Could not change into train selection screen. Please restart the device.", Colors.Red);
+			await AddNotification("Could not change into train selection screen. Please restart the device.", Colors.Red);
 		}
 	}
 
 	private async Task ChangeDirection()
 	{
-		await Dispatcher.UIThread.InvokeAsync(() =>
-		{
-			LoadingName.Text = "Changing direction.";
-			LoadingArea.IsVisible = true;
-		});
+		await InvokeLoadingScreen(true, "Changing direction.");
 		
 		// TODO: Can't change direction if train is actively moving. In the future just disable the button.
 		if (false /*trainIsMoving*/)
@@ -184,7 +166,6 @@ public partial class TrainControlView : UserControl
 		await Task.Delay(750);
 #endif
 		// TODO: Notify train of side change and wait for completion
-		
 		if (_currentDirection == Side.Front)
 			_currentDirection = Side.Back;
 		else
@@ -199,32 +180,58 @@ public partial class TrainControlView : UserControl
 				ChangeCamera();
 				break;
 		}
-		
-		Dispatcher.UIThread.Invoke(() => LoadingArea.IsVisible = false);
+
+		await InvokeLoadingScreen(false);
 	}
 
-	private void ChangeCamera()
+	private async void ChangeCamera()
 	{
 		_currentCamera = _currentCamera == Side.Front ? Side.Back : Side.Front;
 
 		bool canShowPreviousBtn = _currentCamera == Side.Back;
 		bool canShowNextBtn = _currentCamera == Side.Front;
-		
+	
 		PreviousCamButton.IsVisible = canShowPreviousBtn;
 		NextCamButton.IsVisible = canShowNextBtn;
-		
+	
 #if DEBUG
-		_trainCameraService.StartListeningForCameras();
+		await _trainCameraService.StartListeningForCameras();
 #endif
-		
-		Dispatcher.UIThread.Invoke(() => CamDirectionText.Text = (_currentDirection == _currentCamera) ? "[Front Cam]" : "[Back Cam]");
+	
+		await UpdateCameraTitle();
 	}
 
+#region dispatchers
 
-	private void AddNotification(string text, Color color)
+	private async Task UpdateCameraTitle()
 	{
-		Dispatcher.UIThread.Invoke(() => Statics.Notifications.Add(new Notification(text, color)));
+		await Dispatcher.UIThread.InvokeAsync(() => CamDirectionText.Text =  _currentDirection == _currentCamera ? "[Front Cam]" : "[Back Cam]");
 	}
+	
+	private async Task AddNotification(string text, Color color)
+	{
+		await Dispatcher.UIThread.InvokeAsync(() => Statics.Notifications.Add(new Notification(text, color)));
+	}
+	
+	private async Task InvokeControlsAvailability(bool available)
+	{
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			ControlsUnavailableSection.IsVisible = !available;
+			EmergencyStopButton.IsEnabled = available;
+		});
+	}
+	
+	private async Task InvokeLoadingScreen(bool visible, string additionalText = "Loading data...")
+	{
+		await Dispatcher.UIThread.InvokeAsync(() =>
+		{
+			LoadingName.Text = additionalText;
+			LoadingArea.IsVisible = visible;
+		});
+	}
+	
+#endregion
 	
 	#region UI_Events
 
@@ -282,96 +289,34 @@ public partial class TrainControlView : UserControl
 	#endregion
 	
 	#region EasyControl
-
-	private void EasyControl_Click_100(object? sender, RoutedEventArgs e)
+	
+	private void HandleEcButtonClick(Button button, int value)
 	{
-		if(_ecCurrentlyPressed != null)
+		if (_ecCurrentlyPressed != null)
 			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
-		
-		Ec100Btn.Background = Brushes.Gray;
-		_ecCurrentlyPressed = Ec100Btn;
-		_trainControl.EasyControl(100);
-	}
 
-	private void EasyControl_Click_75(object? sender, RoutedEventArgs e)
-	{
-		if(_ecCurrentlyPressed != null)
-			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
-		
-		Ec75Btn.Background = Brushes.Gray;
-		_ecCurrentlyPressed = Ec75Btn;
-		_trainControl.EasyControl(75);
+		button.Background = Brushes.Gray;
+		_ecCurrentlyPressed = button;
+		_trainControl.EasyControl(value);
 	}
+	
+	private void EasyControl_Click_100(object? sender, RoutedEventArgs e) => HandleEcButtonClick(Ec100Btn, 100);
 
-	private void EasyControl_Click_50(object? sender, RoutedEventArgs e)
-	{
-		if(_ecCurrentlyPressed != null)
-			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
-		
-		Ec50Btn.Background = Brushes.Gray;
-		_ecCurrentlyPressed = Ec50Btn;
-		_trainControl.EasyControl(50);
-	}
+	private void EasyControl_Click_75(object? sender, RoutedEventArgs e) => HandleEcButtonClick(Ec100Btn, 75);
 
-	private void EasyControl_Click_25(object? sender, RoutedEventArgs e)
-	{
-		if(_ecCurrentlyPressed != null)
-			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
-		
-		Ec25Btn.Background = Brushes.Gray;
-		_ecCurrentlyPressed = Ec25Btn;
-		_trainControl.EasyControl(25);
-	}
+	private void EasyControl_Click_50(object? sender, RoutedEventArgs e) => HandleEcButtonClick(Ec100Btn, 50);
 
-	private void EasyControl_Click_0(object? sender, RoutedEventArgs e)
-	{
-		if(_ecCurrentlyPressed != null)
-			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
-		
-		Ec0Btn.Background = Brushes.Gray;
-		_ecCurrentlyPressed = Ec0Btn;
-		_trainControl.EasyControl(0);
-	}
+	private void EasyControl_Click_25(object? sender, RoutedEventArgs e) => HandleEcButtonClick(Ec100Btn, 25);
 
-	private void EasyControl_Click_M_25(object? sender, RoutedEventArgs e)
-	{
-		if(_ecCurrentlyPressed != null)
-			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
-		
-		EcM25Btn.Background = Brushes.Gray;
-		_ecCurrentlyPressed = EcM25Btn;
-		_trainControl.EasyControl(-25);
-	}
+	private void EasyControl_Click_0(object? sender, RoutedEventArgs e) => HandleEcButtonClick(Ec100Btn, 0);
 
-	private void EasyControl_Click_M_50(object? sender, RoutedEventArgs e)
-	{
-		if(_ecCurrentlyPressed != null)
-			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
-		
-		EcM50Btn.Background = Brushes.Gray;
-		_ecCurrentlyPressed = EcM50Btn;
-		_trainControl.EasyControl(-50);
-	}
+	private void EasyControl_Click_M_25(object? sender, RoutedEventArgs e) => HandleEcButtonClick(Ec100Btn, -25);
 
-	private void EasyControl_Click_M_75(object? sender, RoutedEventArgs e)
-	{
-		if(_ecCurrentlyPressed != null)
-			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
-		
-		EcM75Btn.Background = Brushes.Gray;
-		_ecCurrentlyPressed = EcM75Btn;
-		_trainControl.EasyControl(-75);
-	}
+	private void EasyControl_Click_M_50(object? sender, RoutedEventArgs e) => HandleEcButtonClick(Ec100Btn, -50);
 
-	private void EasyControl_Click_M_100(object? sender, RoutedEventArgs e)
-	{
-		if(_ecCurrentlyPressed != null)
-			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
-		
-		EcM100Btn.Background = Brushes.Gray;
-		_ecCurrentlyPressed = EcM100Btn;
-		_trainControl.EasyControl(-100);
-	}
+	private void EasyControl_Click_M_75(object? sender, RoutedEventArgs e) => HandleEcButtonClick(Ec100Btn, -75);
+
+	private void EasyControl_Click_M_100(object? sender, RoutedEventArgs e) => HandleEcButtonClick(Ec100Btn, -100);
 
 	#endregion
 }

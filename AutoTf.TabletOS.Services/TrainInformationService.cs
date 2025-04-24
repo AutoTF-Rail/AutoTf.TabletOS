@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using AutoTf.Logging;
+using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 
 namespace AutoTf.TabletOS.Services;

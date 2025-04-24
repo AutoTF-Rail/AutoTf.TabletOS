@@ -4,7 +4,7 @@ using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
 using AutoTf.TabletOS.Avalonia.Views;
-using Statics = AutoTf.TabletOS.Services.Statics;
+using Statics = AutoTf.TabletOS.Models.Statics;
 
 namespace AutoTf.TabletOS.Avalonia;
 

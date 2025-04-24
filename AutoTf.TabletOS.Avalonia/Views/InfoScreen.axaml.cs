@@ -3,6 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels;
+using AutoTf.TabletOS.Models;
+using AutoTf.TabletOS.Models.Interfaces;
 using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -12,11 +14,11 @@ namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class InfoScreen : UserControl
 {
-	private readonly object _previousControl;
-	private readonly NetworkService _networkService = Statics.NetworkService;
+	private readonly UserControl _previousControl;
+	private readonly INetworkService _networkService = Statics.NetworkService;
 	private readonly Logger _logger = Statics.Logger;
 
-	public InfoScreen(object previousControl)
+	public InfoScreen(UserControl previousControl)
 	{
 		_previousControl = previousControl;
 
@@ -33,10 +35,7 @@ public partial class InfoScreen : UserControl
 
 	private void Button_OnClick(object? sender, RoutedEventArgs e)
 	{
-		if (DataContext is MainWindowViewModel viewModel)
-		{
-			viewModel.ActiveView = _previousControl;
-		}
+		Statics.ChangeViewModel.Invoke(_previousControl);
 	}
 
 	private async void Update_Click(object? sender, RoutedEventArgs e)

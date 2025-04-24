@@ -117,6 +117,11 @@ public class TrainControlService : ITrainControlService
 		}
 	}
 
+	public async Task<bool> IsEasyControlAvailable()
+	{
+		return await HttpHelper.SendGet<bool>("http://192.168.1.1/control/isEasyControlAvailable", false);
+	}
+
 	public async Task<bool> EasyControl(int power)
 	{
 		try

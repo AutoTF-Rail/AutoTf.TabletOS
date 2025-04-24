@@ -105,14 +105,8 @@ public partial class MainView : UserControl
 
 	private void ChangeScreen()
 	{
-		Dispatcher.UIThread.Invoke(() =>
-		{
-			if (DataContext is MainWindowViewModel viewModel)
-			{
-				viewModel.ActiveView = new TrainSelectionScreen();
-			}
-			_listener.Dispose();
-		});
+		Statics.ChangeViewModel.Invoke(new TrainSelectionScreen());
+		_listener.Dispose();
 	}
 
 	private void SkipButton_Click(object? sender, RoutedEventArgs e)

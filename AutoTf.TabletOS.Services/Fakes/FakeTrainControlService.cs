@@ -35,6 +35,11 @@ public class FakeTrainControlService : ITrainControlService
 		return Task.FromResult(true);
 	}
 
+	public Task<bool> IsEasyControlAvailable()
+	{
+		return Task.FromResult(true);
+	}
+
 	public Task<bool> EasyControl(int power)
 	{
 		return Task.FromResult(true);
