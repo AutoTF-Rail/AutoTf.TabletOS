@@ -6,8 +6,6 @@
              mc:Ignorable="d"
              d:DesignWidth="1280"
              d:DesignHeight="800"
-             Height="800"
-             Width="1280"
              x:Class="AutoTf.TabletOS.Avalonia.Views.TopBar">
     
     <Grid Name="RootGrid">

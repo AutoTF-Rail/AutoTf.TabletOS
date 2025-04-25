@@ -22,9 +22,8 @@ public partial class TopBar : UserControl
 	private int _brightness;
 	private readonly INetworkService _networkService = Statics.NetworkService;
 	
-	public TopBar(UserControl previousControl)
+	public TopBar()
 	{
-		_previousControl = previousControl;
 		InitializeComponent();
 		Initialize();
 	}
@@ -135,7 +134,8 @@ public partial class TopBar : UserControl
 
 	private void InfoButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new InfoScreen(_previousControl)));
+		if (DataContext is MainWindowViewModel viewModel && viewModel.ActiveView is UserControl uc)
+			Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new InfoScreen(uc)));
 	}
 
 	private void NotificationDiscard_Click(object? sender, RoutedEventArgs e)
