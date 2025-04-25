@@ -35,6 +35,7 @@
         <None Update="CopiedAssets\AiSplash">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Views\AicControlView.axaml" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.2.3" />

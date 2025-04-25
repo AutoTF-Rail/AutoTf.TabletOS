@@ -52,6 +52,8 @@ public static class Statics
 		}
 	}
 
+	public static bool LoadedTestTrain { get; set; }
+
 	private static void NotificationsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	{
 		if (e.Action != NotifyCollectionChangedAction.Add) return;

@@ -47,7 +47,7 @@
                             <ColumnDefinition Width="105" />
                         </Grid.ColumnDefinitions>
                         
-                        <Border Grid.Column="0" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
+                        <Button Grid.Column="0" Click="AicControl_Click" Padding="0" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
                             <Grid>
                                 <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
                                 <DockPanel>
@@ -63,7 +63,8 @@
                                     </StackPanel>
                                 </DockPanel>
                             </Grid>
-                        </Border>
+                        </Button>
+                        
                         <Button Grid.Column="1" Padding="0" Width="95" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
                             <Grid HorizontalAlignment="Center">
                                 <Border CornerRadius="10" Background="Gray" Opacity=".2"/>

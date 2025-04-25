@@ -30,7 +30,7 @@ public partial class TrainControlView : UserControl
 	// TODO: Sync with train on startup
 	private Side _currentDirection = Side.Front;
 	private Side _currentCamera = Side.Front;
-	
+
 	public TrainControlView()
 	{
 		try
@@ -284,6 +284,12 @@ public partial class TrainControlView : UserControl
 	private void ChangeCamera_Click(object? sender, RoutedEventArgs e)
 	{
 		ChangeCamera();
+	}
+
+	private async void AicControl_Click(object? sender, RoutedEventArgs e)
+	{
+		AicControlView aic = new AicControlView();
+		await aic.Show(RootGrid);
 	}
 	
 	#endregion
