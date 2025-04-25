@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="AutoTf.TabletOS.Avalonia.Views.AicControlView">
-    <Grid>
+    <Grid Name="RootGrid">
         <Image Source="../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
         <Grid Margin="20" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
@@ -51,6 +51,7 @@
                 <DockPanel LastChildFill="False" Margin="0, 5" HorizontalAlignment="Left" Name="AicInteractButtonsArea">
                     <Button FontSize="17" Margin="5" Click="ShutdownButton_Click">Shutdown</Button>
                     <Button FontSize="17" Margin="5" Click="RestartButton_Click">Restart</Button>
+                    <Button FontSize="17" Margin="5" Click="LogsButton_Click">Logs</Button>
                 </DockPanel>
             </StackPanel>
             

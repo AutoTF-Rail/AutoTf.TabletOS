@@ -120,10 +120,12 @@ public partial class TrainInfoView : UserControl
 		_taskCompletionSource.TrySetResult(status);
 	}
 	
-	private void LogsButton_Click(object? sender, RoutedEventArgs e)
+	private async void LogsButton_Click(object? sender, RoutedEventArgs e)
 	{
-		TrainLogsViewer logsView = new TrainLogsViewer(_trainInfo);
-		logsView.Show(RootGrid);
+		string[] logDates = await _trainInfo.GetLogDates() ?? [];
+		
+		RemoteLogsViewer logsView = new RemoteLogsViewer(logDates, async s => await _trainInfo.GetLogs(s));
+		await logsView.Show(RootGrid);
 	}
 	
 	private void SetDateButton_Click(object? sender, RoutedEventArgs e)

@@ -106,6 +106,14 @@ public partial class AicControlView : UserControl
 		_aicService.Restart();
 		await InvokeLoadingScreen(false);
 	}
+
+	private async void LogsButton_Click(object? sender, RoutedEventArgs e)
+	{
+		string[] logDates = await _aicService.LogDates();
+		
+		RemoteLogsViewer logsView = new RemoteLogsViewer(logDates, async s => await _aicService.Logs(s));
+		await logsView.Show(RootGrid);
+	}
 	
 	#endregion
 	
