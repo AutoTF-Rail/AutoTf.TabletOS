@@ -296,14 +296,25 @@ public partial class TrainControlView : UserControl
 	
 	#region EasyControl
 	
-	private void HandleEcButtonClick(Button button, int value)
+	private async void HandleEcButtonClick(Button button, int value)
 	{
+		Button? previousButton = _ecCurrentlyPressed;
 		if (_ecCurrentlyPressed != null)
 			_ecCurrentlyPressed.Background = _nonePressedEcBtnBackground;
 
 		button.Background = Brushes.Gray;
 		_ecCurrentlyPressed = button;
-		_trainControl.EasyControl(value);
+
+		if (await _trainControl.EasyControl(value)) 
+			return;
+		
+		await AddNotification("Something went wrong when setting the EasyControl value. Please restart the train.", Colors.Red);
+		_ecCurrentlyPressed = previousButton;
+			
+		if (previousButton != null) 
+			previousButton.Background = Brushes.Gray;
+			
+		button.Background = _nonePressedEcBtnBackground;
 	}
 	
 	private void EasyControl_Click_100(object? sender, RoutedEventArgs e) => HandleEcButtonClick(Ec100Btn, 100);
