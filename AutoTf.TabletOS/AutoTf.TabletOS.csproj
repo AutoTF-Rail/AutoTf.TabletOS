@@ -32,9 +32,6 @@
       <None Update="scripts\showStartupScreen.sh">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Images\TabletOSEmptyBackground.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
       <None Update="Images\TabletOSApplyingUpdates.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>

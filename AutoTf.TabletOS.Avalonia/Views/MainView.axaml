@@ -11,7 +11,7 @@
              x:Class="AutoTf.TabletOS.Avalonia.Views.MainView">
     <Grid>
         <Image Source="../Assets/TabletOSStart.png" Stretch="Fill"></Image>
-        <views:TopBar VerticalAlignment="Top" />
+        <views:TopBar VerticalAlignment="Stretch" />
         <Grid Name="LoadingArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid Background="Black" Opacity=".72" />
             <StackPanel VerticalAlignment="Center">

@@ -13,6 +13,8 @@ public partial class MainWindow : Window
 		Statics.TrainInformationService = new FakeTrainInfo();
 		Statics.TrainControlService = new FakeTrainControlService();
 		Statics.TrainCameraService = new FakeTrainCameraService();
+		Statics.AicService = new FakeAicService();
+		
 		DataContext = new MainWindowViewModel();
 		InitializeComponent();
 	}

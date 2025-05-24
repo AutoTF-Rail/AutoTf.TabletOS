@@ -59,14 +59,15 @@ sealed class Program
 		Statics.TrainInformationService = new TrainInformationService();
 		Statics.TrainControlService = new TrainControlService();
 		Statics.TrainCameraService = new TrainCameraService();
+		Statics.AicService = new AicService();
 #else
 		Statics.DataManager = new FakeDataManager();
 		Statics.TrainInformationService = new FakeTrainInfo();
 		Statics.TrainControlService = new FakeTrainControlService();
 		Statics.TrainCameraService = new FakeTrainCameraService();
+		Statics.AicService = new FakeAicService();
 #endif
 		
-		Statics.AicService = new AicService();
 		Statics.NetworkService = new NetworkService();
 	}
 

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
@@ -22,15 +23,19 @@ public partial class TopBar : UserControl
 	private int _brightness;
 	private readonly INetworkService _networkService = Statics.NetworkService;
 	
-	public TopBar(UserControl previousControl)
+	private TaskCompletionSource<(bool success, string result)>? _keyboardTcs;
+	
+	public TopBar()
 	{
-		_previousControl = previousControl;
 		InitializeComponent();
 		Initialize();
 	}
 
 	public void Initialize()
 	{
+		NumKeyboardGrid.IsVisible = false;
+		Statics.RegisterKeyboard(ShowKeyboard);
+		
 		NotificationsBox.ItemsSource = Statics.Notifications;
 		QuickMenuGrid.IsVisible = false;
 		Statics.Notifications.CollectionChanged +=
@@ -135,7 +140,8 @@ public partial class TopBar : UserControl
 
 	private void InfoButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new InfoScreen(_previousControl)));
+		if (DataContext is MainWindowViewModel viewModel && viewModel.ActiveView is UserControl uc)
+			Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new InfoScreen(uc)));
 	}
 
 	private void NotificationDiscard_Click(object? sender, RoutedEventArgs e)
@@ -147,5 +153,102 @@ public partial class TopBar : UserControl
 	private void NotificationsBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
 	{
 		NotificationsBox.SelectedItem = null;
+	}
+
+	public async Task<(bool success, string result)> ShowKeyboard(string originalValue)
+	{
+		_keyboardTcs = new TaskCompletionSource<(bool, string)>();
+		
+		KeyboardValueBox.Text = originalValue;
+		NumKeyboardGrid.IsVisible = true;
+		
+		return await _keyboardTcs.Task;
+	}
+	
+	
+	private void CloseKeyboard(object? sender, PointerReleasedEventArgs e)
+	{
+		NumKeyboardGrid.IsVisible = false;
+		_keyboardTcs?.TrySetResult((false, ""));
+	}
+
+	private void KeyboardSaveBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		NumKeyboardGrid.IsVisible = false;
+		_keyboardTcs?.TrySetResult((true, KeyboardValueBox.Text!));
+	}
+
+	private void EnterKeyboardValue(string value)
+	{
+		if (KeyboardValueBox.Text == "0")
+			KeyboardValueBox.Text = value;
+		else
+			KeyboardValueBox.Text += value;
+	}
+
+	private void KeyboardNineBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		EnterKeyboardValue("9");
+	}
+
+	private void KeyboardEightBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		EnterKeyboardValue("8");
+	}
+
+	private void KeyboardSevenBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		EnterKeyboardValue("7");
+	}
+
+	private void KeyboardSixBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		EnterKeyboardValue("6");
+	}
+
+	private void KeyboardFiveBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		EnterKeyboardValue("5");
+	}
+
+	private void KeyboardFourBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		EnterKeyboardValue("4");
+	}
+
+	private void KeyboardThreeBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		EnterKeyboardValue("3");
+	}
+
+	private void KeyboardTwoBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		EnterKeyboardValue("2");
+	}
+
+	private void KeyboardOneBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		EnterKeyboardValue("1");
+	}
+
+	private void KeyboardZeroBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		EnterKeyboardValue("0");
+	}
+
+	private void KeyboardCommaBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		if (KeyboardValueBox.Text == null || KeyboardValueBox.Text.Contains(','))
+			return;
+		
+		EnterKeyboardValue(",");
+	}
+
+	private void KeyboardDeleteBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		if (KeyboardValueBox.Text == null || KeyboardValueBox.Text.Length <= 0)
+			return;
+				
+		KeyboardValueBox.Text = KeyboardValueBox.Text.Substring(0, KeyboardValueBox.Text.Length - 1);
 	}
 }

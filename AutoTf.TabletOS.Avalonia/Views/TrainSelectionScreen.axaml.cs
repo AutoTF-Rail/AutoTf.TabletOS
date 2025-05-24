@@ -187,14 +187,18 @@ public partial class TrainSelectionScreen : UserControl
 			await Task.Delay(250);
 		
 			TrainAd trainAd = (TrainAd)((Button)sender!).DataContext!;
+			bool isTestTrain = trainAd.TrainName == "ExampleTrain" && trainAd.TrainNum == "783-938";
+			Statics.LoadedTestTrain = isTestTrain;
 
-			if (trainAd.TrainName == "ExampleTrain" && trainAd.TrainNum == "783-938")
+			if (isTestTrain)
 			{
+				Statics.Notifications.Add(new Notification("Loading test train.", Colors.White));
 				Dispatcher.UIThread.Invoke(() =>
 				{
 					LoadingName.Text = "Loading panel...";
 					Statics.ChangeViewModel.Invoke(new TrainControlView());
 				});
+				return;
 			}
 
 			Statics.TrainConnectionId = Statics.GenerateRandomString();

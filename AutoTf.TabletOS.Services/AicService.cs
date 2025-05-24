@@ -13,7 +13,10 @@ public class AicService : IAicService
     public async Task<bool> IsOnline() => await HttpHelper.SendGet<bool>(AicBasePath + "/online", false, 7);
 
     public async Task<string?> Version() => await HttpHelper.SendGet<string?>(AicBasePath + "/version", false, 7);
+    public async Task<string[]> LogDates() => await HttpHelper.SendGet<string[]>(AicBasePath + "/information/logDates", false) ?? [];
 
+    public async Task<string[]> Logs(string date) => await HttpHelper.SendGet<string[]>(AicBasePath + $"/information/logs?date={date}", false) ?? [];
+    
     public void Shutdown() => _ = HttpHelper.SendPost(AicBasePath + "/shutdown", new StringContent(""), false);
 
     public void Restart() => _ = HttpHelper.SendPost(AicBasePath + "/restart", new StringContent(""), false);

@@ -1,6 +1,6 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
@@ -8,33 +8,32 @@ using Avalonia.VisualTree;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
-public partial class TrainLogsViewer : UserControl
+public partial class RemoteLogsViewer : UserControl
 {
-	private readonly ITrainInformationService _trainInformationService;
+	private readonly string[] _logsDates;
+	private readonly Func<string, Task<string[]?>> _getLogs;
+	
 	private TaskCompletionSource _taskCompletionSource = null!;
 	private Grid _parent = null!;
 	
-	public TrainLogsViewer(ITrainInformationService trainInformationService)
+	public RemoteLogsViewer(string[] logsDates, Func<string, Task<string[]?>> getLogs)
 	{
-		_trainInformationService = trainInformationService;
+		_logsDates = logsDates;
+		_getLogs = getLogs;
 		InitializeComponent();
 		Initialize();
 	}
 
-	private async void Initialize()
+	private void Initialize()
 	{
-		string[]? dates = await _trainInformationService.GetLogDates();
-		if (dates == null)
-			return;
-		
-		DateBox.ItemsSource = dates;
+		DateBox.ItemsSource = _logsDates;
 		
 		DateBox.SelectedIndex = DateBox.ItemCount - 1;
 	}
 
 	private async void DateBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
 	{
-		await Dispatcher.UIThread.Invoke(async () => LogViewerBox.ItemsSource = await _trainInformationService.GetLogs((string)DateBox.SelectedItem!));
+		await Dispatcher.UIThread.InvokeAsync(async () => Task.FromResult(LogViewerBox.ItemsSource = await _getLogs.Invoke((string)DateBox.SelectedItem!)));
 		
 		ScrollViewer? scrollViewer = LogViewerBox.GetVisualDescendants().OfType<ScrollViewer>().FirstOrDefault();
 		scrollViewer?.ScrollToEnd();
