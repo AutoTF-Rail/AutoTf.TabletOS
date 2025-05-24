@@ -126,5 +126,53 @@
                 </Grid>
             </Grid>
         </Grid>
+        
+        <Grid Name="NumKeyboardGrid">
+            <Grid Background="Black" Opacity=".2" Margin="0, 15, 0, 0" PointerReleased="CloseKeyboard" />
+            
+            <Grid HorizontalAlignment="Right" Height="400" Width="375" VerticalAlignment="Bottom"  Margin="0, 0, 10, 10">
+                <Grid Background="Black" Opacity=".2" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    
+                    <DockPanel Grid.Row="0">
+                        <Button DockPanel.Dock="Right" FontSize="17" Margin="5" Click="KeyboardSaveBtn_Click">Save</Button>
+                        <TextBox DockPanel.Dock="Left" FontSize="17" IsReadOnly="True" Name="KeyboardValueBox" VerticalContentAlignment="Center">0</TextBox>
+                    </DockPanel>
+                    <Grid Grid.Row="1" VerticalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        
+                        <Button Grid.Column="0" Grid.Row="0" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardSevenBtn_Click">7</Button>
+                        <Button Grid.Column="1" Grid.Row="0" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardEightBtn_Click">8</Button>
+                        <Button Grid.Column="2" Grid.Row="0" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardNineBtn_Click">9</Button>
+                        
+                        <Button Grid.Column="0" Grid.Row="1" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardSevenBtn_Click">4</Button>
+                        <Button Grid.Column="1" Grid.Row="1" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardSevenBtn_Click">5</Button>
+                        <Button Grid.Column="2" Grid.Row="1" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardSevenBtn_Click">6</Button>
+                        
+                        <Button Grid.Column="0" Grid.Row="2" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardOneBtn_Click">1</Button>
+                        <Button Grid.Column="1" Grid.Row="2" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardTwoBtn_Click">2</Button>
+                        <Button Grid.Column="2" Grid.Row="2" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardThreeBtn_Click">3</Button>
+                        
+                        <Button Grid.Column="0" Grid.Row="3" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardCommaBtn_Click">,</Button>
+                        <Button Grid.Column="1" Grid.Row="3" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardZeroBtn_Click">0</Button>
+                        <Button Grid.Column="2" Grid.Row="3" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="KeyboardDeleteBtn_Click">Delete</Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

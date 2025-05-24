@@ -10,10 +10,24 @@ namespace AutoTf.TabletOS.Models;
 public static class Statics
 {
 	private static string? _macAddress;
+	private static Func<string, Task<(bool success, string result)>>? _keyboardHandler;
 	
 	static Statics()
 	{
 		Notifications.CollectionChanged += NotificationsOnCollectionChanged;
+	}
+	
+	public static void RegisterKeyboard(Func<string, Task<(bool success, string result)>> handler)
+	{
+		_keyboardHandler = handler;
+	}
+	
+	public static async Task<(bool success, string result)> ShowKeyboard(string originalValue)
+	{
+		if (_keyboardHandler == null)
+			throw new InvalidOperationException("No handler registered.");
+
+		return await _keyboardHandler(originalValue);
 	}
 	
 	public static Action? Shutdown;

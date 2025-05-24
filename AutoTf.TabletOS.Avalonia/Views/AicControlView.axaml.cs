@@ -117,80 +117,15 @@ public partial class AicControlView : UserControl
 	
 	#endregion
 	
-	#region LocationKeyboardInteraction
-	
-	private void ResetLocation()
+	private async void CurrentLocationBox_OnGotFocus(object? sender, GotFocusEventArgs e)
 	{
-		CurrentLocationBox.Text = _currentLocation;
-		KeyboardArea.IsVisible = false;
-		AicInteractButtonsArea.IsVisible = true;
-	}
-	
-	private void CurrentLocationBox_OnGotFocus(object? sender, GotFocusEventArgs e)
-	{
-		AicInteractButtonsArea.IsVisible = false;
-		KeyboardArea.IsVisible = true;
-	}
-
-	private async void KeyboardDone_Click(object? sender, RoutedEventArgs e)
-	{
-		await InvokeLoadingScreen(true, "Saving location...");
-		_currentLocation = CurrentLocationBox.Text!;
-		AicInteractButtonsArea.IsVisible = true;
-		KeyboardArea.IsVisible = false;
-
-		await InvokeLoadingScreen(false);
-	}
-
-	private void KeyboardCancel_Click(object? sender, RoutedEventArgs e)
-	{
-		ResetLocation();
-	}
-
-	private void KeyboardBack_Click(object? sender, RoutedEventArgs e)
-	{
-		string currString = CurrentLocationBox.Text!;
-		CurrentLocationBox.Text = currString.Substring(0, currString.Length - 1);
-	}
-
-	private void CurrentLocationBox_OnTextChanged(object? sender, TextChangedEventArgs e)
-	{
-		if (sender is TextBox textBox)
-		{
-			textBox.CaretIndex = textBox.Text?.Length ?? 0;
-		}
-	}
-
-	private void AddCharToLocation(string character)
-	{
-		CurrentLocationBox.Text = CurrentLocationBox.Text += character;
-	}
-
-	private void KeyboardButtonComma_Click(object? sender, RoutedEventArgs e)
-	{
-		if (CurrentLocationBox.Text!.Contains(","))
+		(bool success, string? result) = await Statics.ShowKeyboard(CurrentLocationBox.Text ?? "");
+		
+		if (!success)
 			return;
-		AddCharToLocation(",");
+
+		CurrentLocationBox.Text = result;
+
+		// TODO: Send new location to Central Bridge
 	}
-
-	private void KeyboardButton0_Click(object? sender, RoutedEventArgs e) => AddCharToLocation("0");
-
-	private void KeyboardButton1_Click(object? sender, RoutedEventArgs e) => AddCharToLocation("1");
-
-	private void KeyboardButton2_Click(object? sender, RoutedEventArgs e) => AddCharToLocation("2");
-
-	private void KeyboardButton3_Click(object? sender, RoutedEventArgs e) => AddCharToLocation("3");
-
-	private void KeyboardButton4_Click(object? sender, RoutedEventArgs e) => AddCharToLocation("4");
-
-	private void KeyboardButton5_Click(object? sender, RoutedEventArgs e) => AddCharToLocation("5");
-
-	private void KeyboardButton6_Click(object? sender, RoutedEventArgs e) => AddCharToLocation("6");
-
-	private void KeyboardButton7_Click(object? sender, RoutedEventArgs e) => AddCharToLocation("7");
-
-	private void KeyboardButton8_Click(object? sender, RoutedEventArgs e) => AddCharToLocation("8");
-
-	private void KeyboardButton9_Click(object? sender, RoutedEventArgs e) => AddCharToLocation("9");
-	#endregion
 }

@@ -193,6 +193,6 @@
                 
             </Grid>
         </Grid>
-        <views:TopBar Grid.Row="0" VerticalAlignment="Top" />
+        <views:TopBar Grid.Row="0" />
     </Grid>
 </UserControl>

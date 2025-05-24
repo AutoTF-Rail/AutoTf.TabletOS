@@ -29,24 +29,7 @@
             <StackPanel Grid.Row="1" Name="InteractionsArea">
                 <DockPanel>
                     <TextBlock FontSize="18" VerticalAlignment="Center">Current location:</TextBlock>
-                    <TextBox Name="CurrentLocationBox" TextChanged="CurrentLocationBox_OnTextChanged" MaxLength="8" IsReadOnly="True" CaretBrush="Transparent" GotFocus="CurrentLocationBox_OnGotFocus" Margin="5, 0" FontSize="18" HorizontalAlignment="Left" MinWidth="60"></TextBox>
-                </DockPanel>
-                <DockPanel Background="Gray" LastChildFill="False" HorizontalAlignment="Left" Margin="0, 5" Name="KeyboardArea">
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButtonComma_Click">,</Button>
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButton0_Click">0</Button>
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButton1_Click">1</Button>
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButton2_Click">2</Button>
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButton3_Click">3</Button>
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButton4_Click">4</Button>
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButton5_Click">5</Button>
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButton6_Click">6</Button>
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButton7_Click">7</Button>
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButton8_Click">8</Button>
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardButton9_Click">9</Button>
-                    
-                    <Button FontSize="25" Width="40" Margin="4" Click="KeyboardBack_Click">&lt;</Button>
-                    <Button FontSize="25" Margin="4" Click="KeyboardCancel_Click">Cancel</Button>
-                    <Button FontSize="25" Margin="4" Click="KeyboardDone_Click">Done</Button>
+                    <TextBox Name="CurrentLocationBox" MaxLength="8" IsReadOnly="True" CaretBrush="Transparent" GotFocus="CurrentLocationBox_OnGotFocus" Margin="5, 0" FontSize="18" HorizontalAlignment="Left" MinWidth="60"></TextBox>
                 </DockPanel>
                 <DockPanel LastChildFill="False" Margin="0, 5" HorizontalAlignment="Left" Name="AicInteractButtonsArea">
                     <Button FontSize="17" Margin="5" Click="ShutdownButton_Click">Shutdown</Button>
