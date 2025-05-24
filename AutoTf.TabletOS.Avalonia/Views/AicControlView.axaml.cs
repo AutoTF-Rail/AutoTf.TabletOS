@@ -25,7 +25,6 @@ public partial class AicControlView : UserControl
 	public AicControlView()
 	{
 		InitializeComponent();
-		KeyboardArea.IsVisible = false;
 		
 		InitializeData();
 	}
