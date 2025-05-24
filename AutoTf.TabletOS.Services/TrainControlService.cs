@@ -21,7 +21,7 @@ public class TrainControlService : ITrainControlService
 	// TODO: Reverse UI change if this fails/request the current state on the server to update the UI again
 	public async Task<bool> SetLever(LeverSetModel leverModel) => await HttpHelper.SendPost(_baseUrl + "/setLever", new StringContent(JsonSerializer.Serialize(leverModel), Encoding.UTF8, "application/json"));
 
-	public async Task<bool> EasyControl(int power) => await HttpHelper.SendPost(_baseUrl + "/setLever", new StringContent(JsonSerializer.Serialize(power), Encoding.UTF8, "application/json"));
+	public async Task<bool> EasyControl(int power) => await HttpHelper.SendPost(_baseUrl + "/easyControl", new StringContent(JsonSerializer.Serialize(power), Encoding.UTF8, "application/json"));
 
 	public async Task<bool> EmergencyBrake() => await HttpHelper.SendPost(_baseUrl + "/emergencybrake", new StringContent("", Encoding.UTF8, "application/json"));
 }
