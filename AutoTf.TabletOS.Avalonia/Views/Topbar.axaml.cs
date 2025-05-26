@@ -1,5 +1,8 @@
 using System;
 using System.Diagnostics;
+#if RELEASE
+using System.IO;
+#endif
 using System.Linq;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels;
