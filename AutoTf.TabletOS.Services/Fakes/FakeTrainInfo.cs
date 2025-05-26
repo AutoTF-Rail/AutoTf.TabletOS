@@ -20,9 +20,9 @@ public class FakeTrainInfo : ITrainInformationService
 		return Task.FromResult(Result<string>.Ok("Desiro HC"));
 	}
 
-	public Task<Result<string>> GetLastSync()
+	public Task<Result<DateTime>> GetLastSync()
 	{
-		return Task.FromResult(Result<string>.Ok(DateTime.Now.ToString("o")));
+		return Task.FromResult(Result<DateTime>.Ok(DateTime.Now));
 	}
 
 	public Task<Result<string>> GetVersion()
