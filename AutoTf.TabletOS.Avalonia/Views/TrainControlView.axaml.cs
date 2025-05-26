@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models;
@@ -55,11 +57,36 @@ public partial class TrainControlView : UserControl
 
 			_trainCameraService.NewFrameReceived += NewFrameReceived;
 			
-			Task aicTask = LoadAicData();
-			Task trainDataTask = LoadTrainData();
-			Task trainCamTask = _trainCameraService.StartListeningForCameras();
+			// Oh well... it works
+			
+			List<Task> tasks =
+			[
+				LoadAicData(),
+				LoadTrainData(),
+				_trainCameraService.StartListeningForCameras()
+			];
 
-			await Task.WhenAll(aicTask, trainDataTask, trainCamTask);
+			Dictionary<Task, string> taskNames = new Dictionary<Task, string>
+			{
+				[tasks[0]] = "AIC",
+				[tasks[1]] = "TrainData",
+				[tasks[2]] = "Camera"
+			};
+			
+			LoadingName.Text = string.Join(", ", taskNames);
+			while (tasks.Count > 0)
+			{
+				Task finished = await Task.WhenAny(tasks);
+				tasks.Remove(finished);
+				taskNames.Remove(finished);
+
+				await Dispatcher.UIThread.InvokeAsync(() =>
+				{
+					LoadingName.Text = $"Loading: {string.Join(", ", taskNames)}";
+				});
+
+				await finished;
+			}
 		}
 		catch (Exception e)
 		{

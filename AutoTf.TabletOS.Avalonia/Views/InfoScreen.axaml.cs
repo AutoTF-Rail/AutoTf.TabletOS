@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using AutoTf.Logging;
@@ -116,8 +117,19 @@ public partial class InfoScreen : UserControl
 
 	private void RebootButton_OnClick(object? sender, RoutedEventArgs e)
 	{
-		_networkService.ShutdownConnection();
-		CommandExecuter.ExecuteSilent("reboot now", true);
+		try
+		{
+			_networkService.ShutdownConnection();
+		}
+		catch (Exception exception)
+		{
+			_logger.Log("Failed to shutdown connection:");
+			_logger.Log(exception.ToString());
+		}
+		finally
+		{
+			CommandExecuter.ExecuteSilent("reboot now", true);
+		}
 	}
 
 	private void LogsButton_OnClick(object? sender, RoutedEventArgs e)
