@@ -7,7 +7,7 @@ public interface ITrainInformationService
 	public Task<Result<string>> GetEvuName();
 	public Task<Result<string>> GetTrainId();
 	public Task<Result<string>> GetTrainName();
-	public Task<Result<string>> GetLastSync();
+	public Task<Result<DateTime>> GetLastSync();
 	public Task<Result<string>> GetVersion();
 	public Task<Result<DateTime>> GetNextSave();
 	public Task<Result<string[]>> GetLogDates();

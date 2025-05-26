@@ -18,7 +18,7 @@ public class TrainInformationService : ITrainInformationService
 
 	public async Task<Result<string>> GetTrainName() => await HttpHelper.SendGet(_infoBaseUrl + "/trainName");
 
-	public async Task<Result<string>> GetLastSync() => await HttpHelper.SendGet(_infoBaseUrl + "/lastsynced");
+	public async Task<Result<DateTime>> GetLastSync() => await HttpHelper.SendGet<DateTime>(_infoBaseUrl + "/lastsynced");
 
 	public async Task<Result<string>> GetVersion() => await HttpHelper.SendGet(_infoBaseUrl + "/version");
 

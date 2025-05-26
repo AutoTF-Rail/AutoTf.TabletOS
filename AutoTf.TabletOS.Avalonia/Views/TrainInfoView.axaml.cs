@@ -56,17 +56,17 @@ public partial class TrainInfoView : UserControl
 		string evuName = (await _trainInfo.GetEvuName()).GetValue("Unavailable");
 		string trainId = (await _trainInfo.GetTrainId()).GetValue("Unavailable");
 		string trainName = (await _trainInfo.GetTrainName()).GetValue("Unavailable");
-		string lastTrainSync = (await _trainInfo.GetLastSync()).GetValue("Unavailable");
+		DateTime lastTrainSync = (await _trainInfo.GetLastSync()).GetValue(DateTime.MinValue);
 		string trainVersion = (await _trainInfo.GetVersion()).GetValue("Unavailable");
 		await UpdateSaveTimer();
 		
-		if (evuName == "Unavailable" || trainId == "Unavailable" || trainName == "Unavailable" || lastTrainSync == "Unavailable" || trainVersion == "Unavailable")
+		if (evuName == "Unavailable" || trainId == "Unavailable" || trainName == "Unavailable" || lastTrainSync == DateTime.MinValue || trainVersion == "Unavailable")
 		{
 			Statics.Notifications.Add(new Notification("Could not get train information data. Please view the logs for more information.", Colors.Red));
 			return;
 		}
 
-		int dayDiff = (DateTime.Parse(lastTrainSync) - DateTime.Now).Days * -1;
+		int dayDiff = (lastTrainSync - DateTime.Now).Days * -1;
 
 		IImmutableSolidColorBrush brush = ConvertDayIntoBrush(dayDiff);
 		await Dispatcher.UIThread.InvokeAsync(() => NextTrainConnectionDay.Foreground = brush);
