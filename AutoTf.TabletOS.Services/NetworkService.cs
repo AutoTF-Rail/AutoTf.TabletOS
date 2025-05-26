@@ -49,10 +49,15 @@ public class NetworkService : INetworkService
 		// _logger.Log("Establishing connection via connection ID: " + Statics.TrainConnectionId);
 		CommandExecuter.ExecuteSilent($"nmcli radio wifi off", true);
 		CommandExecuter.ExecuteSilent($"nmcli radio wifi on", true);
-		CommandExecuter.ExecuteSilent($"nmcli c add type wifi con-name CentralBridge-{Statics.TrainConnectionId} ifname wlan0 ssid {name}", true);
-		CommandExecuter.ExecuteSilent($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.key-mgmt wpa-psk", true);
-		CommandExecuter.ExecuteSilent($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} wifi-sec.psk CentralBridgePW", true);
-		CommandExecuter.ExecuteSilent($"nmcli con modify CentralBridge-{Statics.TrainConnectionId} connection.autoconnect no", true);
+		
+		string connectionName = $"CentralBridge-{Statics.TrainConnectionId}";
+
+		CommandExecuter.ExecuteSilent($"nmcli c add type wifi con-name {connectionName} ifname wlan0 ssid {name}", true);
+		CommandExecuter.ExecuteSilent($"nmcli con modify {connectionName} wifi-sec.key-mgmt wpa-psk", true);
+		CommandExecuter.ExecuteSilent($"nmcli con modify {connectionName} wifi-sec.psk CentralBridgePW", true);
+		CommandExecuter.ExecuteSilent($"nmcli con modify {connectionName} connection.autoconnect no", true);
+
+		CommandExecuter.ExecuteSilent($"nmcli con modify {connectionName} 802-11-wireless.hidden yes", true);
 		
 		string output = CommandExecuter.ExecuteCommand($"nmcli con up CentralBridge-{Statics.TrainConnectionId}");
 
