@@ -1,14 +1,14 @@
-using Avalonia.Media;
+using AutoTf.CentralBridge.Shared.Models;
 
 namespace AutoTf.TabletOS.Models.Interfaces;
 
 public interface IAicService
 {
-    public Task<bool?> IsAvailable();
-    public Task<bool> IsOnline();
-    public Task<string?> Version();
-    public Task<string[]> LogDates();
-    public Task<string[]> Logs(string date);
-    public void Shutdown();
-    public void Restart();
+    public Task<Result<bool?>> IsAvailable();
+    public Task<Result> IsOnline();
+    public Task<Result<string>> Version();
+    public Task<Result<string[]>> LogDates();
+    public Task<Result<string[]>> Logs(string date);
+    public Task<Result> Shutdown();
+    public Task<Result> Restart();
 }

@@ -1,4 +1,5 @@
 using System.Net.Sockets;
+using AutoTf.CentralBridge.Shared.Models;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
@@ -24,7 +25,7 @@ public class TrainCameraService : ITrainCameraService
 		_canStream = false;
 		for (int i = 0; i < _udpClients.Count; i++)
 		{
-			if(!await PostStopStream(i))
+			if(!(await PostStopStream(i)).IsSuccess)
 				_logger.Log($"Could not start stream for camera at index {i}.");
 		}
 		
@@ -147,7 +148,7 @@ public class TrainCameraService : ITrainCameraService
 		return false;
 	}
 
-	private async Task<bool> PostStopStream(int cameraIndex)
+	private async Task<Result> PostStopStream(int cameraIndex)
 	{
 		return await HttpHelper.SendPost($"http://192.168.1.1/camera/stopStream?cameraIndex={cameraIndex}", new StringContent(""));
 	}

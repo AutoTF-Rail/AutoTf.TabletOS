@@ -1,49 +1,50 @@
+using AutoTf.CentralBridge.Shared.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 
 namespace AutoTf.TabletOS.Services.Fakes;
 
 public class FakeAicService : IAicService
 {
-    public Task<bool?> IsAvailable()
+    public Task<Result<bool?>> IsAvailable()
     {
-        return Task.FromResult<bool?>(true);
+        return Task.FromResult(Result<bool?>.Ok(true));
     }
 
-    public Task<bool> IsOnline()
+    public Task<Result> IsOnline()
     {
-        return Task.FromResult(true);
+        return Task.FromResult(Result.Ok());
     }
 
-    public Task<string?> Version()
+    public Task<Result<string>> Version()
     {
-        return Task.FromResult("DebugVersion")!;
+        return Task.FromResult(Result<string>.Ok("DebugVersion"));
     }
 
-    public Task<string[]> LogDates()
+    public Task<Result<string[]>> LogDates()
     {
-        return Task.FromResult(new[]
-        {
+        return Task.FromResult(Result<string[]>.Ok(
+        [
             "04-09-2016",
             "01-01-2004"
-        });
+        ]));
     }
 
-    public Task<string[]> Logs(string date)
+    public Task<Result<string[]>> Logs(string date)
     {
-        return Task.FromResult(new[]
-        {
+        return Task.FromResult(Result<string[]>.Ok(
+        [
             "Example Log.",
             "Another example log..."
-        });
+        ]));
     }
 
-    public void Shutdown()
+    public Task<Result> Shutdown()
     {
-        
+        return Task.FromResult(Result.Ok());
     }
 
-    public void Restart()
+    public Task<Result> Restart()
     {
-        
+        return Task.FromResult(Result.Ok());
     }
 }

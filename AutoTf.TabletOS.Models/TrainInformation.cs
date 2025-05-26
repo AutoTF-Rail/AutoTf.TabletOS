@@ -17,10 +17,10 @@ public class TrainInformation
     {
         try
         {
-            EvuName = await _trainInfo.GetEvuName() ?? "Unknown";
-            TrainId = await _trainInfo.GetTrainId() ?? "Unknown";
-            TrainName = await _trainInfo.GetTrainName() ?? "Unknown";
-            TrainVersion = await _trainInfo.GetVersion() ?? "Unknown";
+            EvuName = (await _trainInfo.GetEvuName()).GetValue("Unknown");
+            TrainId = (await _trainInfo.GetTrainId()).GetValue("Unknown");
+            TrainName = (await _trainInfo.GetTrainName()).GetValue("Unknown");
+            TrainVersion = (await _trainInfo.GetVersion()).GetValue("Unknown");
 
             InitializedSuccessfully = true;
         }

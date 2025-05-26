@@ -11,4 +11,8 @@
         <PackageReference Include="Avalonia" Version="11.2.3" />
         <PackageReference Include="Iot.Device.Bindings" Version="3.2.0" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SubModules\AutoTf.CentralBridge.Shared\AutoTf.CentralBridge.Shared.Models\AutoTf.CentralBridge.Shared.Models.csproj" />
+    </ItemGroup>
 </Project>

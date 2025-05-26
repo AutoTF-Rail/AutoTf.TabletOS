@@ -1,8 +1,6 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using AutoTf.Logging;
-using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 using AutoTf.TabletOS.Services;
@@ -43,7 +41,7 @@ public partial class InfoScreen : UserControl
 		if (!NetworkService.IsInternetAvailable())
 			return;
 
-		Dispatcher.UIThread.InvokeAsync(() => UpdateText.IsVisible = true);
+		await Dispatcher.UIThread.InvokeAsync(() => UpdateText.IsVisible = true);
 		await Task.Delay(50);
 		
 		string prevDir = Directory.GetCurrentDirectory();
