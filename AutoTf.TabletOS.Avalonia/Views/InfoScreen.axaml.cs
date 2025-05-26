@@ -65,7 +65,7 @@ public partial class InfoScreen : UserControl
 		await Task.Delay(50);
 		
 		string pull = CommandExecuter.ExecuteCommand("git pull");
-		_logger.Log(pull);
+		
 		if (pull.Contains("Already"))
 		{
 			await Dispatcher.UIThread.InvokeAsync(() =>
@@ -79,11 +79,22 @@ public partial class InfoScreen : UserControl
 			LoadingArea.IsVisible = false;
 			return;
 		}
+		CommandExecuter.ExecuteCommand("git submodule update --init --recursive");
 		
 		LoadingName.Text = "Building update...";
 		await Task.Delay(50);
 		
-		CommandExecuter.ExecuteCommand("dotnet build -c RELEASE -m");
+		string buildOutput = CommandExecuter.ExecuteCommand("dotnet build -c RELEASE -m");
+		if (!buildOutput.Contains("0 Error(s)"))
+		{
+			await Dispatcher.UIThread.InvokeAsync(() =>
+			{
+				InfoOutput.Text = "";
+				InfoStatus.Text = "Failed to build the update.";
+				LoadingArea.IsVisible = false;
+			});
+			return;
+		}
 		await Task.Delay(50);
 		
 		CommandExecuter.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
