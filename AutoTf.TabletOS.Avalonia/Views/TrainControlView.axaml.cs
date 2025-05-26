@@ -73,14 +73,14 @@ public partial class TrainControlView : UserControl
 				[tasks[2]] = "Camera"
 			};
 			
-			await Dispatcher.UIThread.InvokeAsync(() => LoadingName.Text = $"Loading: {string.Join(", ", taskNames)}");
+			await Dispatcher.UIThread.InvokeAsync(() => LoadingName.Text = $"Loading: {string.Join(", ", taskNames.Values)}");
 			while (tasks.Count > 0)
 			{
 				Task finished = await Task.WhenAny(tasks);
 				tasks.Remove(finished);
 				taskNames.Remove(finished);
 
-				await Dispatcher.UIThread.InvokeAsync(() => LoadingName.Text = $"Loading: {string.Join(", ", taskNames)}");
+				await Dispatcher.UIThread.InvokeAsync(() => LoadingName.Text = $"Loading: {string.Join(", ", taskNames.Values)}");
 
 				await finished;
 			}
