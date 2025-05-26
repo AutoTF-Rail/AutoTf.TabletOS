@@ -41,6 +41,7 @@ public partial class MainView : UserControl
 	{
 		if (_isHandlingKey)
 			return;
+		
 		_isHandlingKey = true;
 		Dispatcher.UIThread.Invoke(() =>
 		{

@@ -179,6 +179,9 @@ public partial class TrainControlView : UserControl
 			case Side.Front when _currentCamera == Side.Back:
 				ChangeCamera();
 				break;
+			case Side.Back when _currentCamera == Side.Back:
+				await UpdateCameraTitle();
+				break;
 		}
 
 		await InvokeLoadingScreen(false);
@@ -205,7 +208,7 @@ public partial class TrainControlView : UserControl
 
 	private async Task UpdateCameraTitle()
 	{
-		await Dispatcher.UIThread.InvokeAsync(() => CamDirectionText.Text =  _currentDirection == _currentCamera ? "[Front Cam]" : "[Back Cam]");
+		await Dispatcher.UIThread.InvokeAsync(() => CamDirectionText.Text = _currentDirection == _currentCamera ? "[Front Cam]" : "[Back Cam]");
 	}
 	
 	private async Task AddNotification(string text, Color color)

@@ -251,4 +251,12 @@ public partial class TopBar : UserControl
 				
 		KeyboardValueBox.Text = KeyboardValueBox.Text.Substring(0, KeyboardValueBox.Text.Length - 1);
 	}
+
+	private void LogOutBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		Statics.YubiCode = string.Empty;
+		Statics.YubiSerial = -1;
+		Statics.YubiTime = DateTime.MinValue;
+		Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new MainView()));
+	}
 }

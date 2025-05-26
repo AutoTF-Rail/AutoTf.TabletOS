@@ -120,8 +120,9 @@
                                 </Grid>
                             </Button>
                         </DockPanel>
-                        <Button Margin="5">Connect to wifi</Button>
-                        <Button Margin="5">Authenticate A New Key</Button>
+                        <!-- <Button Margin="5">Connect to wifi</Button> -->
+                        <!-- <Button Margin="5">Authenticate A New Key</Button> -->
+                        <Button Margin="5" Click="LogOutBtn_Click">Logout</Button>
                     </StackPanel>
                 </Grid>
             </Grid>
