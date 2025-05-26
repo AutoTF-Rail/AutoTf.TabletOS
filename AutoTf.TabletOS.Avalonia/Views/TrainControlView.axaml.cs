@@ -98,7 +98,7 @@ public partial class TrainControlView : UserControl
 		
 		if (!info.InitializedSuccessfully)
 		{
-			await AddNotification("Could not get train all information data. To resolve this, maybe reconnect..", Colors.Yellow);
+			await AddNotification("Could not get all train information data. To resolve this, maybe reconnect..", Colors.Yellow);
 		}
 		
 		await Dispatcher.UIThread.InvokeAsync(() =>
