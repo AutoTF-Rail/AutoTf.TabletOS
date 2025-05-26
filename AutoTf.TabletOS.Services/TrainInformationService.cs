@@ -12,15 +12,15 @@ public class TrainInformationService : ITrainInformationService
 	private readonly string _camBaseUrl = "http://192.168.1.1/camera";
 	private readonly string _sysBaseUrl = "http://192.168.1.1/system";
 
-	public async Task<Result<string>> GetEvuName() => await HttpHelper.SendGet<string>(_infoBaseUrl + "/evuname");
+	public async Task<Result<string>> GetEvuName() => await HttpHelper.SendGet(_infoBaseUrl + "/evuname");
 
-	public async Task<Result<string>> GetTrainId() => await HttpHelper.SendGet<string>(_infoBaseUrl + "/trainId");
+	public async Task<Result<string>> GetTrainId() => await HttpHelper.SendGet(_infoBaseUrl + "/trainId");
 
-	public async Task<Result<string>> GetTrainName() => await HttpHelper.SendGet<string>(_infoBaseUrl + "/trainName");
+	public async Task<Result<string>> GetTrainName() => await HttpHelper.SendGet(_infoBaseUrl + "/trainName");
 
-	public async Task<Result<string>> GetLastSync() => await HttpHelper.SendGet<string>(_infoBaseUrl + "/lastsynced");
+	public async Task<Result<string>> GetLastSync() => await HttpHelper.SendGet(_infoBaseUrl + "/lastsynced");
 
-	public async Task<Result<string>> GetVersion() => await HttpHelper.SendGet<string>(_infoBaseUrl + "/version");
+	public async Task<Result<string>> GetVersion() => await HttpHelper.SendGet(_infoBaseUrl + "/version");
 
 	public async Task<Result<string[]>> GetLogDates() => await HttpHelper.SendGet<string[]>(_infoBaseUrl + "/logdates");
 

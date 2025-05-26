@@ -39,7 +39,30 @@ public static class HttpHelper
         }
     }
     
-    public static async Task<Result> SendGet(string endpoint, int timeoutSeconds = 5)
+    public static async Task<Result<string>> SendGet(string endpoint, int timeoutSeconds = 5)
+    {
+        using HttpClient client = new HttpClient();
+        client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
+        client.DefaultRequestHeaders.Add("macAddr", Statics.MacAddress);
+        
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync(endpoint);
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+                return Result<string>.Ok(content);
+
+            return Result<string>.Fail(ResultBase.MapStatusToResultCode(response.StatusCode), content);
+        }
+        catch (Exception ex)
+        {
+            return Result<string>.Fail(ResultCode.InternalServerError, $"Exception occurred: {ex.Message}");
+        }
+    }
+    
+    public static async Task<Result> SendGetRaw(string endpoint, int timeoutSeconds = 5)
     {
         using HttpClient client = new HttpClient();
         client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
