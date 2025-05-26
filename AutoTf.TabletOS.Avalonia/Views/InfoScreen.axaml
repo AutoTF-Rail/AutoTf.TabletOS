@@ -51,8 +51,8 @@
         <Button Click="Button_OnClick" Margin="40" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="Black" BorderBrush="Black">Back</Button>
         
         <TextBlock Name="UpdateText" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="40">Updating...</TextBlock>
-        <TextBlock Name="InfoStatus" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15">Pulling</TextBlock>
-        <TextBlock Name="InfoOutput" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="8">Pulling</TextBlock>
+        <TextBlock Name="InfoStatus" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15"></TextBlock>
+        <TextBlock Name="InfoOutput" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="8"></TextBlock>
                 
         <Grid IsVisible="True" Name="LoadingArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid Background="Black" Opacity=".72" />

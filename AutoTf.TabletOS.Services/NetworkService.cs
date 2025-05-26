@@ -58,6 +58,7 @@ public class NetworkService : INetworkService
 		CommandExecuter.ExecuteSilent($"nmcli con modify {connectionName} connection.autoconnect no", true);
 
 		CommandExecuter.ExecuteSilent($"nmcli con modify {connectionName} 802-11-wireless.hidden yes", true);
+		CommandExecuter.ExecuteSilent($"nmcli con modify {connectionName} 802-11-wireless.scan_ssid 1", true);
 		
 		string output = CommandExecuter.ExecuteCommand($"nmcli con up CentralBridge-{Statics.TrainConnectionId}");
 

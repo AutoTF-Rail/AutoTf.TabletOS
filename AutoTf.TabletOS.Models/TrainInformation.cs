@@ -24,6 +24,18 @@ public class TrainInformation
             Task<Result<string>> versionTask = _trainInfo.GetVersion();
             
             await Task.WhenAll(evuNameTask, trainIdTask, trainNameTask, versionTask);
+
+            if (!evuNameTask.Result.IsSuccess)
+                _logger.Log($"Could not get evu name: {evuNameTask.Result.Value}.");
+            
+            if (!trainIdTask.Result.IsSuccess)
+                _logger.Log($"Could not get train ID: {trainIdTask.Result.Value}.");
+            
+            if (!trainNameTask.Result.IsSuccess)
+                _logger.Log($"Could not get train name: {trainNameTask.Result.Value}.");
+            
+            if (!trainNameTask.Result.IsSuccess)
+                _logger.Log($"Could not get train version: {trainNameTask.Result.Value}.");
             
             EvuName = evuNameTask.Result.GetValue("Unknown");
             TrainId = trainIdTask.Result.GetValue("Unknown");
