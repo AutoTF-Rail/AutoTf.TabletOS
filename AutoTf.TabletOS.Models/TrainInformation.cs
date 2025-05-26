@@ -34,8 +34,8 @@ public class TrainInformation
             if (!trainNameTask.Result.IsSuccess)
                 _logger.Log($"Could not get train name: {trainNameTask.Result.Value}.");
             
-            if (!trainNameTask.Result.IsSuccess)
-                _logger.Log($"Could not get train version: {trainNameTask.Result.Value}.");
+            if (!versionTask.Result.IsSuccess)
+                _logger.Log($"Could not get train version: {versionTask.Result.Value}.");
             
             EvuName = evuNameTask.Result.GetValue("Unknown");
             TrainId = trainIdTask.Result.GetValue("Unknown");
