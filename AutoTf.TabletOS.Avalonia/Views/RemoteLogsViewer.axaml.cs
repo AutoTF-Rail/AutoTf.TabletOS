@@ -32,13 +32,23 @@ public partial class RemoteLogsViewer : UserControl
 		DateBox.SelectedIndex = DateBox.ItemCount - 1;
 	}
 
+	private async void RefreshButton_Click(object? sender, RoutedEventArgs e)
+	{
+		await LoadLogs(DateBox.SelectedItem!.ToString()!);
+	}
+
 	private async void DateBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+	{
+		await LoadLogs(DateBox.SelectedItem!.ToString()!);
+	}
+
+	private async Task LoadLogs(string date)
 	{
 		await Dispatcher.UIThread.InvokeAsync(async () =>
 		{
 			string[] finalList = [];
 			
-			Result<string[]> logResult = await _getLogs.Invoke((string)DateBox.SelectedItem!);
+			Result<string[]> logResult = await _getLogs.Invoke(date);
 			if (logResult.IsSuccess)
 				finalList = logResult.Value!;
 			

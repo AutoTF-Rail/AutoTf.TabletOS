@@ -26,13 +26,18 @@ public class AicInformation
         }
     }
 
+    public async Task<bool> IsOnline() => await _aicService.IsOnline();
+
     public async Task UpdateState()
     {
         try
         {
             bool isOnline = (await _aicService.IsOnline()).IsSuccess;
+
+            bool? isAvailable = null;
             
-            bool? isAvailable = await _aicService.IsAvailable();
+            if (isOnline)
+                isAvailable = await _aicService.IsAvailable();
             
             if (!isOnline)
                 State = "Offline";

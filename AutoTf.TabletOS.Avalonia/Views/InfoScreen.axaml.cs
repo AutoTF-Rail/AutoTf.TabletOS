@@ -29,6 +29,7 @@ public partial class InfoScreen : UserControl
 	{
 		VersionBox.Text = "Version: " + Program.GetGitVersion();
 		UpdateButton.IsEnabled = NetworkService.IsInternetAvailable();
+		LoadingArea.IsVisible = false;
 	}
 
 	private void Button_OnClick(object? sender, RoutedEventArgs e)
@@ -41,6 +42,9 @@ public partial class InfoScreen : UserControl
 		if (!NetworkService.IsInternetAvailable())
 			return;
 
+		LoadingArea.IsVisible = true;
+		LoadingName.Text = "Updating...";
+		InfoOutput.Text = "";
 		await Dispatcher.UIThread.InvokeAsync(() => UpdateText.IsVisible = true);
 		await Task.Delay(50);
 		
@@ -55,14 +59,9 @@ public partial class InfoScreen : UserControl
 		});
 		await Task.Delay(50);
 		
-		string aasddd = CommandExecuter.ExecuteCommand("git reset --hard");
-		_logger.Log(aasddd);
+		CommandExecuter.ExecuteCommand("git reset --hard");
 		
-		await Dispatcher.UIThread.InvokeAsync(() =>
-		{
-			InfoOutput.Text = aasddd;
-			InfoStatus.Text = "Pulling";
-		});
+		LoadingName.Text = "Downloading updates...";
 		await Task.Delay(50);
 		
 		string pull = CommandExecuter.ExecuteCommand("git pull");
@@ -77,42 +76,31 @@ public partial class InfoScreen : UserControl
 			await Task.Delay(50);
 			
 			CommandExecuter.ExecuteSilent("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh", true);
+			LoadingArea.IsVisible = false;
 			return;
 		}
 		
-		await Dispatcher.UIThread.InvokeAsync(() =>
-		{
-			InfoOutput.Text = pull;
-			InfoStatus.Text = "Building";
-		});
+		LoadingName.Text = "Building update...";
 		await Task.Delay(50);
 		
-		string build = CommandExecuter.ExecuteCommand("dotnet build -c RELEASE -m");
-		_logger.Log(build);
-		
-		await Dispatcher.UIThread.InvokeAsync(() =>
-		{
-			InfoOutput.Text = build;
-			InfoStatus.Text = "Perms";
-		});
+		CommandExecuter.ExecuteCommand("dotnet build -c RELEASE -m");
 		await Task.Delay(50);
 		
-		string perms = CommandExecuter.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
-		_logger.Log(perms);
-		
+		CommandExecuter.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
 		_networkService.ShutdownConnection();
 		
+		LoadingName.Text = "Rebooting...";
+		
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{
-			InfoOutput.Text = perms;
-		
-			InfoStatus.Text = "Soft reboot";
+			InfoStatus.Text = "";
 			
 			CommandExecuter.ExecuteSilent("reboot now", true);
 		});
 		await Task.Delay(50);
 		
 		Directory.SetCurrentDirectory(prevDir);
+		LoadingArea.IsVisible = false;
 	}
 
 	private void RebootButton_OnClick(object? sender, RoutedEventArgs e)

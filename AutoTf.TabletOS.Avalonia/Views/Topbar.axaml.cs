@@ -22,6 +22,7 @@ public partial class TopBar : UserControl
 	private readonly INetworkService _networkService = Statics.NetworkService;
 	
 	private TaskCompletionSource<(bool success, string result)>? _keyboardTcs;
+	private int _maxKeyboardTextLength = 0;
 	
 	public TopBar()
 	{
@@ -163,9 +164,10 @@ public partial class TopBar : UserControl
 	
 	#region Keyboard
 
-	public async Task<(bool success, string result)> ShowKeyboard(string originalValue)
+	public async Task<(bool success, string result)> ShowKeyboard(string originalValue, int maxLength)
 	{
 		_keyboardTcs = new TaskCompletionSource<(bool, string)>();
+		_maxKeyboardTextLength = maxLength;
 		
 		KeyboardValueBox.Text = originalValue;
 		NumKeyboardGrid.IsVisible = true;
@@ -193,6 +195,9 @@ public partial class TopBar : UserControl
 
 	private void EnterKeyboardValue(string value)
 	{
+		if (KeyboardValueBox.Text!.Length + 1 > _maxKeyboardTextLength)
+			return;
+		
 		if (KeyboardValueBox.Text == "0" && value != ",")
 			KeyboardValueBox.Text = value;
 		else

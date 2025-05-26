@@ -75,8 +75,9 @@ public partial class TrainControlView : UserControl
 
 	private async Task LoadAicData()
 	{
-		AicInformation aicInfo = new AicInformation();
 		string[] splashes = await File.ReadAllLinesAsync("CopiedAssets/AiSplash");
+		
+		AicInformation aicInfo = new AicInformation();
 		await aicInfo.UpdateState();
 		
 		await Dispatcher.UIThread.InvokeAsync(() =>
@@ -109,7 +110,7 @@ public partial class TrainControlView : UserControl
 		});
 		
 		bool ecAvailable = await _trainControl.IsEasyControlAvailable();
-		await InvokeControlsAvailability(ecAvailable);
+		await UpdateControlsAvailability(ecAvailable);
 	}
 	
 	#endregion
@@ -216,7 +217,7 @@ public partial class TrainControlView : UserControl
 		await Dispatcher.UIThread.InvokeAsync(() => Statics.Notifications.Add(new Notification(text, color)));
 	}
 	
-	private async Task InvokeControlsAvailability(bool available)
+	private async Task UpdateControlsAvailability(bool available)
 	{
 		await Dispatcher.UIThread.InvokeAsync(() =>
 		{

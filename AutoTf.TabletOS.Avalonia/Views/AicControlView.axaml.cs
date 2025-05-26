@@ -130,7 +130,7 @@ public partial class AicControlView : UserControl
 	
 	private async void CurrentLocationBox_OnGotFocus(object? sender, GotFocusEventArgs e)
 	{
-		(bool success, string? result) = await Statics.ShowKeyboard(CurrentLocationBox.Text ?? "");
+		(bool success, string? result) = await Statics.ShowKeyboard(CurrentLocationBox.Text ?? "", 8);
 		
 		if (!success)
 			return;
