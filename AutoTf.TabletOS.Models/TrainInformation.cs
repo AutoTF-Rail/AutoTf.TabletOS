@@ -8,13 +8,8 @@ public class TrainInformation
 {
     private readonly ITrainInformationService _trainInfo = Statics.TrainInformationService;
     private readonly Logger _logger = Statics.Logger; 
-
-    public TrainInformation()
-    {
-        Initialize();
-    }
-
-    private async void Initialize()
+    
+    public async Task UpdateData()
     {
         try
         {

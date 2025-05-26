@@ -119,6 +119,7 @@ public partial class TrainControlView : UserControl
 	private async Task LoadTrainData()
 	{
 		TrainInformation info = new TrainInformation();
+		await info.UpdateData();
 		
 		if (!info.InitializedSuccessfully)
 		{
