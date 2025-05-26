@@ -1,3 +1,4 @@
+using AutoTf.CentralBridge.Shared.Models;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Interfaces;
 
@@ -17,10 +18,17 @@ public class TrainInformation
     {
         try
         {
-            EvuName = await _trainInfo.GetEvuName() ?? "Unknown";
-            TrainId = await _trainInfo.GetTrainId() ?? "Unknown";
-            TrainName = await _trainInfo.GetTrainName() ?? "Unknown";
-            TrainVersion = await _trainInfo.GetVersion() ?? "Unknown";
+            Task<Result<string>> evuNameTask = _trainInfo.GetEvuName();
+            Task<Result<string>> trainIdTask = _trainInfo.GetTrainId();
+            Task<Result<string>> trainNameTask = _trainInfo.GetTrainName();
+            Task<Result<string>> versionTask = _trainInfo.GetVersion();
+            
+            await Task.WhenAll(evuNameTask, trainIdTask, trainNameTask, versionTask);
+            
+            EvuName = evuNameTask.Result.GetValue("Unknown");
+            TrainId = trainIdTask.Result.GetValue("Unknown");
+            TrainName = trainNameTask.Result.GetValue("Unknown");
+            TrainVersion = versionTask.Result.GetValue("Unknown");
 
             InitializedSuccessfully = true;
         }

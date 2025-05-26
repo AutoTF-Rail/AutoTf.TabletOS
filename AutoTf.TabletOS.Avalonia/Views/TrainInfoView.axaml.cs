@@ -3,11 +3,8 @@ using System.Threading.Tasks;
 using System.Timers;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
-using AutoTf.TabletOS.Services;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
 
@@ -31,14 +28,14 @@ public partial class TrainInfoView : UserControl
 	private async Task UpdateSaveTimer()
 	{
 		_saveTimer?.Dispose();
-		DateTime? nextSave = await _trainInfo.GetNextSave();
-		if (nextSave == null)
+		DateTime nextSave = (await _trainInfo.GetNextSave()).GetValue(DateTime.MinValue);
+		if (nextSave == DateTime.MinValue)
 		{
 			Statics.Notifications.Add(new Notification("Could not get next train save date.", Colors.Yellow));
 			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Unknown");
 			return;
 		}
-		int nextSaveInMs = (nextSave.Value.Add(TimeSpan.FromSeconds(2)) - DateTime.Now).Milliseconds;
+		int nextSaveInMs = (nextSave.Add(TimeSpan.FromSeconds(2)) - DateTime.Now).Milliseconds;
 		if (nextSaveInMs <= 0)
 		{
 			await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = "Past Due");
@@ -50,20 +47,20 @@ public partial class TrainInfoView : UserControl
 		_saveTimer.Start();
 		
 
-		string date = nextSave.Value.ToString("HH:mm:ss");
+		string date = nextSave.ToString("HH:mm:ss");
 		await Dispatcher.UIThread.InvokeAsync(() => NextTrainSave.Text = date);
 	}
 
 	private async void LoadInfoData()
 	{
-		string? evuName = await _trainInfo.GetEvuName();
-		string? trainId = await _trainInfo.GetTrainId();
-		string? trainName = await _trainInfo.GetTrainName();
-		string? lastTrainSync = await _trainInfo.GetLastSync();
-		string? trainVersion = await _trainInfo.GetVersion();
+		string evuName = (await _trainInfo.GetEvuName()).GetValue("Unavailable");
+		string trainId = (await _trainInfo.GetTrainId()).GetValue("Unavailable");
+		string trainName = (await _trainInfo.GetTrainName()).GetValue("Unavailable");
+		string lastTrainSync = (await _trainInfo.GetLastSync()).GetValue("Unavailable");
+		string trainVersion = (await _trainInfo.GetVersion()).GetValue("Unavailable");
 		await UpdateSaveTimer();
 		
-		if (evuName == null || trainId == null || trainName == null || lastTrainSync == null || trainVersion == null)
+		if (evuName == "Unavailable" || trainId == "Unavailable" || trainName == "Unavailable" || lastTrainSync == "Unavailable" || trainVersion == "Unavailable")
 		{
 			Statics.Notifications.Add(new Notification("Could not get train information data. Please view the logs for more information.", Colors.Red));
 			return;
@@ -122,7 +119,7 @@ public partial class TrainInfoView : UserControl
 	
 	private async void LogsButton_Click(object? sender, RoutedEventArgs e)
 	{
-		string[] logDates = await _trainInfo.GetLogDates() ?? [];
+		string[] logDates = (await _trainInfo.GetLogDates()).GetValue([]);
 		
 		RemoteLogsViewer logsView = new RemoteLogsViewer(logDates, async s => await _trainInfo.GetLogs(s));
 		await logsView.Show(RootGrid);

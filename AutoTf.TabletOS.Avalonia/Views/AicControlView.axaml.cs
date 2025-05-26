@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using AutoTf.CentralBridge.Shared.Models;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
@@ -43,13 +44,14 @@ public partial class AicControlView : UserControl
 
 			CurrentLocationBox.Text = _currentLocation;
 
-			if (!await _aicService.IsOnline())
+			if (!(await _aicService.IsOnline()).IsSuccess)
 			{
 				InteractionsArea.IsEnabled = false;
 				return;
 			}
 
-			VersionBox.Text = await _aicService.Version();
+			Result<string> versionResult = await _aicService.Version();
+			VersionBox.Text = versionResult.IsSuccess ? versionResult.Value : "Unavailable";
 		}
 		catch (Exception e)
 		{
@@ -95,20 +97,30 @@ public partial class AicControlView : UserControl
 	{
 		await InvokeLoadingScreen(true, "Shutting down AIC...");
 		// TODO: Update status afterwards. (Wait for x seconds or listen for aic unavailablity)
-		_aicService.Shutdown();
+		await _aicService.Shutdown();
+		BackButton_Click(null, null!);
 		await InvokeLoadingScreen(false);
 	}
 
 	private async void RestartButton_Click(object? sender, RoutedEventArgs e)
 	{
 		await InvokeLoadingScreen(true, "Restarting AIC...");
-		_aicService.Restart();
+		await _aicService.Restart();
+		BackButton_Click(null, null!);
 		await InvokeLoadingScreen(false);
 	}
 
 	private async void LogsButton_Click(object? sender, RoutedEventArgs e)
 	{
-		string[] logDates = await _aicService.LogDates();
+		Result<string[]> logResult = await _aicService.LogDates();
+		if (!logResult.IsSuccess)
+		{
+			// TODO: UI Thread?
+			Statics.Notifications.Add(new Notification("Could not get logs from AIC unit. It might have gone offline.", Colors.Yellow));
+			BackButton_Click(null, null!);
+			return;
+		}
+		string[] logDates = logResult.Value!;
 		
 		RemoteLogsViewer logsView = new RemoteLogsViewer(logDates, async s => await _aicService.Logs(s));
 		await logsView.Show(RootGrid);
@@ -118,7 +130,7 @@ public partial class AicControlView : UserControl
 	
 	private async void CurrentLocationBox_OnGotFocus(object? sender, GotFocusEventArgs e)
 	{
-		(bool success, string? result) = await Statics.ShowKeyboard(CurrentLocationBox.Text ?? "");
+		(bool success, string? result) = await Statics.ShowKeyboard(CurrentLocationBox.Text ?? "", 8);
 		
 		if (!success)
 			return;

@@ -1,3 +1,4 @@
+using AutoTf.CentralBridge.Shared.Models;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
@@ -12,42 +13,42 @@ public class FakeTrainControlService : ITrainControlService
 		{ 1, -100 }
 	};
 	
-	public Task<int> GetLeverCount()
+	public Task<Result<int>> GetLeverCount()
 	{
-		return Task.FromResult(1);
+		return Task.FromResult(Result<int>.Ok(1));
 	}
 
-	public Task<double> GetLeverPosition(int leverIndex)
+	public Task<Result<double>> GetLeverPosition(int leverIndex)
 	{
-		return Task.FromResult(_leverPositions[leverIndex]);
+		return Task.FromResult(Result<double>.Ok(_leverPositions[leverIndex]));
 	}
 
-	public Task<LeverType> GetLeverType(int leverIndex)
+	public Task<Result<LeverType>> GetLeverType(int leverIndex)
 	{
 		if (leverIndex == 0)
-			return Task.FromResult(LeverType.CombinedThrottle);
+			return Task.FromResult(Result<LeverType>.Ok(LeverType.CombinedThrottle));
 		else
-			return Task.FromResult(LeverType.MainBrake);
+			return Task.FromResult(Result<LeverType>.Ok(LeverType.MainBrake));
 	}
 
-	public Task<bool> SetLever(LeverSetModel leverModel)
+	public Task<Result> SetLever(LeverSetModel leverModel)
 	{
 		_leverPositions[leverModel.LeverIndex] = leverModel.Percentage;
-		return Task.FromResult(true);
+		return Task.FromResult(Result.Ok());
 	}
 
-	public Task<bool> IsEasyControlAvailable()
+	public Task<Result<bool>> IsEasyControlAvailable()
 	{
-		return Task.FromResult(true);
+		return Task.FromResult(Result<bool>.Ok(true));
 	}
 
-	public Task<bool> EasyControl(int power)
+	public Task<Result> EasyControl(int power)
 	{
-		return Task.FromResult(true);
+		return Task.FromResult(Result.Ok());
 	}
 
-	public Task<bool> EmergencyBrake()
+	public Task<Result> EmergencyBrake()
 	{
-		return Task.FromResult(true);
+		return Task.FromResult(Result.Ok());
 	}
 }

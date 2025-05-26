@@ -55,7 +55,7 @@
                                     <StackPanel Margin="5" VerticalAlignment="Center">
                                         <TextBlock FontSize="25">
                                             <Run>AI Driver: </Run>
-                                            <Run Name="AiDriverStatus" Foreground="Green" FontWeight="Bold">Enabled</Run>
+                                            <Run Name="AiDriverStatus" Foreground="Red" FontWeight="Bold">Offline</Run>
                                         </TextBlock>
                                         <Viewbox>
                                             <TextBlock Foreground="Gray" Name="AiNextStop" FontWeight="Bold">Next stop: Somewhere… Hopefully.</TextBlock>

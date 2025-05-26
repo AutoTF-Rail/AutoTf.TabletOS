@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +30,11 @@ public partial class LogsViewer : UserControl
 
 	private void Initialize()
 	{
-		string[] files = Directory.GetFiles(_logDir).Order().ToArray();
+		string[] files = [];
+		
+		if (Path.Exists(_logDir))
+			files = Directory.GetFiles(_logDir).Order().ToArray();
+		
 		DateBox.ItemsSource = files.Select(Path.GetFileNameWithoutExtension);
 		DateBox.SelectedIndex = DateBox.ItemCount - 1;
 	}

@@ -1,93 +1,79 @@
+using AutoTf.CentralBridge.Shared.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 
 namespace AutoTf.TabletOS.Services.Fakes;
 
 public class FakeTrainInfo : ITrainInformationService
 {
-	public Task<string?> GetEvuName()
+	public Task<Result<string>> GetEvuName()
 	{
-		return Task.FromResult("ExampleEvu2")!;
+		return Task.FromResult(Result<string>.Ok("ExampleEvu2"));
 	}
 
-	public Task<string?> GetTrainId()
+	public Task<Result<string>> GetTrainId()
 	{
-		return Task.FromResult("836-378")!;
+		return Task.FromResult(Result<string>.Ok("836-378"));
 	}
 
-	public Task<string?> GetTrainName()
+	public Task<Result<string>> GetTrainName()
 	{
-		return Task.FromResult("Desiro HC")!;
+		return Task.FromResult(Result<string>.Ok("Desiro HC"));
 	}
 
-	public Task<string?> GetLastSync()
+	public Task<Result<string>> GetLastSync()
 	{
-		return Task.FromResult(DateTime.Now.ToString("o"))!;
+		return Task.FromResult(Result<string>.Ok(DateTime.Now.ToString("o")));
 	}
 
-	public Task<string?> GetVersion()
+	public Task<Result<string>> GetVersion()
 	{
-		return Task.FromResult("9ahf8v")!;
+		return Task.FromResult(Result<string>.Ok("9ahf8v"));
 	}
 
-	public Task<DateTime?> GetNextSave()
+	public Task<Result<DateTime>> GetNextSave()
 	{
-		return Task.FromResult(new DateTime?(DateTime.Now));
+		return Task.FromResult(Result<DateTime>.Ok(DateTime.Now));
 	}
-
-	public Task<bool> PostUpdate()
+	
+	public Task<Result<string[]>> GetLogDates()
 	{
-		return Task.FromResult(true);
-	}
-
-	public Task<bool> PostShutdown()
-	{
-		return Task.FromResult(true);
-	}
-
-	public Task<bool> PostRestart()
-	{
-		return Task.FromResult(true);
-	}
-
-	public Task<bool> PostStartStream(int port, int cameraIndex)
-	{
-		return Task.FromResult<bool>(true);
-	}
-
-	public Task<bool> PostStartStream()
-	{
-		return Task.FromResult(true);
-	}
-
-	public Task<bool> PostStopStream()
-	{
-		return Task.FromResult(true);
-	}
-
-	public Task<string[]?> GetLogDates()
-	{
-		return Task.FromResult(new[]
-		{
+		return Task.FromResult(Result<string[]>.Ok(
+		[
 			"22.02.2024",
 			"22.02.2024",
 			"22.02.2024",
 			"22.02.2024",
-		})!;
+		]));
 	}
 
-	public Task<string[]?> GetLogs(string date)
+	public Task<Result<string[]>> GetLogs(string date)
 	{
-		return Task.FromResult(new[]
-		{
+		return Task.FromResult(Result<string[]>.Ok(
+		[
 			"22.02.2024",
 			"22.02.2024",
 			"22.02.2024",
 			"22.02.2024",
-		})!;
+		]));
 	}
 
-	public Task<bool> SetDate(DateTime date)
+	public Task<Result> PostUpdate()
 	{
-		return Task.FromResult<bool>(true);
+		return Task.FromResult(Result.Ok());
+	}
+
+	public Task<Result> PostShutdown()
+	{
+		return Task.FromResult(Result.Ok());
+	}
+
+	public Task<Result> PostRestart()
+	{
+		return Task.FromResult(Result.Ok());
+	}
+
+	public Task<Result> SetDate(DateTime date)
+	{
+		return Task.FromResult(Result.Ok());
 	}
 }

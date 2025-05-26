@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTf.TabletOS.Preview", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTf.TabletOS.Services", "AutoTf.TabletOS.Services\AutoTf.TabletOS.Services.csproj", "{0A50D597-3677-4DC6-AFE3-E70206941C40}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{CB9692FE-773B-4A85-BFC6-CC2DCBC6CEE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTf.CentralBridge.Shared.Models", "SubModules\AutoTf.CentralBridge.Shared\AutoTf.CentralBridge.Shared.Models\AutoTf.CentralBridge.Shared.Models.csproj", "{3E30A8B6-6A52-4351-AC22-95687BA6F251}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,5 +42,12 @@ Global
 		{0A50D597-3677-4DC6-AFE3-E70206941C40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A50D597-3677-4DC6-AFE3-E70206941C40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A50D597-3677-4DC6-AFE3-E70206941C40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E30A8B6-6A52-4351-AC22-95687BA6F251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E30A8B6-6A52-4351-AC22-95687BA6F251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E30A8B6-6A52-4351-AC22-95687BA6F251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E30A8B6-6A52-4351-AC22-95687BA6F251}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3E30A8B6-6A52-4351-AC22-95687BA6F251} = {CB9692FE-773B-4A85-BFC6-CC2DCBC6CEE5}
 	EndGlobalSection
 EndGlobal

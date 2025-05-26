@@ -1,3 +1,4 @@
+using AutoTf.CentralBridge.Shared.Models;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Media;
@@ -25,12 +26,18 @@ public class AicInformation
         }
     }
 
+    public async Task<bool> IsOnline() => await _aicService.IsOnline();
+
     public async Task UpdateState()
     {
         try
         {
-            bool isOnline = await _aicService.IsOnline();
-            bool? isAvailable = await _aicService.IsAvailable();
+            bool isOnline = (await _aicService.IsOnline()).IsSuccess;
+
+            bool? isAvailable = null;
+            
+            if (isOnline)
+                isAvailable = await _aicService.IsAvailable();
             
             if (!isOnline)
                 State = "Offline";

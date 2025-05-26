@@ -1,12 +1,10 @@
 using System;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
-using AutoTf.TabletOS.Services;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -24,6 +22,7 @@ public partial class TopBar : UserControl
 	private readonly INetworkService _networkService = Statics.NetworkService;
 	
 	private TaskCompletionSource<(bool success, string result)>? _keyboardTcs;
+	private int _maxKeyboardTextLength = 0;
 	
 	public TopBar()
 	{
@@ -155,16 +154,26 @@ public partial class TopBar : UserControl
 		NotificationsBox.SelectedItem = null;
 	}
 
-	public async Task<(bool success, string result)> ShowKeyboard(string originalValue)
+	private void LogOutBtn_Click(object? sender, RoutedEventArgs e)
+	{
+		Statics.YubiCode = string.Empty;
+		Statics.YubiSerial = -1;
+		Statics.YubiTime = DateTime.MinValue;
+		Dispatcher.UIThread.Invoke(() => Statics.ChangeViewModel.Invoke(new MainView()));
+	}
+	
+	#region Keyboard
+
+	public async Task<(bool success, string result)> ShowKeyboard(string originalValue, int maxLength)
 	{
 		_keyboardTcs = new TaskCompletionSource<(bool, string)>();
+		_maxKeyboardTextLength = maxLength;
 		
 		KeyboardValueBox.Text = originalValue;
 		NumKeyboardGrid.IsVisible = true;
 		
 		return await _keyboardTcs.Task;
 	}
-	
 	
 	private void CloseKeyboard(object? sender, PointerReleasedEventArgs e)
 	{
@@ -175,66 +184,45 @@ public partial class TopBar : UserControl
 	private void KeyboardSaveBtn_Click(object? sender, RoutedEventArgs e)
 	{
 		NumKeyboardGrid.IsVisible = false;
-		_keyboardTcs?.TrySetResult((true, KeyboardValueBox.Text!));
+		string text = KeyboardValueBox.Text!;
+		
+		// Remove trailing comma
+		if (text.Last() == ',')
+			text = text.Substring(0, text.Length - 1);
+		
+		_keyboardTcs?.TrySetResult((true, text));
 	}
 
 	private void EnterKeyboardValue(string value)
 	{
-		if (KeyboardValueBox.Text == "0")
+		if (KeyboardValueBox.Text!.Length + 1 > _maxKeyboardTextLength)
+			return;
+		
+		if (KeyboardValueBox.Text == "0" && value != ",")
 			KeyboardValueBox.Text = value;
 		else
 			KeyboardValueBox.Text += value;
 	}
 
-	private void KeyboardNineBtn_Click(object? sender, RoutedEventArgs e)
-	{
-		EnterKeyboardValue("9");
-	}
+	private void KeyboardNineBtn_Click(object? sender, RoutedEventArgs e) => EnterKeyboardValue("9");
 
-	private void KeyboardEightBtn_Click(object? sender, RoutedEventArgs e)
-	{
-		EnterKeyboardValue("8");
-	}
+	private void KeyboardEightBtn_Click(object? sender, RoutedEventArgs e) => EnterKeyboardValue("8");
 
-	private void KeyboardSevenBtn_Click(object? sender, RoutedEventArgs e)
-	{
-		EnterKeyboardValue("7");
-	}
+	private void KeyboardSevenBtn_Click(object? sender, RoutedEventArgs e) => EnterKeyboardValue("7");
 
-	private void KeyboardSixBtn_Click(object? sender, RoutedEventArgs e)
-	{
-		EnterKeyboardValue("6");
-	}
+	private void KeyboardSixBtn_Click(object? sender, RoutedEventArgs e) => EnterKeyboardValue("6");
 
-	private void KeyboardFiveBtn_Click(object? sender, RoutedEventArgs e)
-	{
-		EnterKeyboardValue("5");
-	}
+	private void KeyboardFiveBtn_Click(object? sender, RoutedEventArgs e) => EnterKeyboardValue("5");
 
-	private void KeyboardFourBtn_Click(object? sender, RoutedEventArgs e)
-	{
-		EnterKeyboardValue("4");
-	}
+	private void KeyboardFourBtn_Click(object? sender, RoutedEventArgs e) => EnterKeyboardValue("4");
 
-	private void KeyboardThreeBtn_Click(object? sender, RoutedEventArgs e)
-	{
-		EnterKeyboardValue("3");
-	}
+	private void KeyboardThreeBtn_Click(object? sender, RoutedEventArgs e) => EnterKeyboardValue("3");
 
-	private void KeyboardTwoBtn_Click(object? sender, RoutedEventArgs e)
-	{
-		EnterKeyboardValue("2");
-	}
+	private void KeyboardTwoBtn_Click(object? sender, RoutedEventArgs e) => EnterKeyboardValue("2");
 
-	private void KeyboardOneBtn_Click(object? sender, RoutedEventArgs e)
-	{
-		EnterKeyboardValue("1");
-	}
+	private void KeyboardOneBtn_Click(object? sender, RoutedEventArgs e) => EnterKeyboardValue("1");
 
-	private void KeyboardZeroBtn_Click(object? sender, RoutedEventArgs e)
-	{
-		EnterKeyboardValue("0");
-	}
+	private void KeyboardZeroBtn_Click(object? sender, RoutedEventArgs e) => EnterKeyboardValue("0");
 
 	private void KeyboardCommaBtn_Click(object? sender, RoutedEventArgs e)
 	{
@@ -246,9 +234,17 @@ public partial class TopBar : UserControl
 
 	private void KeyboardDeleteBtn_Click(object? sender, RoutedEventArgs e)
 	{
-		if (KeyboardValueBox.Text == null || KeyboardValueBox.Text.Length <= 0)
+		if (KeyboardValueBox.Text == null)
 			return;
+
+		if (KeyboardValueBox.Text.Length <= 1)
+		{
+			KeyboardValueBox.Text = "0";
+			return;
+		}
 				
 		KeyboardValueBox.Text = KeyboardValueBox.Text.Substring(0, KeyboardValueBox.Text.Length - 1);
 	}
+	
+	#endregion
 }

@@ -140,6 +140,6 @@
             </StackPanel>
         </Grid>
         
-        <views:TopBar VerticalAlignment="Top" />
+        <views:TopBar VerticalAlignment="Stretch" />
     </Grid>
 </UserControl>
