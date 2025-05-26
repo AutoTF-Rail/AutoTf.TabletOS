@@ -56,17 +56,6 @@ public partial class InfoScreen : UserControl
 			InfoOutput.IsVisible = true;
 		});
 		await Task.Delay(50);
-
-		string evalOutput = CommandExecuter.ExecuteCommand("eval $(\"ssh-agent\")");
-		_logger.Log(evalOutput);
-		
-		await Dispatcher.UIThread.InvokeAsync(() =>InfoOutput.Text = evalOutput);
-		await Task.Delay(50);
-
-		string add = CommandExecuter.ExecuteCommand("ssh-add /home/display/githubKey");
-		_logger.Log(add);
-		await Dispatcher.UIThread.InvokeAsync(() => InfoOutput.Text = add);
-		await Task.Delay(50);
 		
 		string aasddd = CommandExecuter.ExecuteCommand("git reset --hard");
 		_logger.Log(aasddd);
