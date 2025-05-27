@@ -62,7 +62,7 @@ sealed class Program
 		Statics.AicService = new AicService();
 #else
 		Statics.DataManager = new FakeDataManager();
-		Statics.TrainInformationService = new FakeTrainInfo();
+		Statics.TrainInformationService = new FakeTrainInformationService();
 		Statics.TrainControlService = new FakeTrainControlService();
 		Statics.TrainCameraService = new FakeTrainCameraService();
 		Statics.AicService = new FakeAicService();

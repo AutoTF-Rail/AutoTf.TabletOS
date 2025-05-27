@@ -2,6 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using AutoTf.TabletOS.Avalonia.ViewModels;
+using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 
 namespace AutoTf.TabletOS.Avalonia;
 

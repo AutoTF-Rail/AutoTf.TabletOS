@@ -3,8 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="clr-namespace:AutoTf.TabletOS.Avalonia.Views"
+             xmlns:viewModels="clr-namespace:AutoTf.TabletOS.Avalonia.ViewModels"
+             xmlns:controls="clr-namespace:AutoTf.TabletOS.Avalonia.UI.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AutoTf.TabletOS.Avalonia.Views.TrainControlView">
+             x:Class="AutoTf.TabletOS.Avalonia.Views.TrainControlView" 
+             x:DataType="viewModels:TrainControlViewModel">
     <Grid>
         <Grid Name="RootGrid">
             <Grid>
@@ -20,26 +23,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     
-                    <Button Click="TrainInfo_Click" Padding="0" Grid.Column="0" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
-                        <Grid>
-                            <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
-                            <DockPanel>
-                                <Image Source="../Assets/RoundTrainIcon.png" VerticalAlignment="Stretch" Margin="10"/>
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock FontSize="31">
-                                        <Run Name="EvuNameBox">EVU: Unknown</Run>
-                                        <Run> - </Run>
-                                        <Run Name="TrainNameBox">Train Name</Run>
-                                    </TextBlock>
-                                    <TextBlock FontSize="17" FontWeight="Bold" Foreground="DimGray">
-                                        <Run Name="TrainIdBox">000-000</Run>
-                                        <Run> - SW-Version:</Run>
-                                        <Run Name="TrainVersion"></Run>
-                                    </TextBlock>
-                                </StackPanel>
-                            </DockPanel>
-                        </Grid>
-                    </Button>
+                    <controls:TrainInformationControl Grid.Column="0" />
                     
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -47,25 +31,9 @@
                             <ColumnDefinition Width="105" />
                         </Grid.ColumnDefinitions>
                         
-                        <Button Grid.Column="0" Click="AicControl_Click" Padding="0" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
-                            <Grid>
-                                <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
-                                <DockPanel>
-                                    <Image Source="../Assets/AIDriverIcon.png" VerticalAlignment="Stretch" Margin="10"/>
-                                    <StackPanel Margin="5" VerticalAlignment="Center">
-                                        <TextBlock FontSize="25">
-                                            <Run>AI Driver: </Run>
-                                            <Run Name="AiDriverStatus" Foreground="Red" FontWeight="Bold">Offline</Run>
-                                        </TextBlock>
-                                        <Viewbox>
-                                            <TextBlock Foreground="Gray" Name="AiNextStop" FontWeight="Bold">Next stop: Somewhere… Hopefully.</TextBlock>
-                                        </Viewbox>
-                                    </StackPanel>
-                                </DockPanel>
-                            </Grid>
-                        </Button>
+                        <controls:AicInformationControl Grid.Column="0" />
                         
-                        <Button Grid.Column="1" Padding="0" Width="95" Background="Transparent" Click="ChangeTrain_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
+                        <Button Grid.Column="1" Padding="0" Width="95" Background="Transparent" Command="{Binding ChangeToTrainSelectionCommand}" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
                             <Grid HorizontalAlignment="Center">
                                 <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
                                 <Image Source="../Assets/TrainSwitchIcon.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="10"/>
@@ -81,118 +49,37 @@
                     </Grid.ColumnDefinitions>
                     
                     <Grid Grid.Column="0" Margin="0, 5">
-                        <!-- <Grid.RowDefinitions> -->
-                        <!--     <RowDefinition Height="1.6*" /> -->
-                        <!--     <RowDefinition /> -->
-                        <!-- </Grid.RowDefinitions> -->
-                        <!-- -->
                         <Border Margin="5, 5, 2, 0" BorderBrush="Black" CornerRadius="10" ClipToBounds="True" BorderThickness="2">
                             <Grid>
                                 <Border CornerRadius="10, 10, 0, 0" Background="Gray" Opacity=".2"/>
                                 <StackPanel HorizontalAlignment="Stretch">
-                                    <Button Click="Control_Click" HorizontalAlignment="Stretch" Padding="0" Background="Transparent" BorderBrush="Black" BorderThickness="0, 0, 0, 2">
+                                    <Button HorizontalAlignment="Stretch" Padding="0" Background="Transparent" BorderBrush="Black" BorderThickness="0, 0, 0, 2">
                                         <Grid>
                                             <Border Background="Gray" Opacity="0.2" />
                                             <DockPanel>
                                                 <Image DockPanel.Dock="Right" Source="../Assets/Arrow_Right.png" Height="20" Margin="10" />
-                                                <TextBlock DockPanel.Dock="Left" Name="CamDirectionText" FontSize="25" Margin="10, 5"/>
+                                                <TextBlock DockPanel.Dock="Left" Text="{Binding CameraText}" FontSize="25" Margin="10, 5"/>
                                                 <TextBlock FontSize="25" HorizontalAlignment="Right" VerticalAlignment="Center">Controls</TextBlock>
                                             </DockPanel>
                                         </Grid>
                                     </Button>
                                     <Grid ClipToBounds="True">
-                                        <Image ClipToBounds="True" Name="PreviewImage" Source="../Assets/LoadingCameraFeedImage.png"></Image>
-                                        <Button Name="NextCamButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="25" Click="ChangeCamera_Click">&gt;</Button>
-                                        <Button Name="PreviousCamButton" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="25" Click="ChangeCamera_Click">&lt;</Button>
+                                        <Image ClipToBounds="True" Name="PreviewImage" Source="{Binding CurrentView}" />
+                                        <Button IsVisible="{Binding NextCamBtnVisible}" Command="{Binding ChangeCameraCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="25">&gt;</Button>
+                                        <Button IsVisible="{Binding PreviousCamBtnVisible}" Command="{Binding ChangeCameraCommand}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="25">&lt;</Button>
                                     </Grid>
                                 </StackPanel>
                             </Grid>
                         </Border>
-                        
                     </Grid>
-                    <Grid Grid.Column="1" Margin="5">
-                        <Border>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="100" />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                
-                                <DockPanel Grid.Row="0" LastChildFill="False">
-                                    <Button Padding="0" Width="95" Background="Transparent" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5, 0">
-                                        <Grid HorizontalAlignment="Center">
-                                            <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
-                                            <Image Source="../Assets/PromileAnzeigeWhite.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="16"/>
-                                        </Grid>
-                                    </Button>
-                                    <Button Padding="0" Width="95" Height="95" Background="Transparent" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5, 0">
-                                        <Grid HorizontalAlignment="Center">
-                                            <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
-                                            <Image Source="../Assets/SpeedIndicator.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="20"/>
-                                        </Grid>
-                                    </Button>
-                                </DockPanel>
-                                
-                                <Grid Grid.Row="1">
-                                    <Border Background="Gray" Opacity=".4" BorderBrush="Black" CornerRadius="15" BorderThickness="1" ClipToBounds="True"></Border>
-                                    <StackPanel>
-                                        <DockPanel VerticalAlignment="Stretch" LastChildFill="False">
-                                            <Button Padding="0" Width="95" Background="Transparent" Click="SpeedLimit_Click" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
-                                                <Grid HorizontalAlignment="Center">
-                                                    <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
-                                                    <Image Source="../Assets/SpeedSign.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="12"/>
-                                                </Grid>
-                                            </Button>
-                                            <Button Name="EmergencyStopButton" IsEnabled="False" Padding="0" Width="95" Height="95" Background="Transparent" Click="EmergencyStopButton_OnClick" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="DarkRed" BorderThickness="2" Margin="5">
-                                                <Grid HorizontalAlignment="Stretch">
-                                                    <Border CornerRadius="10" Background="Red" Opacity=".4"/>
-                                                    <TextBlock HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold">Emergency <LineBreak /> Break</TextBlock>
-                                                </Grid>
-                                            </Button>
-                                        </DockPanel>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center" Name="Ec100Btn" Click="EasyControl_Click_100">100%</Button>
-                                        
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center" Name="Ec75Btn" Click="EasyControl_Click_75">75%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center" Name="Ec50Btn" Click="EasyControl_Click_50">50%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center" Name="Ec25Btn" Click="EasyControl_Click_25">25%</Button>
-                                        
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="100" HorizontalContentAlignment="Center" Name="Ec0Btn" Click="EasyControl_Click_0">0%</Button>
-                                        
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center" Name="EcM25Btn" Click="EasyControl_Click_M_25">-25%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center" Name="EcM50Btn" Click="EasyControl_Click_M_50">-50%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center" Name="EcM75Btn" Click="EasyControl_Click_M_75">-75%</Button>
-                                        
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center" Name="EcM100Btn" Click="EasyControl_Click_M_100">-100%</Button>
-                                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontWeight="Bold" Foreground="Black" FontSize="18" Width="175" HorizontalContentAlignment="Center" Click="ChangeDirection_Click">Change direction</Button>
-                                    </StackPanel>
-                                </Grid>
-                                
-                                <Border Grid.Row="1" Name="ControlsUnavailableSection" Background="Transparent" ClipToBounds="True" BorderThickness="0" CornerRadius="10" HorizontalAlignment="Stretch">
-                                    <Grid>
-                                        <Grid Background="Black" Opacity=".7"></Grid>
-                                        <TextBlock HorizontalAlignment="Center" Width="260" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="20">
-                                            <TextBlock.RenderTransform>
-                                                <RotateTransform Angle="90"/>
-                                            </TextBlock.RenderTransform>
-                                            Controls are not available.
-                                        </TextBlock>
-                                    </Grid>
-                                </Border>
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </Grid>
-                
-                <Grid Grid.Row="0" Grid.RowSpan="3" IsVisible="True" Name="LoadingArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <Grid Background="Black" Opacity=".72" />
-                    <StackPanel VerticalAlignment="Center">
-                        <TextBlock FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Loading...</TextBlock>
-                        <TextBlock Name="LoadingName" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Getting Data</TextBlock>
-                    </StackPanel>
+                    
+                    <controls:EasyControlControl Grid.Column="1" Margin="5"></controls:EasyControlControl>
+                   
                 </Grid>
                 
             </Grid>
         </Grid>
-        <views:TopBar Grid.Row="0" />
+        
+        <controls:TopBar Grid.Row="0" />
     </Grid>
 </UserControl>

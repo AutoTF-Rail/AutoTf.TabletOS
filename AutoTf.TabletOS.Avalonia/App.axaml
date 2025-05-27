@@ -19,5 +19,14 @@
   
     <Application.Styles>
         <FluentTheme />
+        <Style Selector="Button.noHoverBlack:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Black"/>
+        </Style>
+        <Style Selector="Button.noHoverGray:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Gray"/>
+        </Style>
+        <Style Selector="Button.noHover:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
     </Application.Styles>
 </Application>

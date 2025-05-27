@@ -3,7 +3,6 @@ using System.Collections.Specialized;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
-using Avalonia.Controls;
 
 namespace AutoTf.TabletOS.Models;
 
@@ -42,18 +41,9 @@ public static class Statics
 
 	public static Logger Logger = new Logger(true);
 	
-	public static string YubiCode { get; set; } = null!;
-	public static int YubiSerial { get; set; }
-	public static DateTime YubiTime { get; set; }
-	
 	public static string? TrainConnectionId;
 	
 	public static ObservableCollection<Notification> Notifications { get; set; } = new ObservableCollection<Notification>();
-	
-	/// <summary>
-	/// This needs to be invoked on the dispatcher thread. Don't ask why...
-	/// </summary>
-	public static Action<UserControl> ChangeViewModel = null!;
 	
 	public static string MacAddress
 	{

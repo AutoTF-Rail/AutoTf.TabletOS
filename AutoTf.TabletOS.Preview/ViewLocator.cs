@@ -1,5 +1,6 @@
 using System;
 using AutoTf.TabletOS.Avalonia.ViewModels;
+using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 

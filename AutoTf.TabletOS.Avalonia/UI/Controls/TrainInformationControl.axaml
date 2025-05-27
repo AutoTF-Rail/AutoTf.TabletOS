@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:AutoTf.TabletOS.Avalonia.UI.Controls.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AutoTf.TabletOS.Avalonia.UI.Controls.TrainInformationControl"
+             x:DataType="viewModels:TrainInformationControlViewModel">
+    <Button Command="{Binding TrainInfoCommand}" Padding="0" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
+        <Grid>
+            <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
+            <DockPanel>
+                <Image Source="../../Assets/RoundTrainIcon.png" VerticalAlignment="Stretch" Margin="10"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock FontSize="31">
+                        <Run>EVU:</Run>
+                        <Run Text="{Binding EvuName}" />
+                        <Run> - </Run>
+                        <Run Text="{Binding TrainName}" />
+                    </TextBlock>
+                    <TextBlock FontSize="17" FontWeight="Bold" Foreground="DimGray">
+                        <Run Text="{Binding TrainId}" />
+                        <Run> - SW-Version:</Run>
+                        <Run  Text="{Binding TrainVersion}" />
+                    </TextBlock>
+                </StackPanel>
+            </DockPanel>
+        </Grid>
+    </Button>
+</UserControl>

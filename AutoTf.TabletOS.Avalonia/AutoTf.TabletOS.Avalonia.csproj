@@ -10,10 +10,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Content Include="Assets\LoadingCameraFeedImage.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <AvaloniaResource Include="Assets\**"/>
         <None Remove="Assets\BrighterIcon.png" />
         <AvaloniaResource Include="Assets\BrighterIcon.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </AvaloniaResource>
         <None Remove="Assets\DarkerIcon.png" />
         <AvaloniaResource Include="Assets\DarkerIcon.png">
@@ -38,6 +41,8 @@
         <None Include="Views\AicControlView.axaml" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Autofac" Version="8.3.0" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
         <PackageReference Include="Avalonia" Version="11.2.3" />
         <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
         <PackageReference Include="Avalonia.LinuxFramebuffer" Version="11.2.3" />
@@ -67,10 +72,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Models\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\AutoTf.TabletOS.Services\AutoTf.TabletOS.Services.csproj" />
     </ItemGroup>
 
@@ -89,6 +90,41 @@
       <Content Include="CopiedAssets\ExampleImage2.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Dialog\AicControlView.axaml.cs">
+        <DependentUpon>AicControlView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\Controls\TopBar.axaml.cs">
+        <DependentUpon>Topbar.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Dialog\InfoScreen.axaml.cs">
+        <DependentUpon>InfoScreen.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Dialog\Popup.axaml.cs">
+        <DependentUpon>Popup.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Dialog\RemoteLogsViewer.axaml.cs">
+        <DependentUpon>RemoteLogsViewer.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Dialog\TrainChainView.axaml.cs">
+        <DependentUpon>TrainChainView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Dialog\TrainDateSetter.axaml.cs">
+        <DependentUpon>TrainDateSetter.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Dialog\TrainInfoView.axaml.cs">
+        <DependentUpon>TrainInfoView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
 </Project>

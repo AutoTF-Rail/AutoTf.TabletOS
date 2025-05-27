@@ -1,0 +1,187 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:AutoTf.TabletOS.Models;assembly=AutoTf.TabletOS.Models"
+             xmlns:viewModels="clr-namespace:AutoTf.TabletOS.Avalonia.UI.Controls.ViewModels"
+             mc:Ignorable="d"
+             d:DesignWidth="1280"
+             d:DesignHeight="800"
+             x:Class="AutoTf.TabletOS.Avalonia.UI.Controls.TopBar" 
+             x:Name="Root"
+             x:DataType="viewModels:TopBarViewModel">
+    <Grid Name="RootGrid">
+        
+        <Button x:Name="TopBarGrid" Classes="noHover" HorizontalAlignment="Stretch" Padding="0" Command="{Binding ToggleQuickMenuCommand}" Height="25" Background="Transparent" VerticalAlignment="Top">
+            <Grid>
+                <Grid Height="15" VerticalAlignment="Top" Background="Gray" Opacity=".5" />
+                <DockPanel Height="15" VerticalAlignment="Top" LastChildFill="False" HorizontalAlignment="Stretch">
+                    <TextBlock DockPanel.Dock="Left" Text="{Binding CurrentTime}" FontFamily="Roboto"></TextBlock>
+                    <TextBlock DockPanel.Dock="Left" Margin="5, 0" Text="{Binding NotificationsNumber}" Name="NotificationsNumber" FontFamily="Roboto" FontSize="20" VerticalAlignment="Center"></TextBlock>
+                </DockPanel>
+            </Grid>
+        </Button>
+        
+        <Grid IsVisible="{Binding QuickMenuVisible}">
+            <Button Background="Black" Classes="noHoverBlack"  Opacity=".3" Margin="0, 15, 0, 0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0" Command="{Binding ToggleQuickMenuCommand}"/>
+            <Border HorizontalAlignment="Left" Width="950" VerticalAlignment="Top" Margin="5, 20, 0, 0">
+                <Grid>
+                    <ItemsControl Name="NotificationsBox" ItemsSource="{Binding Notifications}" Background="Transparent">
+                        <ItemsControl.Styles>
+                            <Style Selector="ContentPresenter">
+                                <Setter Property="Padding" Value="5"/>
+                                <Setter Property="Margin" Value="5, 2"/>
+                            </Style>
+                        </ItemsControl.Styles>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:Notification">
+                                <Border Margin="0" CornerRadius="5" Padding="0" HorizontalAlignment="Stretch" Height="60">
+                                    <Grid Margin="0">
+                                        <Border Margin="0" CornerRadius="5" Background="Black" Opacity=".4" />
+                                        <Border Margin="0" CornerRadius="5" BorderBrush="{Binding Color}" BorderThickness="2" />
+                                        
+                                        <DockPanel VerticalAlignment="Stretch">
+                                            <Button DockPanel.Dock="Right" FontSize="17" Margin="5" Command="{Binding #Root.((viewModels:TopBarViewModel)DataContext).NotificationDiscardCommand}" CommandParameter="{Binding}">Discard</Button>
+                                            <TextBlock TextWrapping="Wrap" FontSize="17" TextTrimming="None" DockPanel.Dock="Left" Margin="5" VerticalAlignment="Center">
+                                                <Run Text="{Binding Time}" />
+                                                <Run Text="-" />
+                                                <Run Text="{Binding Text}" />
+                                            </TextBlock>
+                                        </DockPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Border>
+            
+            <Grid>
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0, 17, 2, 0">
+                    <Border Height="310" Width="310" CornerRadius="10" Background="Gray" Opacity=".5" />
+                    <Border Height="300" Width="300" CornerRadius="10" Background="Gray" Opacity=".95" />
+                    
+                    <StackPanel Margin="30">
+                        <DockPanel LastChildFill="False">
+                            <Button Padding="0" Width="135" Height="50" Background="Transparent" Command="{Binding RestartCommand}">
+                                <Grid>
+                                    <Border Background="LightBlue" CornerRadius="10" />
+                                    <DockPanel Margin="5">
+                                        <Grid Width="38" Height="38">
+                                            <Border Background="White" CornerRadius="35" BorderBrush="Black" Opacity="1" />
+                                            <Image Source="../../Assets/ShutoffIcon.png" Height="25" />
+                                        </Grid>
+                                        <TextBlock FontSize="15" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">Restart</TextBlock>
+                                    </DockPanel>
+                                </Grid>
+                            </Button>
+                            <Button Padding="0" Width="135" Height="50" Background="Transparent" Command="{Binding ShutdownCommand}">
+                                <Grid>
+                                    <Border Background="LightBlue" CornerRadius="10" />
+                                    <DockPanel Margin="5">
+                                        <Grid Width="38" Height="38">
+                                            <Border Background="White" CornerRadius="35" BorderBrush="Black" Opacity="1" />
+                                            <Image Source="../../Assets/ShutoffIcon.png" Height="25" />
+                                        </Grid>
+                                        <TextBlock FontSize="15" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" Margin="5">Shutdown</TextBlock>
+                                    </DockPanel>
+                                </Grid>
+                            </Button>
+                        </DockPanel>
+                        
+                        <DockPanel LastChildFill="False">
+                            <Button Padding="0" Width="66" Margin="0,0,1,0" Height="50" Background="Transparent" Command="{Binding DarkerCommand}">
+                                <Grid>
+                                    <Border Background="LightGray" CornerRadius="10" />
+                                    <DockPanel Margin="5">
+                                        <Grid Width="38" Height="38">
+                                            <Border Background="Gray" CornerRadius="35" BorderBrush="Black" Opacity=".2" />
+                                            <Image Source="../../Assets/DarkerIcon.png" Height="25" />
+                                        </Grid>
+                                    </DockPanel>
+                                </Grid>
+                            </Button>
+                            <Button Padding="0" Width="66" Margin="2,0,0,0" Height="50" Background="Transparent" Command="{Binding BrighterCommand}">
+                                <Grid>
+                                    <Border Background="LightGray" CornerRadius="10" />
+                                    <DockPanel Margin="5">
+                                        <Grid Width="38" Height="38">
+                                            <Border Background="Gray" CornerRadius="35" BorderBrush="Black" Opacity=".2" />
+                                            <Image Source="../../Assets/BrighterIcon.png" Height="25" />
+                                        </Grid>
+                                    </DockPanel>
+                                </Grid>
+                            </Button>
+                        </DockPanel>
+                    </StackPanel>
+                    
+                    <StackPanel VerticalAlignment="Bottom" Margin="27">
+                        <DockPanel>
+                            <Border Background="LightBlue" CornerRadius="10" />
+                            <Button Padding="0" Width="200" Margin="2,0,0,0" Height="30" Background="Transparent" Command="{Binding InfoCommand}">
+                                <Grid>
+                                    <Border Background="DarkGray" CornerRadius="10" />
+                                    <DockPanel Margin="5">
+                                        <Image Source="../../Assets/QuestionMarkIcon.png" Height="20" />
+                                        <TextBlock Margin="5, 0, 0, 0" VerticalAlignment="Center">TabletOS by AutoTF</TextBlock>
+                                    </DockPanel>
+                                </Grid>
+                            </Button>
+                        </DockPanel>
+                        <!-- <Button Margin="5">Connect to wifi</Button> -->
+                        <!-- <Button Margin="5">Authenticate A New Key</Button> -->
+                        <Button Margin="5" Command="{Binding LogOutCommand}">Logout</Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+        
+        <Grid Name="NumKeyboardGrid" IsVisible="{Binding KeyboardVisible}">
+            <Button Background="Black" Opacity=".2" Margin="0, 15, 0, 0" Command="{Binding CloseKeyboardCommand}" />
+            
+            <Grid HorizontalAlignment="Right" Height="400" Width="375" VerticalAlignment="Bottom"  Margin="0, 0, 10, 10">
+                <Grid Background="Black" Opacity=".2" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    
+                    <DockPanel Grid.Row="0">
+                        <Button DockPanel.Dock="Right" FontSize="17" Margin="5" Command="{Binding SaveKeyboardCommand}">Save</Button>
+                        <TextBox DockPanel.Dock="Left" FontSize="17" IsReadOnly="True" Text="{Binding KeyboardValue}" VerticalContentAlignment="Center" />
+                    </DockPanel>
+                    <Grid Grid.Row="1" VerticalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        
+                        <Button Grid.Column="0" Grid.Row="0" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter="7">7</Button>
+                        <Button Grid.Column="1" Grid.Row="0" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter="8">8</Button>
+                        <Button Grid.Column="2" Grid.Row="0" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter="9">9</Button>
+                        
+                        <Button Grid.Column="0" Grid.Row="1" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter="4">4</Button>
+                        <Button Grid.Column="1" Grid.Row="1" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter="5">5</Button>
+                        <Button Grid.Column="2" Grid.Row="1" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter="6">6</Button>
+                        
+                        <Button Grid.Column="0" Grid.Row="2" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter="1">1</Button>
+                        <Button Grid.Column="1" Grid.Row="2" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter="2">2</Button>
+                        <Button Grid.Column="2" Grid.Row="2" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter="3">3</Button>
+                        
+                        <Button Grid.Column="0" Grid.Row="3" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter=",">,</Button>
+                        <Button Grid.Column="1" Grid.Row="3" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding EnterKeyboardValueCommand}" CommandParameter="0">0</Button>
+                        <Button Grid.Column="2" Grid.Row="3" Margin="2" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding DeleteKeyboardValueCommand}">Delete</Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

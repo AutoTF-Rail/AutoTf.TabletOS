@@ -1,0 +1,139 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:AutoTf.TabletOS.Models;assembly=AutoTf.TabletOS.Models"
+             xmlns:viewModels="clr-namespace:AutoTf.TabletOS.Avalonia.ViewModels"
+             xmlns:controls="clr-namespace:AutoTf.TabletOS.Avalonia.UI.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AutoTf.TabletOS.Avalonia.Views.TrainSelectionView"
+             x:Name="Root" x:DataType="viewModels:TrainSelectionViewModel">
+    <Grid>
+        <TextBlock Margin="50, 40" Foreground="Red" FontSize="25" Name="ErrorBox" HorizontalAlignment="Stretch"></TextBlock>
+        
+        <Grid Margin="40, 40, 40, 40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <Border Grid.Column="0" Margin="10" BorderBrush="Black" BorderThickness="1" CornerRadius="20, 0, 0, 20">
+                <Grid>
+                    <Border Background="Black" Opacity=".1" CornerRadius="20, 0, 0, 20" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel VerticalAlignment="Stretch" Grid.Row="0">
+                            <DockPanel LastChildFill="False">
+                                <TextBlock FontSize="25" Margin="10, 6">Trains near you</TextBlock>
+                                <Button Command="{Binding RescanCommand}" Name="RescanButton" CornerRadius="5" Height="35" Background="Transparent" DockPanel.Dock="Right">
+                                    <Image Source="../Assets/ReloadIcon.png" Height="22" />
+                                </Button>
+                            </DockPanel>
+                            <Line HorizontalAlignment="Stretch" StartPoint="0,0" EndPoint="580,0" Stroke="Black" Opacity=".7" StrokeThickness="3" />
+                        </StackPanel>
+                        <ItemsControl Grid.Row="1" Margin="5, 5, 5, 0" ItemsSource="{Binding NearbyTrains}" Background="Transparent" VerticalAlignment="Stretch" Padding="0">
+                            <ItemsControl.Styles>
+                                <Style Selector="ContentPresenter">
+                                    <Setter Property="Padding" Value="2"/>
+                                    <Setter Property="Margin" Value="2"/>
+                                </Style>
+                            </ItemsControl.Styles>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="models:TrainAd">
+                                    <Button Command="{Binding #Root.((viewModels:TrainSelectionViewModel)DataContext).TrainNearbyCommand, ElementName=Root}" CommandParameter="{Binding}" Background="Transparent" Margin="0" CornerRadius="50" Padding="0" HorizontalAlignment="Stretch" Height="55">
+                                        <Grid Margin="0">
+                                            <Border Margin="0" CornerRadius="50" BorderBrush="Black" BorderThickness="2" />
+                                            <Border Margin="0" CornerRadius="50" Opacity=".15">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0%, 0%" EndPoint="100%, 0%">
+                                                        <GradientStop Color="GreenYellow" Offset="0" />
+                                                        <GradientStop Color="Blue" Offset="1" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                            <DockPanel VerticalAlignment="Stretch">
+                                                <Image DockPanel.Dock="Left" Source="../Assets/RoundTrainIcon.png" VerticalAlignment="Center" Height="52" />
+                                                <Image DockPanel.Dock="Right" Source="../Assets/Arrow_Right.png" Margin="10" Height="35" VerticalAlignment="Center" />
+                                                <TextBlock FontSize="25" Margin="10" VerticalAlignment="Center">
+                                                    <Run Text="{Binding TrainName}" />
+                                                    <Run>-</Run>
+                                                    <Run Text="{Binding TrainNum}" />
+                                                </TextBlock>
+                                            </DockPanel>
+                                        </Grid>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Border Grid.Row="1" IsVisible="{Binding NearbyLoadingVisible}">
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Border CornerRadius="0, 0, 0, 20" Background="Black" Opacity=".5" />
+                                <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center">Searching Nearby...</TextBlock>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+             <Border Grid.Column="1" Margin="10" BorderBrush="Black" BorderThickness="1" CornerRadius="0, 20, 20, 0">
+                <Grid>
+                    <Border Background="Black" Opacity=".1" CornerRadius="0, 20, 20, 0" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel VerticalAlignment="Stretch" Grid.Row="0">
+                            <TextBlock FontSize="25" Margin="10, 6">Other trains</TextBlock>
+                            <Line HorizontalAlignment="Stretch" StartPoint="0,0" EndPoint="580,0" Stroke="Black" Opacity=".7" StrokeThickness="3" />
+                        </StackPanel>
+                        <ItemsControl Grid.Row="1" Margin="5, 5, 5, 0" Name="OtherTrains" Background="Transparent" VerticalAlignment="Stretch" Padding="0">
+                            <ItemsControl.Styles>
+                                <Style Selector="ContentPresenter">
+                                    <Setter Property="Padding" Value="2"/>
+                                    <Setter Property="Margin" Value="2"/>
+                                </Style>
+                            </ItemsControl.Styles>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="models:TrainAd">
+                                    <Button Background="Transparent" Margin="0" CornerRadius="50" Padding="0" HorizontalAlignment="Stretch" Height="55">
+                                        <Grid Margin="0">
+                                            <Border Margin="0" CornerRadius="50" BorderBrush="Black" BorderThickness="2" />
+                                            <Border Margin="0" CornerRadius="50" Opacity=".15">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0%, 0%" EndPoint="100%, 0%">
+                                                        <GradientStop Color="GreenYellow" Offset="0" />
+                                                        <GradientStop Color="Blue" Offset="1" />
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                            <DockPanel VerticalAlignment="Stretch">
+                                                <Image DockPanel.Dock="Left" Source="../Assets/RoundTrainIcon.png" VerticalAlignment="Center" Height="52" />
+                                                <Image DockPanel.Dock="Right" Source="../Assets/Arrow_Right.png" Margin="10" Height="35" VerticalAlignment="Center" />
+                                                <TextBlock FontSize="25" Margin="10" VerticalAlignment="Center">
+                                                    <Run Text="{Binding TrainName}" />
+                                                    <Run>-</Run>
+                                                    <Run Text="{Binding TrainNum}" />
+                                                </TextBlock>
+                                            </DockPanel>
+                                        </Grid>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Border Grid.Row="1" Name="OtherLoadingArea">
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Border CornerRadius="0, 0, 20, 0" Background="Black" Opacity=".5" />
+                                <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Name="OtherTrainsLoadingText">Checking for Internet...</TextBlock>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        <controls:TopBar VerticalAlignment="Stretch" />
+    </Grid>
+</UserControl>

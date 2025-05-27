@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialog="clr-namespace:AutoTf.TabletOS.Avalonia.ViewModels.Dialog"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Height="800"
+             Width="1280"
+             x:Class="AutoTf.TabletOS.Avalonia.Views.Dialog.TrainInfoView"
+             x:DataType="dialog:TrainInfoViewModel">
+    <Grid Name="RootGrid">
+        <Image Source="../../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
+        
+        <StackPanel Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock FontSize="25">
+                <Run>EVU: </Run>
+                <Run Text="{Binding EvuName}" FontWeight="Black" />
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>Train ID: </Run>
+                <Run Text="{Binding TrainId}" FontWeight="Black" />
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>Train Name: </Run>
+                <Run Text="{Binding TrainName}" FontWeight="Black" />
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>SW-Version: </Run>
+                <Run Text="{Binding TrainVersion}" FontWeight="Black" />
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>Next Connection Day: </Run>
+                <Run Foreground="{Binding NextSyncBrush}" Text="{Binding NextConnectionDay}" FontWeight="Black" />
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>Next Data Save: </Run>
+                <Run Foreground="Gray" Text="{Binding NextTrainSync}" FontWeight="Black" />
+            </TextBlock>
+            <TextBlock FontSize="25">
+                <Run>Version: </Run>
+                <Run Foreground="Gray" Text="{Binding TrainVersion}" FontWeight="Black" />
+            </TextBlock>
+        </StackPanel>
+        
+        <DockPanel Margin="70" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Command="{Binding ShutdownCommand}">Shutdown</Button>
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Command="{Binding RestartCommand}" >Restart</Button>
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Command="{Binding UpdateCommand}">Update</Button>
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Command="{Binding ChainCommand}">Chain</Button>
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Command="{Binding SetDateCommand}">Set Date</Button>
+            <Button Margin="5" FontSize="18" Foreground="Black" BorderBrush="Black" Command="{Binding LogsCommand}">Logs</Button>
+        </DockPanel>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="18" Command="{Binding BackCommand}" Margin="20" Foreground="Black" BorderBrush="Black">Back</Button>
+    </Grid>
+</UserControl>

@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialog="clr-namespace:AutoTf.TabletOS.Avalonia.ViewModels.Dialog"
+             mc:Ignorable="d" 
+             d:DesignWidth="1280"
+             d:DesignHeight="800"
+             Height="800"
+             Width="1280"
+             x:Class="AutoTf.TabletOS.Avalonia.Views.Dialog.InfoScreen"
+             x:DataType="dialog:InfoScreenViewModel">
+    <Grid Name="RootGrid">
+        <Image Source="../../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
+        <Grid>
+             <Grid.ColumnDefinitions>
+                 <ColumnDefinition Width="*" />
+                 <ColumnDefinition />
+             </Grid.ColumnDefinitions>
+            
+            <Image Source="../../Assets/AutoTfTabletOsCombine.png" Grid.Column="0" Width="300" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40" />
+            
+            <StackPanel Grid.Column="1" Margin="50">
+                <TextBlock Foreground="Black" FontSize="27" FontWeight="Bold">TabletOS by AutoTF</TextBlock>
+                <TextBlock Foreground="Black" FontSize="16">Served under the Apache 2.0 License</TextBlock>
+                <TextBlock Foreground="Black" FontSize="16" Text="{Binding GitVersion}"></TextBlock>
+                <TextBlock Foreground="Black" Margin="0, 15, 0, 0" FontSize="16">Run on a Raspberry PI 4 4GB</TextBlock>
+                <TextBlock Foreground="Black" Margin="0, 30, 0, 0" FontSize="16">Learn more:</TextBlock>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="20" />
+                    </Grid.RowDefinitions>
+                    <Image Grid.Column="0" Margin="5" Source="../../Assets/RepoCode.png" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Foreground="Black">(Source Code)</TextBlock>
+                    <Image Grid.Column="1" Margin="5" Source="../../Assets/HomepageCode.png" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Foreground="Black">(AutoTF Homepage)</TextBlock>
+                    <Image Grid.Column="2" Margin="5" Source="../../Assets/LicenseCode.png" />
+                    <TextBlock Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Foreground="Black">(License)</TextBlock>
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <DockPanel Margin="40" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button Margin="5" Command="{Binding UpdateCommand}">Update</Button>
+            <Button Margin="5" Command="{Binding RestartCommand}">Restart</Button>
+            <Button Margin="5" Command="{Binding LogsCommand}">Logs</Button>
+        </DockPanel>
+        
+        <Button Margin="40" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="Black" BorderBrush="Black" Command="{Binding BackCommand}">Back</Button>
+        
+        <TextBlock IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding InfoText}" Margin="15" />
+    </Grid>
+</UserControl>

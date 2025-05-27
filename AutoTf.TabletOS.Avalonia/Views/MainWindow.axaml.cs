@@ -1,4 +1,3 @@
-using AutoTf.TabletOS.Avalonia.ViewModels;
 using Avalonia.Controls;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
@@ -7,7 +6,17 @@ public partial class MainWindow : Window
 {
 	public MainWindow()
 	{
-		DataContext = new MainWindowViewModel();
 		InitializeComponent();
+	}
+	
+	public void SetView(UserControl view)
+	{
+		ActiveView.Content = view;
+	}
+    
+	public void ShowLoadingScreen(bool visible, string text = "")
+	{
+		LoadingName.Text = text;
+		LoadingArea.IsVisible = visible;
 	}
 }
