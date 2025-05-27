@@ -19,7 +19,7 @@ using TrainSelectionView = AutoTf.TabletOS.Avalonia.Views.TrainSelectionView;
 
 namespace AutoTf.TabletOS.Avalonia;
 
-public class App : Application
+public partial class App : Application
 {
 	public static IContainer? Container { get; private set; }
 	public static MainWindow? MainWindow { get; private set; }
