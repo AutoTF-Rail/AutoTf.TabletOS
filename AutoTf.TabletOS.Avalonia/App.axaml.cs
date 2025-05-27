@@ -1,3 +1,4 @@
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Autofac;
@@ -12,6 +13,7 @@ using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 using AutoTf.TabletOS.Services;
 using AutoTf.TabletOS.Services.Fakes;
+using Avalonia.Data.Core.Plugins;
 using Statics = AutoTf.TabletOS.Models.Statics;
 using TrainSelectionView = AutoTf.TabletOS.Avalonia.Views.TrainSelectionView;
 
@@ -25,6 +27,19 @@ public class App : Application
 	public override void Initialize()
 	{
 		AvaloniaXamlLoader.Load(this);
+	}
+	
+	private void DisableAvaloniaDataAnnotationValidation()
+	{
+		// Get an array of plugins to remove
+		var dataValidationPluginsToRemove =
+			BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+
+		// remove each entry found
+		foreach (var plugin in dataValidationPluginsToRemove)
+		{
+			BindingPlugins.DataValidators.Remove(plugin);
+		}
 	}
 	
 	public override void OnFrameworkInitializationCompleted()
@@ -90,6 +105,7 @@ public class App : Application
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
 			desktop.MainWindow = MainWindow;
+			DisableAvaloniaDataAnnotationValidation();
 		}
 		else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView)
 		{
