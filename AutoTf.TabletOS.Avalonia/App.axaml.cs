@@ -89,11 +89,11 @@ public class App : Application
 		
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
-			desktop.MainWindow = mainWindow;
+			desktop.MainWindow = MainWindow;
 		}
 		else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView)
 		{
-			singleView.MainView = mainWindow;
+			singleView.MainView = MainWindow;
 		}
 		
 		base.OnFrameworkInitializationCompleted();
