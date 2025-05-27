@@ -125,13 +125,15 @@ public partial class App : Application
 
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime)
 		{
-			builder.RegisterType<MainWindow>();
-			builder.RegisterType<MainWindow>().As<IUiControl>();
+			MainWindow mainWindow = new MainWindow();
+			builder.RegisterInstance(mainWindow);
+			builder.RegisterInstance(mainWindow).As<IUiControl>();
 		}
 		else if (ApplicationLifetime is ISingleViewApplicationLifetime)
 		{
-			builder.RegisterType<MainSingleWindow>();
-			builder.RegisterType<MainSingleWindow>().As<IUiControl>();
+			MainSingleWindow mainWindow = new MainSingleWindow();
+			builder.RegisterInstance(mainWindow);
+			builder.RegisterInstance(mainWindow).As<IUiControl>();
 		}
 	}
 }
