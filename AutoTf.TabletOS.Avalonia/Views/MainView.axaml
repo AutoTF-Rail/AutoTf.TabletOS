@@ -2,24 +2,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:views="clr-namespace:AutoTf.TabletOS.Avalonia.Views"
+             xmlns:viewModels="clr-namespace:AutoTf.TabletOS.Avalonia.ViewModels"
+             xmlns:controls="clr-namespace:AutoTf.TabletOS.Avalonia.UI.Controls"
              mc:Ignorable="d"
              d:DesignWidth="1280"
              d:DesignHeight="800"
              Height="800"
              Width="1280"
-             x:Class="AutoTf.TabletOS.Avalonia.Views.MainView">
+             x:Class="AutoTf.TabletOS.Avalonia.Views.MainView"
+             x:DataType="viewModels:MainViewViewModel">
     <Grid>
         <Image Source="../Assets/TabletOSStart.png" Stretch="Fill"></Image>
-        <views:TopBar VerticalAlignment="Stretch" />
-        <Grid Name="LoadingArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Grid Background="Black" Opacity=".72" />
-            <StackPanel VerticalAlignment="Center">
-                <TextBlock FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Loading...</TextBlock>
-                <TextBlock Name="LoadingName" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Processing File</TextBlock>
-                <TextBlock Name="LoadingPercent" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">0%</TextBlock>
-            </StackPanel>
-        </Grid>
-        <Button Name="SkipButton" HorizontalAlignment="Left" VerticalAlignment="Top" Click="SkipButton_Click">Skip</Button>
+        <controls:TopBar VerticalAlignment="Stretch" />
+        
+        <Button IsVisible="{Binding SkipButtonVisible}" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding SkipButtonCommand}">Skip</Button>
     </Grid>
 </UserControl>

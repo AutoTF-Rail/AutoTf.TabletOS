@@ -1,4 +1,3 @@
-using AutoTf.CentralBridge.Shared.Models;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Media;
@@ -7,8 +6,14 @@ namespace AutoTf.TabletOS.Models;
 
 public class AicInformation
 {
-    private readonly IAicService _aicService = Statics.AicService;
-    private readonly Logger _logger = Statics.Logger;
+    private readonly IAicService _aicService;
+    private readonly Logger _logger;
+
+    public AicInformation(IAicService aicService, Logger logger)
+    {
+        _aicService = aicService;
+        _logger = logger;
+    }
 
     public string State { get; private set; } = "Offline";
 

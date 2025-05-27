@@ -10,9 +10,14 @@
         <PackageReference Include="AutoTf.Logging" Version="1.0.0-develop-20250106-1316" />
         <PackageReference Include="Avalonia" Version="11.2.3" />
         <PackageReference Include="Iot.Device.Bindings" Version="3.2.0" />
+        <PackageReference Include="ReactiveUI" Version="20.1.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\SubModules\AutoTf.CentralBridge.Shared\AutoTf.CentralBridge.Shared.Models\AutoTf.CentralBridge.Shared.Models.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Interfaces\Base\" />
     </ItemGroup>
 </Project>

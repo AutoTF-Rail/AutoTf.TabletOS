@@ -1,0 +1,77 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:AutoTf.TabletOS.Avalonia.UI.Controls.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AutoTf.TabletOS.Avalonia.UI.Controls.EasyControlControl"
+             x:DataType="viewModels:EasyControlControlViewModel">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                
+                <DockPanel Grid.Row="0" LastChildFill="False">
+                    <Button Padding="0" Width="95" Background="Transparent" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5, 0">
+                        <Grid HorizontalAlignment="Center">
+                            <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
+                            <Image Source="../../Assets/PromileAnzeigeWhite.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="16"/>
+                        </Grid>
+                    </Button>
+                    <Button Padding="0" Width="95" Height="95" Background="Transparent" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5, 0">
+                        <Grid HorizontalAlignment="Center">
+                            <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
+                            <Image Source="../../Assets/SpeedIndicator.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="20"/>
+                        </Grid>
+                    </Button>
+                </DockPanel>
+                
+                <Grid Grid.Row="1">
+                    <Border Background="Gray" Opacity=".4" BorderBrush="Black" CornerRadius="15" BorderThickness="1" ClipToBounds="True"></Border>
+                    <StackPanel>
+                        <DockPanel VerticalAlignment="Stretch" LastChildFill="False">
+                            <Button Padding="0" Width="95" Background="Transparent" Command="{Binding SpeedLimitCommand}" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="Black" BorderThickness="2" Margin="5">
+                                <Grid HorizontalAlignment="Center">
+                                    <Border CornerRadius="10" Background="Gray" Opacity=".2"/>
+                                    <Image Source="../../Assets/SpeedSign.png" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="12"/>
+                                </Grid>
+                            </Button>
+                            <Button IsEnabled="{Binding EmergencyStopUnavailable}" Padding="0" Width="95" Height="95" Background="Transparent" Command="{Binding EmergencyStopCommand}" HorizontalAlignment="Stretch" CornerRadius="10" BorderBrush="DarkRed" BorderThickness="2" Margin="5">
+                                <Grid HorizontalAlignment="Stretch">
+                                    <Border CornerRadius="10" Background="Red" Opacity=".4"/>
+                                    <TextBlock HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold">Emergency <LineBreak /> Brake</TextBlock>
+                                </Grid>
+                            </Button>
+                        </DockPanel>
+                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center" Command="{Binding EasyControlCommand}" CommandParameter="100">100%</Button>
+                        
+                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center" Command="{Binding EasyControlCommand}" CommandParameter="75">75%</Button>
+                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center" Command="{Binding EasyControlCommand}" CommandParameter="50">50%</Button>
+                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center" Command="{Binding EasyControlCommand}" CommandParameter="25">25%</Button>
+                        
+                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="100" HorizontalContentAlignment="Center" Command="{Binding EasyControlCommand}" CommandParameter="0">0%</Button>
+                        
+                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="110" HorizontalContentAlignment="Center" Command="{Binding EasyControlCommand}" CommandParameter="-25">-25%</Button>
+                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="120" HorizontalContentAlignment="Center" Command="{Binding EasyControlCommand}" CommandParameter="-50">-50%</Button>
+                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="130" HorizontalContentAlignment="Center" Command="{Binding EasyControlCommand}" CommandParameter="-75">-75%</Button>
+                        
+                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontSize="25" Width="140" HorizontalContentAlignment="Center" Command="{Binding EasyControlCommand}" CommandParameter="-100">-100%</Button>
+                        
+                        <Button HorizontalAlignment="Center" Margin="2" Height="40" FontWeight="Bold" Foreground="Black" FontSize="18" Width="175" HorizontalContentAlignment="Center" Command="{Binding ChangeDirectionCommand}">Change direction</Button>
+                    </StackPanel>
+                </Grid>
+                
+                <Border Grid.Row="1" IsVisible="{Binding ControlsUnavailable}" Background="Black" ClipToBounds="True" BorderThickness="0" CornerRadius="10" HorizontalAlignment="Stretch">
+                    <Grid>
+                        <Grid Background="Black" Opacity=".7"></Grid>
+                        <TextBlock HorizontalAlignment="Center" Width="260" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="20">
+                            <TextBlock.RenderTransform>
+                                <RotateTransform Angle="90"/>
+                            </TextBlock.RenderTransform>
+                            Controls are not available.
+                        </TextBlock>
+                    </Grid>
+                </Border>
+            </Grid>
+</UserControl>

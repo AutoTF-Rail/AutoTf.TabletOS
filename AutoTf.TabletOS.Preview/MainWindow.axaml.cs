@@ -1,5 +1,4 @@
 using AutoTf.TabletOS.Models;
-using AutoTf.TabletOS.Services;
 using AutoTf.TabletOS.Services.Fakes;
 using Avalonia.Controls;
 
@@ -10,7 +9,7 @@ public partial class MainWindow : Window
 	public MainWindow()
 	{
 		Statics.DataManager = new FakeDataManager();
-		Statics.TrainInformationService = new FakeTrainInfo();
+		Statics.TrainInformationService = new FakeTrainInformationService();
 		Statics.TrainControlService = new FakeTrainControlService();
 		Statics.TrainCameraService = new FakeTrainCameraService();
 		Statics.AicService = new FakeAicService();

@@ -6,8 +6,14 @@ namespace AutoTf.TabletOS.Models;
 
 public class TrainInformation
 {
-    private readonly ITrainInformationService _trainInfo = Statics.TrainInformationService;
-    private readonly Logger _logger = Statics.Logger; 
+    private readonly ITrainInformationService _trainInfo;
+    private readonly Logger _logger;
+
+    public TrainInformation(ITrainInformationService trainInfo, Logger logger)
+    {
+        _trainInfo = trainInfo;
+        _logger = logger;
+    }
     
     public async Task UpdateData()
     {
