@@ -122,9 +122,16 @@ public partial class App : Application
 		builder.RegisterType<AicInformation>().AsSelf().SingleInstance();
 		builder.RegisterType<TrainCameraInformation>().AsSelf().SingleInstance();
 		
+
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime)
+		{
+			builder.RegisterType<MainWindow>();
 			builder.RegisterType<MainWindow>().As<IUiControl>();
+		}
 		else if (ApplicationLifetime is ISingleViewApplicationLifetime)
+		{
+			builder.RegisterType<MainSingleWindow>();
 			builder.RegisterType<MainSingleWindow>().As<IUiControl>();
+		}
 	}
 }
