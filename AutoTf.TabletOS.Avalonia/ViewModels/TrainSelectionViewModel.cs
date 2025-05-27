@@ -61,11 +61,11 @@ public class TrainSelectionViewModel : ReactiveObject
         NearbyLoadingVisible = false;
         _viewRouter.InvokeLoadingArea(false);
 #endif
-        Initialize();
-        // Task.Run(Initialize);
+        // Initialize();
+        Task.Run(Initialize);
     }
 
-    private async void Initialize()
+    private async Task Initialize()
     {
         LoadInternetTrains();
         await RunTrainScan();

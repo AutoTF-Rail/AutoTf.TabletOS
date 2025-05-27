@@ -4,6 +4,7 @@ using Autofac;
 using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Controls;
+using Avalonia.Threading;
 
 namespace AutoTf.TabletOS.Avalonia;
 
@@ -20,13 +21,19 @@ public class ViewRouter : IViewRouter
 
     public void NavigateTo<TView>() where TView : UserControl
     {
-        TView view = _scope.Resolve<TView>();
-        _uiControl.SetView(view);
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            TView view = _scope.Resolve<TView>();
+            _uiControl.SetView(view);
+        });
     }
 
     public void NavigateTo(UserControl view)
     {
-        _uiControl.SetView(view);
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            _uiControl.SetView(view);
+        });
     }
 
     public async Task<int> ShowDialog<T>(ViewBase<T> dialog)
@@ -43,6 +50,6 @@ public class ViewRouter : IViewRouter
 
     public void InvokeLoadingArea(bool visible, string message = "")
     {
-        _uiControl.ShowLoadingScreen(visible, message);
+        Dispatcher.UIThread.InvokeAsync(() => { _uiControl.ShowLoadingScreen(visible, message); });
     }
 }
