@@ -125,6 +125,10 @@
         <DependentUpon>TrainInfoView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Views\MainSingleWindow.axaml.cs">
+        <DependentUpon>MainSingleWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
 </Project>

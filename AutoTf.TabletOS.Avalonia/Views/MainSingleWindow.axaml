@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DesignWidth="1280"
+        d:DesignHeight="800"
+        Height="800"
+        Width="1280"
+        x:Class="AutoTf.TabletOS.Avalonia.Views.MainSingleWindow">
+    <Grid>
+        <Image Source="../Assets/TabletOSBackground.png" Stretch="Fill"></Image>
+        <ContentControl x:Name="ActiveView" />
+        
+        <Grid x:Name="DialogStack" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            
+        </Grid>
+        <ContentControl x:Name="DialogHost" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsVisible="false" />
+        
+        <Grid Name="LoadingArea" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsVisible="False">
+            <Grid Background="Black" Opacity=".72" />
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Loading...</TextBlock>
+                <TextBlock Name="LoadingName" FontSize="17" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Processing File</TextBlock>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

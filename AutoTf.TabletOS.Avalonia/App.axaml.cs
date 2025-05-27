@@ -22,7 +22,6 @@ namespace AutoTf.TabletOS.Avalonia;
 public partial class App : Application
 {
 	public static IContainer? Container { get; private set; }
-	public static MainWindow? MainWindow { get; private set; }
 	
 	public override void Initialize()
 	{
@@ -45,7 +44,35 @@ public partial class App : Application
 	public override void OnFrameworkInitializationCompleted()
 	{
 		ContainerBuilder builder = new ContainerBuilder();
+		
+		Register(builder);
 
+		Container = builder.Build();
+		
+		IViewRouter router = Container.Resolve<IViewRouter>();
+		
+		router.NavigateTo<MainView>();
+		
+		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+		{
+			desktop.MainWindow = Container.Resolve<MainWindow>();
+		}
+		else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView)
+		{
+			singleView.MainView = Container.Resolve<MainSingleWindow>();
+		}
+		
+		if (Current!.ApplicationLifetime is IControlledApplicationLifetime controlledLifetime)
+		{
+			// Subscribe to the Exit event
+			controlledLifetime.Exit += (_, _) => Statics.Shutdown?.Invoke();
+		}
+		
+		base.OnFrameworkInitializationCompleted();
+	}
+
+	private void Register(ContainerBuilder builder)
+	{
 		builder.RegisterType<ViewRouter>().As<IViewRouter>().SingleInstance();
 		builder.RegisterInstance(new Logger(true)).As<Logger>();
 		
@@ -94,30 +121,10 @@ public partial class App : Application
 		builder.RegisterType<TrainInformation>().AsSelf().SingleInstance();
 		builder.RegisterType<AicInformation>().AsSelf().SingleInstance();
 		builder.RegisterType<TrainCameraInformation>().AsSelf().SingleInstance();
-
-		MainWindow = new MainWindow();
-		Container = builder.Build();
 		
-		IViewRouter router = Container.Resolve<IViewRouter>();
-		
-		router.NavigateTo<MainView>();
-		
-		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-		{
-			desktop.MainWindow = MainWindow;
-			DisableAvaloniaDataAnnotationValidation();
-		}
-		else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView)
-		{
-			singleView.MainView = MainWindow;
-		}
-		
-		base.OnFrameworkInitializationCompleted();
-		
-		if (Current!.ApplicationLifetime is IControlledApplicationLifetime controlledLifetime)
-		{
-			// Subscribe to the Exit event
-			controlledLifetime.Exit += (_, _) => Statics.Shutdown?.Invoke();
-		}
+		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime)
+			builder.RegisterType<MainWindow>().As<IUiControl>();
+		else if (ApplicationLifetime is ISingleViewApplicationLifetime)
+			builder.RegisterType<MainSingleWindow>().As<IUiControl>();
 	}
 }

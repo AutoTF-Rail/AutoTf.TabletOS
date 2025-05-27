@@ -1,13 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using AutoTf.TabletOS.Avalonia.ViewModels.Base;
+using AutoTf.TabletOS.Models.Interfaces;
 using Avalonia.Controls;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
-public partial class MainWindow : Window, IUiControl
+public partial class MainSingleWindow : UserControl, IUiControl
 {
-	public MainWindow()
+	public MainSingleWindow()
 	{
 		InitializeComponent();
 	}
