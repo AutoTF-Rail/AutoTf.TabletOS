@@ -1,13 +1,11 @@
-using AutoTf.Logging;
 using Avalonia.Controls;
 
 namespace AutoTf.TabletOS.Avalonia.Views;
 
 public partial class MainWindow : Window
 {
-	public MainWindow(Logger logger)
+	public MainWindow()
 	{
-		logger.Log("Starting up");
 		InitializeComponent();
 	}
 	

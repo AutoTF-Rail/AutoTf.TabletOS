@@ -12,9 +12,9 @@ public class ViewRouter : IViewRouter
     private readonly MainWindow _mainWindow;
     private readonly ILifetimeScope _scope;
 
-    public ViewRouter(MainWindow mainWindow, ILifetimeScope scope)
+    public ViewRouter(ILifetimeScope scope)
     {
-        _mainWindow = mainWindow;
+        _mainWindow = App.MainWindow!;
         _scope = scope;
     }
 

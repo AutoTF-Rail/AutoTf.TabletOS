@@ -20,6 +20,7 @@ namespace AutoTf.TabletOS.Avalonia;
 public class App : Application
 {
 	public static IContainer? Container { get; private set; }
+	public static MainWindow? MainWindow { get; private set; }
 	
 	public override void Initialize()
 	{
@@ -30,7 +31,6 @@ public class App : Application
 	{
 		ContainerBuilder builder = new ContainerBuilder();
 
-		builder.RegisterType<MainWindow>().AsSelf().SingleInstance();
 		builder.RegisterType<ViewRouter>().As<IViewRouter>().SingleInstance();
 		builder.RegisterInstance(new Logger(true)).As<Logger>();
 		
@@ -79,12 +79,11 @@ public class App : Application
 		builder.RegisterType<TrainInformation>().AsSelf().SingleInstance();
 		builder.RegisterType<AicInformation>().AsSelf().SingleInstance();
 		builder.RegisterType<TrainCameraInformation>().AsSelf().SingleInstance();
-		
-		
+
+		MainWindow = new MainWindow();
 		Container = builder.Build();
 		
 		IViewRouter router = Container.Resolve<IViewRouter>();
-		MainWindow mainWindow = Container.Resolve<MainWindow>();
 		
 		router.NavigateTo<MainView>();
 		
