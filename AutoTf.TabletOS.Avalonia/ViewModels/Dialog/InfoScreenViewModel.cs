@@ -38,7 +38,7 @@ public class InfoScreenViewModel : DialogViewModelBase
     }
 
     public IRelayCommand BackCommand { get; }
-    public IRelayCommand UpdateCommand { get; }
+    public IAsyncRelayCommand UpdateCommand { get; }
     public IRelayCommand RestartCommand { get; }
     public IAsyncRelayCommand LogsCommand { get; }
     
@@ -50,7 +50,7 @@ public class InfoScreenViewModel : DialogViewModelBase
         _logger = logger;
         
         BackCommand = new RelayCommand(() => Close(0));
-        UpdateCommand = new RelayCommand(Update, NetworkService.IsInternetAvailable);
+        UpdateCommand = new AsyncRelayCommand(Update, NetworkService.IsInternetAvailable);
         RestartCommand = new RelayCommand(Restart);
         LogsCommand = new AsyncRelayCommand(OpenLogs);
     }
@@ -78,12 +78,12 @@ public class InfoScreenViewModel : DialogViewModelBase
         }
     }
 
-    private void Update()
+    private async Task Update()
     {
         if (!NetworkService.IsInternetAvailable())
 			return;
 
-        _viewRouter.InvokeLoadingArea(true, "Updating...");
+        await _viewRouter.InvokeLoadingArea(true, "Updating...");
         InfoText = "";
         
 		string prevDir = Directory.GetCurrentDirectory();
@@ -91,7 +91,7 @@ public class InfoScreenViewModel : DialogViewModelBase
 		
 		CommandExecuter.ExecuteCommand("git reset --hard");
 		
-		_viewRouter.InvokeLoadingArea(true, "Downloading updates...");
+		await _viewRouter.InvokeLoadingArea(true, "Downloading updates...");
 		
 		string pull = CommandExecuter.ExecuteCommand("git pull");
 		
@@ -100,18 +100,18 @@ public class InfoScreenViewModel : DialogViewModelBase
 			InfoText = "Already Up to Date.";
 			
 			CommandExecuter.ExecuteSilent("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh", true);
-			_viewRouter.InvokeLoadingArea(false);
+			await _viewRouter.InvokeLoadingArea(false);
 			return;
 		}
 		CommandExecuter.ExecuteCommand("git submodule update --init --recursive");
 		
-		_viewRouter.InvokeLoadingArea(true, "Building update...");
+		await _viewRouter.InvokeLoadingArea(true, "Building update...");
 		
 		string buildOutput = CommandExecuter.ExecuteCommand("dotnet build -c RELEASE -m");
 		if (!buildOutput.Contains("0 Error(s)"))
 		{
 			InfoText = "Failed to build the update.";
-			_viewRouter.InvokeLoadingArea(false);
+			await _viewRouter.InvokeLoadingArea(false);
 			return;
 		}
 		
@@ -124,7 +124,7 @@ public class InfoScreenViewModel : DialogViewModelBase
 		CommandExecuter.ExecuteSilent("reboot now", true);
 		
 		Directory.SetCurrentDirectory(prevDir);
-		_viewRouter.InvokeLoadingArea(false);
+		await _viewRouter.InvokeLoadingArea(false);
     }
 
     private async Task OpenLogs()
