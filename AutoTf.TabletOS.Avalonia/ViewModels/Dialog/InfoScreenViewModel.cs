@@ -118,7 +118,7 @@ public class InfoScreenViewModel : DialogViewModelBase
 		CommandExecuter.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
 		_networkService.ShutdownConnection();
 		
-		_viewRouter.InvokeLoadingArea(true, "Rebooting");
+		await _viewRouter.InvokeLoadingArea(true, "Rebooting");
 		InfoText = "Restarting.";
 		
 		CommandExecuter.ExecuteSilent("reboot now", true);

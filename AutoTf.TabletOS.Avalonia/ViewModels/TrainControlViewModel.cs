@@ -32,9 +32,15 @@ public class TrainControlViewModel : ViewModelBase
     public Bitmap CurrentView
     {
         get => _currentView;
-        private set => this.RaiseAndSetIfChanged(ref _currentView, value);
+        private set
+        {
+            // avalonia crashes when we don't do that and the bitmap keeps getting updated in the background
+            if (_viewRouter.DialogCount() >= 1)
+                return;
+            this.RaiseAndSetIfChanged(ref _currentView, value);
+        }
     }
-    
+
     public RelayCommand ChangeCameraCommand { get; }
     public RelayCommand ChangeToTrainSelectionCommand { get; }
 

@@ -39,4 +39,9 @@ public partial class MainSingleWindow : UserControl, IUiControl
 
 		return result;
 	}
+
+	public int DialogCount()
+	{
+		return DialogStack.Children.Count;
+	}
 }
