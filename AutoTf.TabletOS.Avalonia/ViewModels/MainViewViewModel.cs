@@ -56,12 +56,12 @@ public class MainViewViewModel : ViewModelBase
             return;
 		
         _isHandlingKey = true;
-        _viewRouter.InvokeLoadingArea(true, "Checking for key...");
-        await Task.Delay(25);
+        await _viewRouter.InvokeLoadingArea(true, "Checking for key...");
+        
         IYubiKeyDevice? key = YubiKeyDevice.FindAll().FirstOrDefault();
         if (key == null)
         {
-            _viewRouter.InvokeLoadingArea(false);
+            await _viewRouter.InvokeLoadingArea(false);
             return;
         }
         await Task.Run(() => GetKey(key), _cancelTokenSource.Token);
@@ -79,7 +79,7 @@ public class MainViewViewModel : ViewModelBase
         if (_isHandlingKey)
             return;
         _isHandlingKey = true;
-        _viewRouter.InvokeLoadingArea(true, "Loading key...");
+        await _viewRouter.InvokeLoadingArea(true, "Loading key...");
         await Task.Delay(25);
         await Task.Run(() => GetKey(e.Device), _cancelTokenSource.Token);
     }

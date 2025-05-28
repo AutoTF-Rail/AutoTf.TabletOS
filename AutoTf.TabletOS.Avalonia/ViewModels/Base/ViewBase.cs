@@ -1,5 +1,6 @@
 using Autofac;
 using Avalonia.Controls;
+using Avalonia.Threading;
 
 namespace AutoTf.TabletOS.Avalonia.ViewModels.Base;
 
@@ -9,7 +10,7 @@ public abstract class ViewBase<TViewModel> : UserControl
     {
         if (!Design.IsDesignMode)
         {
-            TViewModel vm = App.Container.Resolve<TViewModel>();
+            TViewModel vm = App.Container!.Resolve<TViewModel>();
             DataContext = vm;
         }
     }

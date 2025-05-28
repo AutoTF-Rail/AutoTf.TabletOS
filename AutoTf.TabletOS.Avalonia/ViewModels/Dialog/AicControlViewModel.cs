@@ -97,28 +97,28 @@ public class AicControlViewModel : DialogViewModelBase
 
     private async Task RestartAic()
     {
-        _viewRouter.InvokeLoadingArea(true, "Restarting AIC...");
+        await _viewRouter.InvokeLoadingArea(true, "Restarting AIC...");
         
         await _aicService.Restart();
         Back();
-        _viewRouter.InvokeLoadingArea(false);
+        await _viewRouter.InvokeLoadingArea(false);
     }
 
     private async Task ShutdownAic()
     {
-        _viewRouter.InvokeLoadingArea(true, "Shutting down AIC...");
+        await _viewRouter.InvokeLoadingArea(true, "Shutting down AIC...");
         
         // TODO: Update status afterwards. (Wait for x seconds or listen for aic unavailablity)
         await _aicService.Shutdown();
         Back();
-        _viewRouter.InvokeLoadingArea(false);
+        await _viewRouter.InvokeLoadingArea(false);
     }
 
     protected override async Task Initialize()
     {
         try
         {
-            _viewRouter.InvokeLoadingArea(true, "Loading data...");
+            await _viewRouter.InvokeLoadingArea(true, "Loading data...");
 
             await _aicInformation.UpdateState();
             AicStatus = _aicInformation.State;
@@ -144,8 +144,7 @@ public class AicControlViewModel : DialogViewModelBase
         }
         finally
         {
-            _viewRouter.InvokeLoadingArea(false);
+            await _viewRouter.InvokeLoadingArea(false);
         }
-        
     }
 }

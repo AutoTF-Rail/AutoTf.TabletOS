@@ -3,8 +3,10 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Autofac;
 using AutoTf.Logging;
+using AutoTf.TabletOS.Avalonia.Extensions;
 using AutoTf.TabletOS.Avalonia.UI.Controls.ViewModels;
 using AutoTf.TabletOS.Avalonia.ViewModels;
+using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Avalonia.ViewModels.Dialog;
 using Avalonia.Markup.Xaml;
 using AutoTf.TabletOS.Avalonia.Views;
@@ -105,7 +107,11 @@ public partial class App : Application
 		builder.RegisterType<MainViewViewModel>().AsSelf();
 		builder.RegisterType<TrainSelectionViewModel>().AsSelf();
 		builder.RegisterType<TrainControlViewModel>().AsSelf();
-		builder.RegisterType<TrainInformationControlViewModel>().AsSelf();
+		
+		builder.RegisterType<AicInformationControlViewModel>().AsSelf().AsyncInit();
+		builder.RegisterType<EasyControlControlViewModel>().AsSelf().AsyncInit();
+		builder.RegisterType<TopBarViewModel>().AsSelf().AsyncInit();
+		builder.RegisterType<TrainInformationControlViewModel>().AsSelf().AsyncInit();
 		
 		// Dialog Views
 		builder.RegisterType<TrainInfoView>().AsSelf();
@@ -116,14 +122,11 @@ public partial class App : Application
 		builder.RegisterType<InfoScreen>().AsSelf();
 		
 		// DialogViewModels
-		builder.RegisterType<TrainInfoViewModel>().AsSelf();
+		builder.RegisterType<TrainInfoViewModel>().AsSelf().AsyncInit();
+		builder.RegisterType<AicControlViewModel>().AsSelf().AsyncInit();
 		builder.RegisterType<RemoteLogsViewerViewModel>().AsSelf();
 		builder.RegisterType<TrainDateSetterViewModel>().AsSelf();
 		builder.RegisterType<TrainChainViewModel>().AsSelf();
-		builder.RegisterType<AicInformationControlViewModel>().AsSelf();
-		builder.RegisterType<AicControlViewModel>().AsSelf();
-		builder.RegisterType<EasyControlControlViewModel>().AsSelf();
-		builder.RegisterType<TopBarViewModel>().AsSelf();
 		builder.RegisterType<InfoScreenViewModel>().AsSelf();
 		
 		// Wrappers

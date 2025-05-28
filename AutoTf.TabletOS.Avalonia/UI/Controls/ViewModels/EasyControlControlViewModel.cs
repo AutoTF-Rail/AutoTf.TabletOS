@@ -64,7 +64,7 @@ public class EasyControlControlViewModel : ViewModelBase
     {
         try
         {
-            _viewRouter.InvokeLoadingArea(true, "Changing direction...");
+            await _viewRouter.InvokeLoadingArea(true, "Changing direction...");
 		    
             // TODO: Can't change direction if train is actively moving. In the future just disable the button.
             if (false /*trainIsMoving*/)
@@ -93,7 +93,7 @@ public class EasyControlControlViewModel : ViewModelBase
                     break;
             }
 
-            _viewRouter.InvokeLoadingArea(false);
+            await _viewRouter.InvokeLoadingArea(false);
         }
         catch (Exception e)
         {

@@ -6,7 +6,6 @@ using System.Linq;
 using System.IO;
 #endif
 using System.Threading.Tasks;
-using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Avalonia.ViewModels.Dialog;
 using AutoTf.TabletOS.Avalonia.Views;
@@ -32,7 +31,7 @@ public class TopBarViewModel : ViewModelBase
     private readonly INetworkService _networkService;
     private readonly IViewRouter _viewRouter;
 
-    private string _currentTime = "Unavailable";
+    private string _currentTime = "";
     private string _notificationsNumber = "";
     private bool _quickMenuVisible;
     private bool _keyboardVisible;

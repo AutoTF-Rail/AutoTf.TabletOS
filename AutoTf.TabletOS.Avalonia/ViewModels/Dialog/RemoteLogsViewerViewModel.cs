@@ -51,7 +51,7 @@ public class RemoteLogsViewerViewModel : DialogViewModelBase
         BackCommand = new RelayCommand(Back);
         RefreshCommand = new AsyncRelayCommand(async () => await LoadLogs(SelectedDate));
         
-        SelectedDate = LogDates.Last();
+        SelectedDate = LogDates.LastOrDefault() ?? "";
     }
 
     public static RemoteLogsViewer Create(string[] logsDates, Func<string, Task<Result<string[]>>> getLogs)
