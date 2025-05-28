@@ -66,6 +66,7 @@ public class TrainSelectionViewModel : ViewModelBase
 
     protected override async Task Initialize()
     {
+        await _viewRouter.InvokeLoadingArea(false);
         LoadInternetTrains();
         await RunTrainScan();
     }
