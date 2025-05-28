@@ -11,4 +11,5 @@ public interface IUiControl
     public void ShowLoadingScreen(bool visible, string text = "");
 
     public Task<int> AddDialog<T>(ViewBase<T> dialog);
+    public int DialogCount();
 }

@@ -64,7 +64,7 @@
                                         </Grid>
                                     </Button>
                                     <Grid ClipToBounds="True">
-                                        <Image ClipToBounds="True" Name="PreviewImage" Source="{Binding CurrentView}" />
+                                        <Image ClipToBounds="True" Source="{Binding CurrentView}" />
                                         <Button IsVisible="{Binding NextCamBtnVisible}" Command="{Binding ChangeCameraCommand}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="25">&gt;</Button>
                                         <Button IsVisible="{Binding PreviousCamBtnVisible}" Command="{Binding ChangeCameraCommand}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="25">&lt;</Button>
                                     </Grid>

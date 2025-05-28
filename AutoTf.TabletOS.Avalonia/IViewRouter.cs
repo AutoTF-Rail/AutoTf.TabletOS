@@ -11,4 +11,5 @@ public interface IViewRouter
     public Task<int> ShowDialog<T>(ViewBase<T> dialog);
     public Task<int> ShowDialog<TView, TViewModel>() where TView : ViewBase<TViewModel> where TViewModel : DialogViewModelBase;
     public Task InvokeLoadingArea(bool visible, string message = "");
+    public int DialogCount();
 }
