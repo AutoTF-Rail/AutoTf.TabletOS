@@ -98,7 +98,7 @@ public class TrainControlViewModel : ViewModelBase
         {
             // TODO: Sync direction
             
-            _viewRouter.InvokeLoadingArea(true, "Loading data...");
+            await _viewRouter.InvokeLoadingArea(true, "Loading data...");
 
             _trainCameraService.NewFrameReceived += NewFrameReceived;
 			
@@ -113,14 +113,14 @@ public class TrainControlViewModel : ViewModelBase
                 [tasks[0]] = "Camera"
             };
 			
-            _viewRouter.InvokeLoadingArea(true, $"Loading: {string.Join(", ", taskNames.Values)}");
+            await _viewRouter.InvokeLoadingArea(true, $"Loading: {string.Join(", ", taskNames.Values)}");
             while (tasks.Count > 0)
             {
                 Task finished = await Task.WhenAny(tasks);
                 tasks.Remove(finished);
                 taskNames.Remove(finished);
 
-                _viewRouter.InvokeLoadingArea(true, $"Loading: {string.Join(", ", taskNames.Values)}");
+                await _viewRouter.InvokeLoadingArea(true, $"Loading: {string.Join(", ", taskNames.Values)}");
 
                 await finished;
             }
@@ -132,7 +132,7 @@ public class TrainControlViewModel : ViewModelBase
         }
         finally
         {
-            _viewRouter.InvokeLoadingArea(false);
+            await _viewRouter.InvokeLoadingArea(false);
         }
     }
 

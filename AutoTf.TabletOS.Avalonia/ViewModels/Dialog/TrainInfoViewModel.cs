@@ -142,7 +142,7 @@ public class TrainInfoViewModel : DialogViewModelBase
 
     private async Task RestartTrain()
     {
-        _viewRouter.InvokeLoadingArea(true, "Restarting train...");
+        await _viewRouter.InvokeLoadingArea(true, "Restarting train...");
         
         // TODO: Notify train system of shutdown (seperate from actual shutdown?)
         // Prevent shutdown when train is still moving without assistant
@@ -152,7 +152,7 @@ public class TrainInfoViewModel : DialogViewModelBase
 
     private async Task ShutdownTrain()
     {
-        _viewRouter.InvokeLoadingArea(true, "Shutting down train...");
+        await _viewRouter.InvokeLoadingArea(true, "Shutting down train...");
         
         // TODO: Notify train system of shutdown (seperate from actual shutdown?)
         // Prevent shutdown when train is still moving without assistant

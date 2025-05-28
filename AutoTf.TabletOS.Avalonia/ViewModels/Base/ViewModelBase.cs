@@ -13,20 +13,22 @@ public class ViewModelBase : ReactiveObject
     protected ViewModelBase()
     {
         _logger = App.Container!.Resolve<Logger>();
-        _ = InitializeAsync();
     }
     
-    private async Task InitializeAsync()
+    public void InitializeAsync()
     {
-        try
+        _ = Task.Run(async () =>
         {
-            await Initialize();
-        }
-        catch (Exception ex)
-        {
-            _logger.Log("Failed to initialize Viewmodel: " );
-            _logger.Log(ex.ToString());
-        }
+            try
+            {
+                await Initialize();
+            }
+            catch (Exception ex)
+            {
+                _logger.Log("Failed to initialize Viewmodel:");
+                _logger.Log(ex.ToString());
+            }
+        });
     }
 
     protected virtual Task Initialize()

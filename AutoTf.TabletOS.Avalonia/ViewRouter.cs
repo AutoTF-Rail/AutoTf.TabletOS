@@ -19,21 +19,53 @@ public class ViewRouter : IViewRouter
         _scope = scope;
     }
 
-    public void NavigateTo<TView>() where TView : UserControl
+    public async Task NavigateTo<TView>() where TView : UserControl
     {
-        Dispatcher.UIThread.InvokeAsync(() =>
+        try
         {
-            TView view = _scope.Resolve<TView>();
-            _uiControl.SetView(view);
-        });
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                TView view = _scope.Resolve<TView>();
+                _uiControl.SetView(view);
+
+                Dispatcher.UIThread.Post(() =>
+                {
+                    if (view.DataContext is ViewModelBase vm)
+                    {
+                        vm.InitializeAsync();
+                    }
+                }, DispatcherPriority.Background);
+            }, DispatcherPriority.Render);
+
+            await Task.Delay(25);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Exception in NavigateTo: " + e);
+        }
     }
 
-    public void NavigateTo(UserControl view)
+    public async Task NavigateTo(UserControl view)
     {
-        Dispatcher.UIThread.InvokeAsync(() =>
+        try
         {
-            _uiControl.SetView(view);
-        });
+            if (Dispatcher.UIThread.CheckAccess())
+            {
+                _uiControl.SetView(view);
+            }
+            else
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    _uiControl.SetView(view);
+                }, DispatcherPriority.Render);
+            }
+            await Task.Delay(25);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Exception in NavigateTo: " + e);
+        }
     }
 
     public async Task<int> ShowDialog<T>(ViewBase<T> dialog)
@@ -48,8 +80,26 @@ public class ViewRouter : IViewRouter
         return await ShowDialog(view);
     }
 
-    public void InvokeLoadingArea(bool visible, string message = "")
+    public async Task InvokeLoadingArea(bool visible, string message = "")
     {
-        Dispatcher.UIThread.InvokeAsync(() => { _uiControl.ShowLoadingScreen(visible, message); });
+        try
+        {
+            if (Dispatcher.UIThread.CheckAccess())
+            {
+                _uiControl.ShowLoadingScreen(visible, message);
+            }
+            else
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                        _uiControl.ShowLoadingScreen(visible, message),
+                    DispatcherPriority.Render);
+            }
+            
+            await Task.Delay(25).ConfigureAwait(false);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Exception in InvokeLoadingArea: " + e);
+        }
     }
 }

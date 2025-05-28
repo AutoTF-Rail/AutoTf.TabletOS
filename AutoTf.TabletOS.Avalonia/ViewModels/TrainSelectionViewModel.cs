@@ -152,7 +152,7 @@ public class TrainSelectionViewModel : ViewModelBase
             if (trainAd == null)
                 return;
             
-            _viewRouter.InvokeLoadingArea(true, "Connecting to train...");
+            await _viewRouter.InvokeLoadingArea(true, "Connecting to train...");
             
             bool isTestTrain = trainAd.TrainName == "ExampleTrain" && trainAd.TrainNum == "783-938";
             Statics.LoadedTestTrain = isTestTrain;
@@ -160,8 +160,8 @@ public class TrainSelectionViewModel : ViewModelBase
             if (isTestTrain)
             {
                 _notificationService.Info("Loading test train.");
-                _viewRouter.InvokeLoadingArea(true, "Loading panel...");
-                _viewRouter.NavigateTo<TrainControlView>();
+                await _viewRouter.InvokeLoadingArea(true, "Loading panel...");
+                await _viewRouter.NavigateTo<TrainControlView>();
                 return;
             }
 
@@ -174,7 +174,7 @@ public class TrainSelectionViewModel : ViewModelBase
             {
                 _logger.Log($"Connection: {Statics.Connection}.");
                 _logger.Log(connOutput!);
-                _viewRouter.InvokeLoadingArea(false);
+                await _viewRouter.InvokeLoadingArea(false);
                 
                 _notificationService.Warn("Could not connect to train.");
                 return;
@@ -192,7 +192,7 @@ public class TrainSelectionViewModel : ViewModelBase
     
     private async Task TryLogin()
     {
-        _viewRouter.InvokeLoadingArea(true, "Logging in...");
+        await _viewRouter.InvokeLoadingArea(true, "Logging in...");
 		
         try
         {
@@ -204,8 +204,8 @@ public class TrainSelectionViewModel : ViewModelBase
 			
             loginResponse.EnsureSuccessStatusCode();
 			
-            _viewRouter.InvokeLoadingArea(true, "Loading panel...");
-            _viewRouter.NavigateTo<TrainControlView>();
+            await _viewRouter.InvokeLoadingArea(true, "Loading panel...");
+            await _viewRouter.NavigateTo<TrainControlView>();
         }
         catch (Exception ex)
         {
@@ -213,7 +213,7 @@ public class TrainSelectionViewModel : ViewModelBase
             _logger.Log("Could not login:");
             _logger.Log(ex.ToString());
             
-            _viewRouter.InvokeLoadingArea(false);
+            await _viewRouter.InvokeLoadingArea(false);
             _notificationService.Error("Could not login. An internal error occured.");
         }
     }
