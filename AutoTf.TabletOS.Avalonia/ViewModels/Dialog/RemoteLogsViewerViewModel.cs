@@ -36,7 +36,7 @@ public class RemoteLogsViewerViewModel : DialogViewModelBase
         set
         {
             this.RaiseAndSetIfChanged(ref _selectedDate, value);
-            Task.Run(() => LoadLogs(SelectedDate));
+            _ = LoadLogs(SelectedDate);
         }
     }
 

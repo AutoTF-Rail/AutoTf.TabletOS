@@ -80,6 +80,11 @@ public class ViewRouter : IViewRouter
         return await ShowDialog(view);
     }
 
+    public int DialogCount()
+    {
+        return _uiControl.DialogCount();
+    }
+
     public async Task InvokeLoadingArea(bool visible, string message = "")
     {
         try
@@ -96,7 +101,6 @@ public class ViewRouter : IViewRouter
             }
             
             await Task.Delay(25).ConfigureAwait(false);
-            await Task.Yield();
         }
         catch (Exception e)
         {
