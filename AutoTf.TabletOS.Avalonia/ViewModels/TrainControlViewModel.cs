@@ -34,9 +34,9 @@ public class TrainControlViewModel : ViewModelBase
         get => _currentView;
         private set => this.RaiseAndSetIfChanged(ref _currentView, value);
     }
-    
-    public RelayCommand ChangeCameraCommand { get; }
-    public RelayCommand ChangeToTrainSelectionCommand { get; }
+
+    public IRelayCommand ChangeCameraCommand { get; }
+    public IAsyncRelayCommand ChangeToTrainSelectionCommand { get; }
 
     public TrainControlViewModel(Logger logger, IViewRouter viewRouter, ITrainCameraService trainCameraService, TrainCameraInformation trainCamInfo, INetworkService networkService)
     {
@@ -47,7 +47,7 @@ public class TrainControlViewModel : ViewModelBase
         _networkService = networkService;
 
         ChangeCameraCommand = new RelayCommand(ChangeCamera);
-        ChangeToTrainSelectionCommand = new RelayCommand(ChangeToTrainSelection);
+        ChangeToTrainSelectionCommand = new AsyncRelayCommand(ChangeToTrainSelection);
         
         _trainCamInfo.WhenAnyPropertyChanged().Subscribe(_ =>
         {
@@ -64,19 +64,19 @@ public class TrainControlViewModel : ViewModelBase
 #endif
     }
 
-    private void ChangeToTrainSelection()
+    private async Task ChangeToTrainSelection()
     {
         try
         {
             _logger.Log("Changing to train selection by request.");
-            _viewRouter.InvokeLoadingArea(true, "Disconnecting...");
+            await _viewRouter.InvokeLoadingArea(true, "Disconnecting...");
             
             _trainCameraService.DisconnectStreams();
 			
             // TODO: Tell train that you disconnected (emergency break if connection is lost, or user proceeds)
             _networkService.ShutdownConnection();
 
-            _viewRouter.NavigateTo<TrainSelectionView>();
+            await _viewRouter.NavigateTo<TrainSelectionView>();
         }
         catch (Exception e)
         {
