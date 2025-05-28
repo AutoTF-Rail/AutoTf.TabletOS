@@ -1,12 +1,11 @@
 using System.Threading.Tasks;
-using ReactiveUI;
 
 namespace AutoTf.TabletOS.Avalonia.ViewModels.Base;
 
-public class DialogViewModelBase : ReactiveObject
+public class DialogViewModelBase : ViewModelBase
 {
     private TaskCompletionSource<int>? _tcs;
-   
+
     internal Task<int> ShowAsync()
     {
         _tcs = new TaskCompletionSource<int>();

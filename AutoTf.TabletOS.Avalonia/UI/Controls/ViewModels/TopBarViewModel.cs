@@ -6,6 +6,8 @@ using System.Linq;
 using System.IO;
 #endif
 using System.Threading.Tasks;
+using AutoTf.Logging;
+using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Avalonia.ViewModels.Dialog;
 using AutoTf.TabletOS.Avalonia.Views;
 using AutoTf.TabletOS.Avalonia.Views.Dialog;
@@ -17,13 +19,13 @@ using ReactiveUI;
 
 namespace AutoTf.TabletOS.Avalonia.UI.Controls.ViewModels;
 
-public class TopBarViewModel : ReactiveObject
+public class TopBarViewModel : ViewModelBase
 {
     private DispatcherTimer _timer = null!;
     private int _brightness;
 	
     private TaskCompletionSource<(bool success, string result)>? _keyboardTcs;
-    private int _maxKeyboardTextLength = 0;
+    private int _maxKeyboardTextLength;
 	
     private readonly INotificationService _notificationService;
     private readonly YubiKeySession _yubiKey;
@@ -35,7 +37,7 @@ public class TopBarViewModel : ReactiveObject
     private bool _quickMenuVisible;
     private bool _keyboardVisible;
     private ObservableCollection<Notification> _notifications = new ObservableCollection<Notification>();
-    private string _keyboardValue;
+    private string _keyboardValue = string.Empty;
     
     public string CurrentTime
     {
@@ -109,8 +111,6 @@ public class TopBarViewModel : ReactiveObject
         DeleteKeyboardValueCommand = new RelayCommand(DeleteKeyboardValue);
 
         NotificationDiscardCommand = new RelayCommand<Notification>(DiscardNotification);
-
-        Initialize();
     }
 
     private void DiscardNotification(Notification? notification)
@@ -246,7 +246,7 @@ public class TopBarViewModel : ReactiveObject
         Environment.Exit(0);
     }
 
-    private void Initialize()
+    protected override Task Initialize()
     {
         Statics.RegisterKeyboard(ShowKeyboard);
         
@@ -266,6 +266,8 @@ public class TopBarViewModel : ReactiveObject
         };
         _timer.Tick += (_, _) => CurrentTime = DateTime.Now.ToString("dd.MM.yy HH:mm:ss");
         _timer.Start();
+        
+        return Task.CompletedTask;
     }
     
     public async Task<(bool success, string result)> ShowKeyboard(string originalValue, int maxLength)

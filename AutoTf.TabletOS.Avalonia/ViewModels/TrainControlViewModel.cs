@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoTf.Logging;
+using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Avalonia.Views;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
@@ -13,7 +14,7 @@ using ReactiveUI;
 
 namespace AutoTf.TabletOS.Avalonia.ViewModels;
 
-public class TrainControlViewModel : ReactiveObject
+public class TrainControlViewModel : ViewModelBase
 {
     private readonly Logger _logger;
     private readonly IViewRouter _viewRouter;
@@ -61,8 +62,6 @@ public class TrainControlViewModel : ReactiveObject
             await _trainCameraService.StartListeningForCameras();
         });
 #endif
-
-        Initialize();
     }
 
     private void ChangeToTrainSelection()
@@ -93,7 +92,7 @@ public class TrainControlViewModel : ReactiveObject
         _trainCamInfo.CurrentCamera = _trainCamInfo.CurrentCamera  == Side.Front ? Side.Back : Side.Front;
     }
 
-    private async void Initialize()
+    protected override async Task Initialize()
     {
         try
         {

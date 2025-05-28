@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoTf.Logging;
+using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Avalonia.Views;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
@@ -15,7 +16,7 @@ using ReactiveUI;
 
 namespace AutoTf.TabletOS.Avalonia.ViewModels;
 
-public class TrainSelectionViewModel : ReactiveObject
+public class TrainSelectionViewModel : ViewModelBase
 {
     private readonly Logger _logger;
     private readonly INetworkService _networkService;
@@ -61,11 +62,9 @@ public class TrainSelectionViewModel : ReactiveObject
         NearbyLoadingVisible = false;
         _viewRouter.InvokeLoadingArea(false);
 #endif
-        // Initialize();
-        Task.Run(Initialize);
     }
 
-    private async Task Initialize()
+    protected override async Task Initialize()
     {
         LoadInternetTrains();
         await RunTrainScan();

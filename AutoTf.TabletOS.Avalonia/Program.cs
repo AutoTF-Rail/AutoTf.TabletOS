@@ -30,7 +30,6 @@ sealed class Program
 		try
 		{
 			AppBuilder builder = BuildAvaloniaApp();
-			Initialize();
 			if (args.Contains("--drm"))
 			{
 				SilenceConsole();
@@ -51,26 +50,7 @@ sealed class Program
 
 		return -1;
 	}
-
-	private static void Initialize()
-	{
-#if RELEASE
-		Statics.DataManager = new DataService();
-		Statics.TrainInformationService = new TrainInformationService();
-		Statics.TrainControlService = new TrainControlService();
-		Statics.TrainCameraService = new TrainCameraService();
-		Statics.AicService = new AicService();
-#else
-		Statics.DataManager = new FakeDataManager();
-		Statics.TrainInformationService = new FakeTrainInformationService();
-		Statics.TrainControlService = new FakeTrainControlService();
-		Statics.TrainCameraService = new FakeTrainCameraService();
-		Statics.AicService = new FakeAicService();
-#endif
-		
-		Statics.NetworkService = new NetworkService();
-	}
-
+	
 	private static void SilenceConsole()
 	{
 		if (!IsInteractiveEnvironment())
