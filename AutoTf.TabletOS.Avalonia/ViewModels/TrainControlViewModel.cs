@@ -41,8 +41,8 @@ public class TrainControlViewModel : ViewModelBase
         }
     }
 
-    public RelayCommand ChangeCameraCommand { get; }
-    public RelayCommand ChangeToTrainSelectionCommand { get; }
+    public IRelayCommand ChangeCameraCommand { get; }
+    public IRelayCommand ChangeToTrainSelectionCommand { get; }
 
     public TrainControlViewModel(Logger logger, IViewRouter viewRouter, ITrainCameraService trainCameraService, TrainCameraInformation trainCamInfo, INetworkService networkService)
     {
