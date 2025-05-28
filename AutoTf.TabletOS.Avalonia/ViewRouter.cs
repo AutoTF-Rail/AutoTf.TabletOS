@@ -96,6 +96,7 @@ public class ViewRouter : IViewRouter
             }
             
             await Task.Delay(25).ConfigureAwait(false);
+            await Task.Yield();
         }
         catch (Exception e)
         {
