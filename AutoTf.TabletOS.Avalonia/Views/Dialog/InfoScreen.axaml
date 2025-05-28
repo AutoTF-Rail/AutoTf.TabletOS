@@ -53,6 +53,6 @@
         
         <Button Margin="40" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="Black" BorderBrush="Black" Command="{Binding BackCommand}">Back</Button>
         
-        <TextBlock IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding InfoText}" Margin="15" />
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding InfoText}" Margin="15" />
     </Grid>
 </UserControl>

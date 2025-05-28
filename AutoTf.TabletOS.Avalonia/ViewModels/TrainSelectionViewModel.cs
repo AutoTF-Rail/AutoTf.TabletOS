@@ -153,6 +153,8 @@ public class TrainSelectionViewModel : ViewModelBase
                 return;
             
             await _viewRouter.InvokeLoadingArea(true, "Connecting to train...");
+            // Idk why this extra call is needed JUST here
+            await Task.Yield();
             
             bool isTestTrain = trainAd.TrainName == "ExampleTrain" && trainAd.TrainNum == "783-938";
             Statics.LoadedTestTrain = isTestTrain;
