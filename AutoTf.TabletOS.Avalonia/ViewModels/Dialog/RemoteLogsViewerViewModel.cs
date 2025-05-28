@@ -62,6 +62,7 @@ public class RemoteLogsViewerViewModel : DialogViewModelBase
     
     private async Task LoadLogs(string date)
     {
+        Logs = new ObservableCollection<string>();
         string[] finalList = [];
 		
         Result<string[]> logResult = await _getLogs.Invoke(date);

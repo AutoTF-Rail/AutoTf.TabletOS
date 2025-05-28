@@ -12,8 +12,8 @@ public class AicService : IAicService
     public async Task<Result<bool?>> IsAvailable() => await HttpHelper.SendGet<bool?>(AicBasePath + "/isAvailable", 7);
     public async Task<Result> IsOnline() => await HttpHelper.SendGetRaw(AicBasePath + "/", 7);
     public async Task<Result<string>> Version() => await HttpHelper.SendGet(AicBasePath + "/version", 7);
-    public async Task<Result<string[]>> LogDates() => await HttpHelper.SendGet<string[]>(AicBasePath + "/information/logDates");
-    public async Task<Result<string[]>> Logs(string date) => await HttpHelper.SendGet<string[]>(AicBasePath + $"/information/logs?date={date}");
+    public async Task<Result<string[]>> LogDates() => await HttpHelper.SendGet<string[]>(AicBasePath + "/information/logDates", 7);
+    public async Task<Result<string[]>> Logs(string date) => await HttpHelper.SendGet<string[]>(AicBasePath + $"/information/logs?date={date}", 7);
     
     public async Task<Result> Shutdown() => await HttpHelper.SendPost(AicBasePath + "/shutdown", new StringContent(""));
 

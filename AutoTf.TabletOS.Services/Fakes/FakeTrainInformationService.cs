@@ -48,13 +48,14 @@ public class FakeTrainInformationService : ITrainInformationService
 
 	public Task<Result<string[]>> GetLogs(string date)
 	{
-		return Task.FromResult(Result<string[]>.Ok(
-		[
-			"22.02.2024",
-			"22.02.2024",
-			"22.02.2024",
-			"22.02.2024",
-		]));
+		List<string> logs = new List<string>();
+		for (int i = 0; i < 50; i++)
+		{
+			logs.Add("TestLog");
+		}
+		logs.Add(string.Join(",", logs));
+		logs.Add("Final");
+		return Task.FromResult(Result<string[]>.Ok(logs.ToArray()));
 	}
 
 	public Task<Result> PostUpdate()
