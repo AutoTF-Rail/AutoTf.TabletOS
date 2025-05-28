@@ -72,8 +72,6 @@ public class AicControlViewModel : DialogViewModelBase
         RestartCommand = new AsyncRelayCommand(RestartAic);
         LogsCommand = new AsyncRelayCommand(OpenLogs);
         BackCommand = new RelayCommand(Back);
-        
-        Initialize();
     }
 
     private void Back()
@@ -116,7 +114,7 @@ public class AicControlViewModel : DialogViewModelBase
         _viewRouter.InvokeLoadingArea(false);
     }
 
-    private async void Initialize()
+    protected override async Task Initialize()
     {
         try
         {

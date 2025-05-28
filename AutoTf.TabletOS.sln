@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTf.TabletOS.Models", "A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B8612643-3750-46A3-8C3E-FD03D693799B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTf.TabletOS.Preview", "AutoTf.TabletOS.Preview\AutoTf.TabletOS.Preview.csproj", "{B7995C64-83FE-4ABF-A558-C688A812CFCC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTf.TabletOS.Services", "AutoTf.TabletOS.Services\AutoTf.TabletOS.Services.csproj", "{0A50D597-3677-4DC6-AFE3-E70206941C40}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{CB9692FE-773B-4A85-BFC6-CC2DCBC6CEE5}"
@@ -34,10 +32,6 @@ Global
 		{1EDAC2C8-6BFB-4F98-8B8F-2CD8B618967F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EDAC2C8-6BFB-4F98-8B8F-2CD8B618967F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EDAC2C8-6BFB-4F98-8B8F-2CD8B618967F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7995C64-83FE-4ABF-A558-C688A812CFCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7995C64-83FE-4ABF-A558-C688A812CFCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7995C64-83FE-4ABF-A558-C688A812CFCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7995C64-83FE-4ABF-A558-C688A812CFCC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A50D597-3677-4DC6-AFE3-E70206941C40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A50D597-3677-4DC6-AFE3-E70206941C40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A50D597-3677-4DC6-AFE3-E70206941C40}.Release|Any CPU.ActiveCfg = Release|Any CPU

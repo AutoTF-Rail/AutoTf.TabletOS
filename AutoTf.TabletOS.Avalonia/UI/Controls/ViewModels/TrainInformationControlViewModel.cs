@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Avalonia.ViewModels.Dialog;
 using AutoTf.TabletOS.Avalonia.Views.Dialog;
 using AutoTf.TabletOS.Models;
@@ -10,7 +11,7 @@ using Logger = AutoTf.Logging.Logger;
 
 namespace AutoTf.TabletOS.Avalonia.UI.Controls.ViewModels;
 
-public class TrainInformationControlViewModel : ReactiveObject
+public class TrainInformationControlViewModel : ViewModelBase
 {
     private readonly TrainInformation _trainInfo;
     private readonly INotificationService _notificationService;
@@ -60,8 +61,6 @@ public class TrainInformationControlViewModel : ReactiveObject
         _networkService = networkService;
 
         TrainInfoCommand = new AsyncRelayCommand(OpenTrainInfo);
-        
-        LoadTrainData();
     }
 	
     private async Task OpenTrainInfo()
@@ -90,8 +89,8 @@ public class TrainInformationControlViewModel : ReactiveObject
             _notificationService.Error("Could not disconnect from train.");
         }
     }
-	
-    private async void LoadTrainData()
+
+    protected override async Task Initialize()
     {
         await _trainInfo.UpdateData();
 		

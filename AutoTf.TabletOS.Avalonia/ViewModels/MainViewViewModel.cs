@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 using CommunityToolkit.Mvvm.Input;
@@ -12,7 +13,7 @@ using Yubico.YubiKey.Oath;
 
 namespace AutoTf.TabletOS.Avalonia.ViewModels;
 
-public class MainViewViewModel : ReactiveObject
+public class MainViewViewModel : ViewModelBase
 {
     private bool _skipButtonVisible = true;
     
@@ -47,11 +48,9 @@ public class MainViewViewModel : ReactiveObject
         _listener = YubiKeyDeviceListener.Instance;
         _listener.Arrived += async (sender, args) => await KeyPluggedIn(sender, args);
         _listener.Removed += KeyRemoved;
-        
-        TryDetectAlreadyPluggedIn().ConfigureAwait(false);
     }
     
-    private async Task TryDetectAlreadyPluggedIn()
+    protected override async Task Initialize()
     {
         if (_isHandlingKey)
             return;
@@ -75,7 +74,7 @@ public class MainViewViewModel : ReactiveObject
         _viewRouter.InvokeLoadingArea(false);
     }
 
-    private async Task KeyPluggedIn(object? sender, YubiKeyDeviceEventArgs e)
+    private async Task KeyPluggedIn(object? _, YubiKeyDeviceEventArgs e)
     {
         if (_isHandlingKey)
             return;

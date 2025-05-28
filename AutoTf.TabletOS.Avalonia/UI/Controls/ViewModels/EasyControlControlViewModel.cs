@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AutoTf.Logging;
+using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
@@ -9,7 +10,7 @@ using ReactiveUI;
 
 namespace AutoTf.TabletOS.Avalonia.UI.Controls.ViewModels;
 
-public class EasyControlControlViewModel : ReactiveObject
+public class EasyControlControlViewModel : ViewModelBase
 {
     private readonly IViewRouter _viewRouter;
     private readonly INotificationService _notificationService;
@@ -49,11 +50,9 @@ public class EasyControlControlViewModel : ReactiveObject
         EmergencyStopCommand = new AsyncRelayCommand(EmergencyStop);
         EasyControlCommand = new AsyncRelayCommand<string>(EasyControl);
         ChangeDirectionCommand = new AsyncRelayCommand(ChangeDirection);
-
-        Initialize();
     }
 
-    private async void Initialize()
+    protected override async Task Initialize()
     {
         // TODO: If available: Include check if its being driven by the AIC (If so: only disable EC, not emergency brake)
         bool ecAvailable = await _trainControl.IsEasyControlAvailable();

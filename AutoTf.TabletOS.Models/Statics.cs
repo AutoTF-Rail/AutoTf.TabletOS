@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using AutoTf.Logging;
 using AutoTf.TabletOS.Models.Enums;
-using AutoTf.TabletOS.Models.Interfaces;
 
 namespace AutoTf.TabletOS.Models;
 
@@ -31,13 +30,6 @@ public static class Statics
 	
 	public static Action? Shutdown;
 	public static ConnectionType Connection { get; set; } = ConnectionType.None;
-	
-	public static ITrainInformationService TrainInformationService = null!;
-	public static ITrainControlService TrainControlService = null!;
-	public static ITrainCameraService TrainCameraService = null!;
-	public static IDataManager DataManager = null!;
-	public static IAicService AicService = null!;
-	public static INetworkService NetworkService = null!;
 
 	public static Logger Logger = new Logger(true);
 	

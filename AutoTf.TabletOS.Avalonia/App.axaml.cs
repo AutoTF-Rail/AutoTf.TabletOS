@@ -12,7 +12,9 @@ using AutoTf.TabletOS.Avalonia.Views.Dialog;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
 using AutoTf.TabletOS.Services;
+#if DEBUG
 using AutoTf.TabletOS.Services.Fakes;
+#endif
 using Avalonia.Data.Core.Plugins;
 using Statics = AutoTf.TabletOS.Models.Statics;
 using TrainSelectionView = AutoTf.TabletOS.Avalonia.Views.TrainSelectionView;
@@ -31,7 +33,7 @@ public partial class App : Application
 	private void DisableAvaloniaDataAnnotationValidation()
 	{
 		// Get an array of plugins to remove
-		var dataValidationPluginsToRemove =
+		DataAnnotationsValidationPlugin[] dataValidationPluginsToRemove =
 			BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
 
 		// remove each entry found
@@ -79,10 +81,17 @@ public partial class App : Application
 		builder.RegisterType<YubiKeySession>().AsSelf().SingleInstance();
 		
 		// Services
+#if DEBUG
 		builder.RegisterType<FakeTrainControlService>().As<ITrainControlService>().SingleInstance();
 		builder.RegisterType<FakeTrainCameraService>().As<ITrainCameraService>().SingleInstance();
 		builder.RegisterType<FakeTrainInformationService>().As<ITrainInformationService>().SingleInstance();
 		builder.RegisterType<FakeAicService>().As<IAicService>().SingleInstance();
+#else
+		builder.RegisterType<TrainControlService>().As<ITrainControlService>().SingleInstance();
+		builder.RegisterType<TrainCameraService>().As<ITrainCameraService>().SingleInstance();
+		builder.RegisterType<TrainInformationService>().As<ITrainInformationService>().SingleInstance();
+		builder.RegisterType<AicService>().As<IAicService>().SingleInstance();
+#endif
 		
 		builder.RegisterType<NotificationService>().As<INotificationService>().SingleInstance();
 		builder.RegisterType<NetworkService>().As<INetworkService>().SingleInstance();

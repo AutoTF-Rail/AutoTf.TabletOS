@@ -53,13 +53,12 @@ public class InfoScreenViewModel : DialogViewModelBase
         UpdateCommand = new RelayCommand(Update, NetworkService.IsInternetAvailable);
         RestartCommand = new RelayCommand(Restart);
         LogsCommand = new AsyncRelayCommand(OpenLogs);
-
-        Initialize();
     }
 
-    private void Initialize()
+    protected override Task Initialize()
     {
-        GitVersion = $"Version: {Program.GetGitVersion()}";
+	    GitVersion = $"Version: {Program.GetGitVersion()}";
+	    return Task.CompletedTask;
     }
 
     private void Restart()

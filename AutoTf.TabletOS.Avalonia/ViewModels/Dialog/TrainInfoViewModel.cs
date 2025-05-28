@@ -109,9 +109,6 @@ public class TrainInfoViewModel : DialogViewModelBase
         LogsCommand = new AsyncRelayCommand(ViewLogs);
         
         BackCommand = new RelayCommand(Back);
-        
-        
-        Initialize();
     }
 
     private void Back()
@@ -163,7 +160,7 @@ public class TrainInfoViewModel : DialogViewModelBase
         Close(1);
     }
 
-    private async void Initialize()
+    protected override async Task Initialize()
     {
         string evuName = (await _trainInfo.GetEvuName()).GetValue("Unavailable");
         string trainId = (await _trainInfo.GetTrainId()).GetValue("Unavailable");
