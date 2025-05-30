@@ -80,6 +80,7 @@ public class TrainSelectionViewModel : ViewModelBase
             _logger.Log("Not running bluetooth scan due to not being in RELEASE");
 #endif
             NearbyLoadingVisible = true;
+            await Task.Delay(25);
             _logger.Log("Scanning for trains.");
             NearbyTrains.Clear();
             
