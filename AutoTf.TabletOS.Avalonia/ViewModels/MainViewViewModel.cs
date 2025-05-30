@@ -84,6 +84,7 @@ public class MainViewViewModel : ViewModelBase
             return;
         
         _isHandlingKey = true;
+        _cancelTokenSource = new CancellationTokenSource();
         await _viewRouter.InvokeLoadingArea(true, "Loading key...");
         await Task.Delay(25);
         await Task.Run(() => GetKey(e.Device), _cancelTokenSource.Token);
