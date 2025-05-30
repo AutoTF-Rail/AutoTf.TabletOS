@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Interfaces;
@@ -20,6 +21,7 @@ public class MainViewViewModel : ViewModelBase
     private readonly IViewRouter _viewRouter;
     private readonly INotificationService _notificationService;
     private readonly YubiKeySession _yubiKey;
+    private readonly Logger _logger;
 
     private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
     private YubiKeyDeviceListener _listener;
@@ -33,11 +35,12 @@ public class MainViewViewModel : ViewModelBase
 
     public ICommand SkipButtonCommand { get; }
 
-    public MainViewViewModel(IViewRouter viewRouter, INotificationService notificationService, YubiKeySession yubiKey)
+    public MainViewViewModel(IViewRouter viewRouter, INotificationService notificationService, YubiKeySession yubiKey, Logger logger)
     {
         _viewRouter = viewRouter;
         _notificationService = notificationService;
         _yubiKey = yubiKey;
+        _logger = logger;
 #if RELEASE
         SkipButtonVisible = false;
 #else
@@ -88,22 +91,31 @@ public class MainViewViewModel : ViewModelBase
 
     private void GetKey(IYubiKeyDevice device)
     {
-        using OathSession session = new OathSession(device);
-
-        Credential? atfCred = session.GetCredentials().FirstOrDefault(c => c.Issuer == "AutoTF");
-
-        if (atfCred is not null)
+        try
         {
-            _yubiKey.Code = session.CalculateCredential(atfCred).Value!;
-            _yubiKey.SerialNumber = device.SerialNumber!.Value;
-            _yubiKey.Time = DateTime.UtcNow;
-            ChangeScreen();
-        }
-        else
-            _notificationService.Warn("Could not find AutoTF Credential on key.");
+            using OathSession session = new OathSession(device);
 
-        _viewRouter.InvokeLoadingArea(false);
-        _isHandlingKey = false;
+            Credential? atfCred = session.GetCredentials().FirstOrDefault(c => c.Issuer == "AutoTF");
+
+            if (atfCred is not null)
+            {
+                _yubiKey.Code = session.CalculateCredential(atfCred).Value!;
+                _yubiKey.SerialNumber = device.SerialNumber!.Value;
+                _yubiKey.Time = DateTime.UtcNow;
+                ChangeScreen();
+            }
+            else
+                _notificationService.Warn("Could not find AutoTF Credential on key.");
+
+            _viewRouter.InvokeLoadingArea(false);
+            _isHandlingKey = false;
+        }
+        catch (Exception e)
+        {
+            _notificationService.Error("Failed to read key.");
+            _logger.Log("Failed to read key:");
+            _logger.Log(e.ToString());
+        }
     }
 
     private void SkipKeyLogin()
