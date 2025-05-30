@@ -19,11 +19,17 @@ public class NotificationService : INotificationService
 
     private void AddNotification(string message, Color color)
     {
-        Notifications.Add(new Notification(message, color));
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            Notifications.Add(new Notification(message, color));
+        });
     }
 
     public void Remove(Notification notification)
     {
-        Notifications.Remove(notification);
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            Notifications.Remove(notification);
+        });
     }
 }
