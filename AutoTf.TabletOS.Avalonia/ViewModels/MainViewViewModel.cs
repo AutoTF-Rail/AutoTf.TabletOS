@@ -62,6 +62,7 @@ public class MainViewViewModel : ViewModelBase
         if (key == null)
         {
             await _viewRouter.InvokeLoadingArea(false);
+            _isHandlingKey = false;
             return;
         }
         await Task.Run(() => GetKey(key), _cancelTokenSource.Token);
@@ -78,6 +79,7 @@ public class MainViewViewModel : ViewModelBase
     {
         if (_isHandlingKey)
             return;
+        
         _isHandlingKey = true;
         await _viewRouter.InvokeLoadingArea(true, "Loading key...");
         await Task.Delay(25);
@@ -101,6 +103,7 @@ public class MainViewViewModel : ViewModelBase
             _notificationService.Warn("Could not find AutoTF Credential on key.");
 
         _viewRouter.InvokeLoadingArea(false);
+        _isHandlingKey = false;
     }
 
     private void SkipKeyLogin()
