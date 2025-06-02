@@ -47,7 +47,7 @@
         </Grid>
         <DockPanel Margin="40" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <Button Margin="5" Command="{Binding UpdateCommand}">Update</Button>
-            <Button Margin="5" Command="{Binding RestartCommand}">Restart</Button>
+            <Button Margin="5" Command="{Binding SwitchBranchCommand}" Content="{Binding SwitchBranchText}" />
             <Button Margin="5" Command="{Binding LogsCommand}">Logs</Button>
         </DockPanel>
         

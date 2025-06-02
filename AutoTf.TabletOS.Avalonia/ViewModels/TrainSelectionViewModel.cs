@@ -49,7 +49,7 @@ public class TrainSelectionViewModel : ViewModelBase
         _viewRouter = viewRouter;
         _notificationService = notificationService;
         _yubiKey = yubiKey;
-        TrainNearbyCommand = new AsyncRelayCommand<TrainAd>(HandleNearbyTrain);
+        TrainNearbyCommand = new AsyncRelayCommand<TrainAd>(OpenConnectionToNearby);
         RescanCommand = new AsyncRelayCommand(RunTrainScan);
         
         _viewRouter.InvokeLoadingArea(true, "Loading data...");
@@ -147,7 +147,7 @@ public class TrainSelectionViewModel : ViewModelBase
         // }
     }
 
-    private async Task HandleNearbyTrain(TrainAd? trainAd)
+    private async Task OpenConnectionToNearby(TrainAd? trainAd)
     {
         try
         {
@@ -176,8 +176,9 @@ public class TrainSelectionViewModel : ViewModelBase
 
             if(Statics.Connection == ConnectionType.None)
             {
-                _logger.Log($"Connection: {Statics.Connection}.");
+                _logger.Log($"Connection failed: {Statics.Connection}:");
                 _logger.Log(connOutput!);
+                _networkService.ShutdownConnection();
                 await _viewRouter.InvokeLoadingArea(false);
                 
                 _notificationService.Warn("Could not connect to train.");
@@ -191,6 +192,7 @@ public class TrainSelectionViewModel : ViewModelBase
             _logger.Log("Could not connect to train:");
             _logger.Log(exception.ToString());
             _notificationService.Error("Could not connect to train. An internal error occured.");
+            _networkService.ShutdownConnection();
         }
     }
     

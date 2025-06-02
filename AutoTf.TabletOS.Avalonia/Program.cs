@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using AutoTf.TabletOS.Services;
-using AutoTf.TabletOS.Services.Fakes;
 using Avalonia;
 using Statics = AutoTf.TabletOS.Models.Statics;
 
@@ -107,6 +106,43 @@ sealed class Program
 		catch (Exception ex)
 		{
 			return $"Error retrieving Git version: {ex.Message}";
+		}
+	}
+
+	public static List<string> GetBranches()
+	{
+		try
+		{
+			ProcessStartInfo psi = new ProcessStartInfo
+			{
+				FileName = "git",
+				Arguments = "branch",
+				RedirectStandardOutput = true,
+				RedirectStandardError = true,
+				UseShellExecute = false,
+				CreateNoWindow = true,
+			};
+
+			using (Process process = new Process())
+			{
+				process.StartInfo = psi;
+				process.Start();
+				string output = process.StandardOutput.ReadToEnd().Trim();
+				string error = process.StandardError.ReadToEnd().Trim();
+
+				process.WaitForExit();
+
+				if (!string.IsNullOrWhiteSpace(error))
+				{
+					throw new Exception($"Git Error: {error}");
+				}
+
+				return output.Split(Environment.NewLine).ToList();
+			}
+		}
+		catch (Exception ex)
+		{
+			return [];
 		}
 	}
 }

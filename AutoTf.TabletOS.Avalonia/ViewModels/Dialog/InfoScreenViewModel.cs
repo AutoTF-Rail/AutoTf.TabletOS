@@ -1,9 +1,8 @@
-using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoTf.CentralBridge.Shared.Models;
-using AutoTf.Logging;
 using AutoTf.TabletOS.Avalonia.ViewModels.Base;
 using AutoTf.TabletOS.Avalonia.Views.Dialog;
 using AutoTf.TabletOS.Models;
@@ -20,10 +19,14 @@ public class InfoScreenViewModel : DialogViewModelBase
     
     private readonly IViewRouter _viewRouter;
     private readonly INetworkService _networkService;
-    private readonly Logger _logger;
 
     private string _gitVersion = "Unknown";
     private string _infoText = "";
+    private string _switchBranchText = "Feature unavailable";
+
+    private bool _canSwitch;
+    private string _nextBranch = "develop";
+
     
     public string GitVersion
     {
@@ -36,95 +39,128 @@ public class InfoScreenViewModel : DialogViewModelBase
 	    get => _infoText;
 	    private set => this.RaiseAndSetIfChanged(ref _infoText, value);
     }
-
+    
+    public string SwitchBranchText
+    {
+	    get => _switchBranchText;
+	    private set => this.RaiseAndSetIfChanged(ref _switchBranchText, value);
+    }
+    
     public IRelayCommand BackCommand { get; }
     public IAsyncRelayCommand UpdateCommand { get; }
-    public IRelayCommand RestartCommand { get; }
     public IAsyncRelayCommand LogsCommand { get; }
+    public IAsyncRelayCommand SwitchBranchCommand { get; }
     
-
-    public InfoScreenViewModel(IViewRouter viewRouter, INetworkService networkService, Logger logger)
+    public InfoScreenViewModel(IViewRouter viewRouter, INetworkService networkService)
     {
         _viewRouter = viewRouter;
         _networkService = networkService;
-        _logger = logger;
-        
+
         BackCommand = new RelayCommand(() => Close(0));
-        UpdateCommand = new AsyncRelayCommand(Update, NetworkService.IsInternetAvailable);
-        RestartCommand = new RelayCommand(Restart);
+        UpdateCommand = new AsyncRelayCommand(() => Update(), NetworkService.IsInternetAvailable);
+        SwitchBranchCommand = new AsyncRelayCommand(SwitchBranch, () => _canSwitch);
         LogsCommand = new AsyncRelayCommand(OpenLogs);
+    }
+
+    private async Task SwitchBranch()
+    {
+	    if (!_canSwitch)
+		    return;
+
+	    await Update(_nextBranch);
+	    // We still need to update the text afterwards, because the Update could fail.
+	    await Initialize();
     }
 
     protected override Task Initialize()
     {
 	    GitVersion = $"Version: {Program.GetGitVersion()}";
+	    List<string> branches = Program.GetBranches();
+	    
+	    if (branches.Any())
+		    _canSwitch = true;
+
+	    string? currentBranch = branches.FirstOrDefault(x => x.StartsWith("* "));
+
+	    if (currentBranch == null)
+	    {
+		    _nextBranch = "main";
+		    return Task.CompletedTask;
+	    }
+	    currentBranch = currentBranch.Replace("*", "").Trim();
+
+	    string nextBranchToSearch = "develop";
+	    
+	    if (currentBranch == "develop")
+		    nextBranchToSearch = "main";
+
+	    string? nextBranch = branches.FirstOrDefault(x => x.ToLower().Contains(nextBranchToSearch));
+
+	    if (nextBranch == null)
+	    {
+		    _canSwitch = false;
+		    return Task.CompletedTask;
+	    }
+
+	    _nextBranch = nextBranch;
+	    SwitchBranchText = $"Switch To {_nextBranch}";
+	    
 	    return Task.CompletedTask;
     }
 
-    private void Restart()
+    private async Task Update(string branch = "main")
     {
-        try
-        {
-            _networkService.ShutdownConnection();
-        }
-        catch (Exception exception)
-        {
-            _logger.Log("Failed to shutdown connection:");
-            _logger.Log(exception.ToString());
-        }
-        finally
-        {
-            CommandExecuter.ExecuteSilent("reboot now", true);
-        }
-    }
-
-    private async Task Update()
-    {
-        if (!NetworkService.IsInternetAvailable())
-			return;
-
-        await _viewRouter.InvokeLoadingArea(true, "Updating...");
-        InfoText = "";
-        
-		string prevDir = Directory.GetCurrentDirectory();
-		Directory.SetCurrentDirectory("/home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia");
-		
-		CommandExecuter.ExecuteCommand("git reset --hard");
-		
-		await _viewRouter.InvokeLoadingArea(true, "Downloading updates...");
-		
-		string pull = CommandExecuter.ExecuteCommand("git pull");
-		
-		if (pull.Contains("Already"))
-		{
-			InfoText = "Already Up to Date.";
+	    if (!NetworkService.IsInternetAvailable())
+		    return;
+	    
+	    string prevDir = Directory.GetCurrentDirectory();
+	    await _viewRouter.InvokeLoadingArea(true, "Updating...");
+	    
+	    InfoText = "";
+	    
+	    Directory.SetCurrentDirectory("/home/display/AutoTf.TabletOS/AutoTf.TabletOS.Avalonia");
+	    
+	    try
+	    {
+			CommandExecuter.ExecuteCommand("git reset --hard");
 			
-			CommandExecuter.ExecuteSilent("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh", true);
-			await _viewRouter.InvokeLoadingArea(false);
-			return;
-		}
-		CommandExecuter.ExecuteCommand("git submodule update --init --recursive");
-		
-		await _viewRouter.InvokeLoadingArea(true, "Building update...");
-		
-		string buildOutput = CommandExecuter.ExecuteCommand("dotnet build -c RELEASE -m");
-		if (!buildOutput.Contains("0 Error(s)"))
-		{
-			InfoText = "Failed to build the update.";
-			await _viewRouter.InvokeLoadingArea(false);
-			return;
-		}
-		
-		CommandExecuter.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
-		_networkService.ShutdownConnection();
-		
-		await _viewRouter.InvokeLoadingArea(true, "Rebooting");
-		InfoText = "Restarting.";
-		
-		CommandExecuter.ExecuteSilent("reboot now", true);
-		
-		Directory.SetCurrentDirectory(prevDir);
-		await _viewRouter.InvokeLoadingArea(false);
+			CommandExecuter.ExecuteCommand($"git checkout {branch}");
+			
+			await _viewRouter.InvokeLoadingArea(true, "Downloading updates...");
+			
+			string pull = CommandExecuter.ExecuteCommand("git pull");
+			
+			if (pull.Contains("Already"))
+			{
+				InfoText = "Already Up to Date.";
+				return;
+			}
+			CommandExecuter.ExecuteCommand("git submodule update --init --recursive");
+			
+			await _viewRouter.InvokeLoadingArea(true, "Building update...");
+			
+			string buildOutput = CommandExecuter.ExecuteCommand("dotnet build -c RELEASE -m");
+			if (!buildOutput.Contains("0 Error(s)"))
+			{
+				InfoText = "Failed to build the update.";
+				return;
+			}
+			
+			CommandExecuter.ExecuteCommand("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh");
+			_networkService.ShutdownConnection();
+			
+			await _viewRouter.InvokeLoadingArea(true, "Rebooting");
+			InfoText = "Restarting.";
+			
+			CommandExecuter.ExecuteSilent("reboot now", true);
+	    }
+	    finally
+	    {
+		    
+		    CommandExecuter.ExecuteSilent("chmod +x /home/display/AutoTf.TabletOS/AutoTf.TabletOS/scripts/startup.sh", true);
+		    Directory.SetCurrentDirectory(prevDir);
+		    await _viewRouter.InvokeLoadingArea(false);
+	    }
     }
 
     private async Task OpenLogs()
