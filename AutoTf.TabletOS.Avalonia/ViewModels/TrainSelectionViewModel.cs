@@ -11,6 +11,7 @@ using AutoTf.TabletOS.Avalonia.Views;
 using AutoTf.TabletOS.Models;
 using AutoTf.TabletOS.Models.Enums;
 using AutoTf.TabletOS.Models.Interfaces;
+using AutoTf.TabletOS.Services;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 
@@ -26,6 +27,7 @@ public class TrainSelectionViewModel : ViewModelBase
 
     private ObservableCollection<TrainAd> _nearbyTrains = new ObservableCollection<TrainAd>();
     private bool _nearbyLoadingVisible = true;
+    private string _otherTrainsLoadingText = "Checking for internet...";
     
     public ObservableCollection<TrainAd> NearbyTrains
     {
@@ -37,6 +39,12 @@ public class TrainSelectionViewModel : ViewModelBase
     {
         get => _nearbyLoadingVisible;
         private set => this.RaiseAndSetIfChanged(ref _nearbyLoadingVisible, value);
+    }
+    
+    public string OtherTrainsLoadingText
+    {
+        get => _otherTrainsLoadingText;
+        private set => this.RaiseAndSetIfChanged(ref _otherTrainsLoadingText, value);
     }
     
     public IRelayCommand<TrainAd> TrainNearbyCommand { get; }
@@ -137,14 +145,17 @@ public class TrainSelectionViewModel : ViewModelBase
 
     private void LoadInternetTrains()
     {
-        // if (NetworkService.IsInternetAvailable())
-        // {
-        //     Dispatcher.UIThread.Invoke(() => OtherTrainsLoadingText.Text = "No trains found.");
-        // }
-        // else
-        // {
-        //     Dispatcher.UIThread.Invoke(() => OtherTrainsLoadingText.Text = "No Internet Connection.");
-        // }
+        if (!NetworkService.IsInternetAvailable())
+            OtherTrainsLoadingText = "No internet connection.";
+        
+        // TODO: Implement loading for internet trains
+        if (true)
+            OtherTrainsLoadingText = "Internet trains are not available";
+        else
+#pragma warning disable CS0162 // Unreachable code detected
+            // ReSharper disable once HeuristicUnreachableCode
+            OtherTrainsLoadingText = "No trains found.";
+#pragma warning restore CS0162 // Unreachable code detected
     }
 
     private async Task OpenConnectionToNearby(TrainAd? trainAd)

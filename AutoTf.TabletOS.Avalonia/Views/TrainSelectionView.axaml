@@ -126,7 +126,7 @@
                         <Border Grid.Row="1" Name="OtherLoadingArea">
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <Border CornerRadius="0, 0, 20, 0" Background="Black" Opacity=".5" />
-                                <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Name="OtherTrainsLoadingText">Checking for Internet...</TextBlock>
+                                <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding OtherTrainsLoadingText}"></TextBlock>
                             </Grid>
                         </Border>
                     </Grid>
