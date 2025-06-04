@@ -31,7 +31,7 @@ public class TopBarViewModel : ViewModelBase
     private readonly INetworkService _networkService;
     private readonly IViewRouter _viewRouter;
 
-    private string _currentTime = "";
+    private string _currentTime = DateTime.Now.ToString("dd.MM.yy HH:mm:ss");
     private string _notificationsNumber = "";
     private bool _quickMenuVisible;
     private bool _keyboardVisible;
@@ -254,6 +254,8 @@ public class TopBarViewModel : ViewModelBase
         {
             NotificationsNumber = new string('•', _notificationService.Notifications.Count);
         };
+        // Set once on startup
+        NotificationsNumber = new string('•', _notificationService.Notifications.Count);
         
 #if RELEASE
 		_brightness = int.Parse(File.ReadAllText("/sys/class/backlight/10-0045/brightness"));
