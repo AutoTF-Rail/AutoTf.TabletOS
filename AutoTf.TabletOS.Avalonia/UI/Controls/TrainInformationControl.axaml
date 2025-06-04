@@ -13,7 +13,6 @@
                 <Image Source="../../Assets/RoundTrainIcon.png" VerticalAlignment="Stretch" Margin="10"/>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock FontSize="31">
-                        <Run>EVU:</Run>
                         <Run Text="{Binding EvuName}" />
                         <Run> - </Run>
                         <Run Text="{Binding TrainName}" />
